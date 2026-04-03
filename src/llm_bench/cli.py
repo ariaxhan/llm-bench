@@ -96,6 +96,9 @@ def run(
         if model == "apple-foundationmodel" or provider == "apfel":
             p = get_provider("apfel")
             model_specs.append((p, "apple-foundationmodel"))
+        elif provider == "opencode" or model.startswith("opencode/"):
+            p = get_provider("opencode")
+            model_specs.append((p, model))
         else:
             kwargs = {}
             if base_url:

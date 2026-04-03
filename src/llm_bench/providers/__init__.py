@@ -2,8 +2,9 @@
 
 from llm_bench.providers.apfel import ApfelProvider
 from llm_bench.providers.openai_compat import OpenAICompatProvider
+from llm_bench.providers.opencode import OpenCodeProvider
 
-__all__ = ["OpenAICompatProvider", "ApfelProvider", "get_provider"]
+__all__ = ["OpenAICompatProvider", "ApfelProvider", "OpenCodeProvider", "get_provider"]
 
 
 def get_provider(name: str, **kwargs):
@@ -14,6 +15,7 @@ def get_provider(name: str, **kwargs):
             name="ollama",
         ),
         "apfel": lambda: ApfelProvider(),
+        "opencode": lambda: OpenCodeProvider(),
         "openai-compat": lambda: OpenAICompatProvider(
             base_url=kwargs["base_url"],
             api_key=kwargs.get("api_key", ""),
