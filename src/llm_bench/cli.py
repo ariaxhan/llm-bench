@@ -35,16 +35,20 @@ def main():
 @click.option("--details", "-d", is_flag=True, help="Show detailed output per test")
 @click.option("--output", "-o", default=None, help="Save results to JSON file")
 @click.option("--category", "-c", default=None, help="Run only tests in this category")
-def run(models, provider, base_url, tests, details, output, category):
+@click.option("--hard", is_flag=True, help="Run hard mode tests only")
+@click.option("--full", is_flag=True, help="Run all tests (standard + hard)")
+def run(models, provider, base_url, tests, details, output, category, hard, full):
     """Run benchmarks against one or more models.
 
     Examples:
         llm-bench run phi4:14b qwen3.5:4b
-        llm-bench run phi4:14b -p ollama --details
+        llm-bench run phi4:14b --hard
+        llm-bench run phi4:14b --full --details
         llm-bench run apple-foundationmodel -p apfel
         llm-bench run phi4:14b -t code-gen,bug-detection
-        llm-bench run phi4:14b -c code
     """
+    from llm_bench.tests import FULL_TESTS, HARD_TESTS
+
     # Resolve tests
     if tests:
         test_list = [get_test(t.strip()) for t in tests.split(",")]
@@ -52,8 +56,12 @@ def run(models, provider, base_url, tests, details, output, category):
         if not test_list:
             console.print("[red]No valid tests found for given IDs[/red]")
             sys.exit(1)
+    elif hard:
+        test_list = HARD_TESTS
+    elif full:
+        test_list = FULL_TESTS
     elif category:
-        test_list = [t for t in ALL_TESTS if t.category == category]
+        test_list = [t for t in FULL_TESTS if t.category == category]
         if not test_list:
             console.print(f"[red]No tests in category '{category}'[/red]")
             sys.exit(1)
@@ -113,11 +121,22 @@ def models(provider, base_url):
 @main.command(name="list-tests")
 def list_tests():
     """List all available benchmark tests."""
-    console.print("\n[bold]Available Tests[/bold]\n")
+    from llm_bench.tests import FULL_TESTS, HARD_TESTS
+
+    console.print("\n[bold]Standard Tests[/bold]\n")
     for t in ALL_TESTS:
         stars = "★" * t.difficulty.value
         console.print(f"  [cyan]{t.id:<24}[/cyan] {stars:<6} [{t.category}] {t.name}")
-    console.print(f"\n  {len(ALL_TESTS)} tests total\n")
+
+    console.print("\n[bold]Hard Mode Tests[/bold]\n")
+    for t in HARD_TESTS:
+        stars = "★" * t.difficulty.value
+        console.print(f"  [red]{t.id:<24}[/red] {stars:<6} [{t.category}] {t.name}")
+
+    total = len(FULL_TESTS)
+    std = len(ALL_TESTS)
+    hrd = len(HARD_TESTS)
+    console.print(f"\n  {total} tests total ({std} standard + {hrd} hard)\n")
 
 
 @main.command()

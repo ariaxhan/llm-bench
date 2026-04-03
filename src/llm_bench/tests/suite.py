@@ -374,7 +374,9 @@ ALL_TESTS: list[TestCase] = [
 
 
 def get_test(test_id: str) -> TestCase | None:
-    for t in ALL_TESTS:
+    from llm_bench.tests.hard_suite import HARD_TESTS
+
+    for t in ALL_TESTS + HARD_TESTS:
         if t.id == test_id:
             return t
     return None
