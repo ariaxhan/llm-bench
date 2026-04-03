@@ -11,6 +11,7 @@ venv/
 .env
 .pytest_cache/
 .ruff_cache/
-results/
+results/*.json
+!results/community/
 *.jsonl
 !tests/fixtures/*.jsonl

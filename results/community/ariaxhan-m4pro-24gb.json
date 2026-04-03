@@ -1,0 +1,907 @@
+{
+  "hardware": {
+    "contributor": "ariaxhan",
+    "machine": "MacBook Pro M4 Pro",
+    "chip": "Apple M4 Pro",
+    "memory_gb": 24,
+    "os": "macOS 26 (Tahoe)",
+    "date": "2026-04-03"
+  },
+  "benchmark_version": "0.1.0",
+  "standard_results": {
+    "apfel": {
+      "model": "apple-foundationmodel",
+      "provider": "apfel",
+      "total_score": 0.735,
+      "total_latency_ms": 39327.0,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "tag-extraction",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2128.195915953256,
+          "tokens_used": 50,
+          "details": {
+            "expected_tags": [
+              "agents",
+              "research",
+              "safety",
+              "tools"
+            ],
+            "got_tags": [
+              "agents",
+              "infrastructure",
+              "open-models",
+              "research",
+              "safety",
+              "tools"
+            ],
+            "precision": 0.67,
+            "recall": 1.0,
+            "f1": 0.8
+          }
+        },
+        {
+          "test_id": "novelty-rating",
+          "score": 0.7,
+          "passed": true,
+          "latency_ms": 1392.0923330588266,
+          "tokens_used": 74,
+          "details": {
+            "expected_rating": 3,
+            "got_rating": 2,
+            "rating_correct": false,
+            "justification_sentences": 3
+          }
+        },
+        {
+          "test_id": "fluff-strip",
+          "score": 0.88,
+          "passed": true,
+          "latency_ms": 642.7702499786392,
+          "tokens_used": 26,
+          "details": {
+            "word_count": 20,
+            "max_words": 60,
+            "under_limit": true,
+            "facts_found": 4,
+            "facts_required": 5
+          }
+        },
+        {
+          "test_id": "thread-match",
+          "score": 0.7499999999999999,
+          "passed": true,
+          "latency_ms": 2173.838417045772,
+          "tokens_used": 117,
+          "details": {
+            "correct_threads": [
+              "agents",
+              "open-models",
+              "tools"
+            ],
+            "matched": [
+              "agents",
+              "open-models",
+              "tools"
+            ],
+            "wrong_matches": [
+              "prompting",
+              "research"
+            ]
+          }
+        },
+        {
+          "test_id": "collision-detect",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 7869.4528749911115,
+          "tokens_used": 453,
+          "details": {
+            "connections_found": 2,
+            "connections_required": 2,
+            "has_reasoning": true
+          }
+        },
+        {
+          "test_id": "draft-email",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 1257.2544580325484,
+          "tokens_used": 72,
+          "details": {
+            "word_count": 56,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "code-gen",
+          "score": 0.2,
+          "passed": false,
+          "latency_ms": 3217.609625076875,
+          "tokens_used": 132,
+          "details": {
+            "executed": false,
+            "error": "Traceback (most recent call last):\n  File \"/var/folders/69/64zl4qkd7sq4sh3scn66wltm0000gp/T/tmpj9433_1x.py\", line 31, in <module>\n    assert result[0] == {\"name\": \"test\", \"type\": \"doc\"}, f\"Got {result[0]}\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Got {}\n",
+            "code_found": true
+          }
+        },
+        {
+          "test_id": "bug-detection",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 5122.745834058151,
+          "tokens_used": 276,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 0
+          }
+        },
+        {
+          "test_id": "multi-step-plan",
+          "score": 0.71,
+          "passed": true,
+          "latency_ms": 11616.637749946676,
+          "tokens_used": 561,
+          "details": {
+            "steps_found": 4,
+            "steps_required": 5,
+            "ordering_correct": false
+          }
+        },
+        {
+          "test_id": "creative-piece",
+          "score": 0.3463888888888889,
+          "passed": false,
+          "latency_ms": 2137.7896670019254,
+          "tokens_used": 57,
+          "details": {
+            "word_count": 44,
+            "length_ok": true,
+            "elements_found": 2,
+            "forbidden_found": 0,
+            "variety_score": 0.04
+          }
+        },
+        {
+          "test_id": "instruction-follow",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 1768.5730829834938,
+          "tokens_used": 31,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": false,
+            "check_contains": true,
+            "lines": 7,
+            "check_max_lines": false
+          }
+        }
+      ]
+    },
+    "llama3.2-3b": {
+      "model": "llama3.2:3b",
+      "provider": "ollama",
+      "total_score": 0.819,
+      "total_latency_ms": 101582.8,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "tag-extraction",
+          "score": 0.9272727272727272,
+          "passed": true,
+          "latency_ms": 17564.288540976122,
+          "tokens_used": 256,
+          "details": {
+            "expected_tags": [
+              "agents",
+              "research",
+              "safety",
+              "tools"
+            ],
+            "got_tags": [
+              "agents",
+              "infrastructure",
+              "open-models",
+              "prompting",
+              "research",
+              "safety",
+              "tools"
+            ],
+            "precision": 0.57,
+            "recall": 1.0,
+            "f1": 0.73
+          }
+        },
+        {
+          "test_id": "novelty-rating",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 4651.220458094031,
+          "tokens_used": 256,
+          "details": {
+            "expected_rating": 3,
+            "got_rating": 3,
+            "rating_correct": true,
+            "justification_sentences": 4
+          }
+        },
+        {
+          "test_id": "fluff-strip",
+          "score": 0.88,
+          "passed": true,
+          "latency_ms": 3140.229791053571,
+          "tokens_used": 211,
+          "details": {
+            "word_count": 24,
+            "max_words": 60,
+            "under_limit": true,
+            "facts_found": 4,
+            "facts_required": 5
+          }
+        },
+        {
+          "test_id": "thread-match",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 6708.634458016604,
+          "tokens_used": 409,
+          "details": {
+            "correct_threads": [
+              "agents",
+              "open-models",
+              "tools"
+            ],
+            "matched": [
+              "agents",
+              "tools"
+            ],
+            "wrong_matches": []
+          }
+        },
+        {
+          "test_id": "collision-detect",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 18994.459750014357,
+          "tokens_used": 644,
+          "details": {
+            "connections_found": 2,
+            "connections_required": 2,
+            "has_reasoning": true
+          }
+        },
+        {
+          "test_id": "draft-email",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2016.0482909996063,
+          "tokens_used": 212,
+          "details": {
+            "word_count": 68,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "code-gen",
+          "score": 0.2,
+          "passed": false,
+          "latency_ms": 8169.566500000656,
+          "tokens_used": 290,
+          "details": {
+            "executed": false,
+            "error": "Traceback (most recent call last):\n  File \"/var/folders/69/64zl4qkd7sq4sh3scn66wltm0000gp/T/tmpe16cc2zh.py\", line 23, in <module>\n    assert result[1].strip() == \"Hello world\", f\"Got '{result[1]}'\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Got ''\n",
+            "code_found": true
+          }
+        },
+        {
+          "test_id": "bug-detection",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 14055.59533298947,
+          "tokens_used": 552,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 0
+          }
+        },
+        {
+          "test_id": "multi-step-plan",
+          "score": 0.71,
+          "passed": true,
+          "latency_ms": 18582.49379193876,
+          "tokens_used": 660,
+          "details": {
+            "steps_found": 4,
+            "steps_required": 5,
+            "ordering_correct": false
+          }
+        },
+        {
+          "test_id": "creative-piece",
+          "score": 0.49680555555555556,
+          "passed": false,
+          "latency_ms": 5371.696833986789,
+          "tokens_used": 263,
+          "details": {
+            "word_count": 77,
+            "length_ok": true,
+            "elements_found": 5,
+            "forbidden_found": 0,
+            "variety_score": 0.14
+          }
+        },
+        {
+          "test_id": "instruction-follow",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2328.587875002995,
+          "tokens_used": 159,
+          "details": {
+            "check_is_valid_json": true,
+            "check_not_contains": true,
+            "check_contains": true,
+            "lines": 1,
+            "check_max_lines": true
+          }
+        }
+      ]
+    },
+    "phi4-14b": {
+      "model": "phi4:14b",
+      "provider": "ollama",
+      "total_score": 0.814,
+      "total_latency_ms": 271006.1,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "tag-extraction",
+          "score": 0.95,
+          "passed": true,
+          "latency_ms": 23098.93279208336,
+          "tokens_used": 236,
+          "details": {
+            "expected_tags": [
+              "agents",
+              "research",
+              "safety",
+              "tools"
+            ],
+            "got_tags": [
+              "agents",
+              "open-models",
+              "safety",
+              "tools"
+            ],
+            "precision": 0.75,
+            "recall": 0.75,
+            "f1": 0.75
+          }
+        },
+        {
+          "test_id": "novelty-rating",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 6247.087249998003,
+          "tokens_used": 252,
+          "details": {
+            "expected_rating": 3,
+            "got_rating": 3,
+            "rating_correct": true,
+            "justification_sentences": 5
+          }
+        },
+        {
+          "test_id": "fluff-strip",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 4103.569584083743,
+          "tokens_used": 224,
+          "details": {
+            "word_count": 39,
+            "max_words": 60,
+            "under_limit": true,
+            "facts_found": 5,
+            "facts_required": 5
+          }
+        },
+        {
+          "test_id": "thread-match",
+          "score": 0.8571428571428571,
+          "passed": true,
+          "latency_ms": 10624.254500027746,
+          "tokens_used": 367,
+          "details": {
+            "correct_threads": [
+              "agents",
+              "open-models",
+              "tools"
+            ],
+            "matched": [
+              "agents",
+              "open-models",
+              "tools"
+            ],
+            "wrong_matches": [
+              "research"
+            ]
+          }
+        },
+        {
+          "test_id": "collision-detect",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 37498.99704195559,
+          "tokens_used": 723,
+          "details": {
+            "connections_found": 2,
+            "connections_required": 2,
+            "has_reasoning": true
+          }
+        },
+        {
+          "test_id": "draft-email",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 6433.549958048388,
+          "tokens_used": 196,
+          "details": {
+            "word_count": 57,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "code-gen",
+          "score": 0.2,
+          "passed": false,
+          "latency_ms": 13148.91191595234,
+          "tokens_used": 345,
+          "details": {
+            "executed": false,
+            "error": "Traceback (most recent call last):\n  File \"/var/folders/69/64zl4qkd7sq4sh3scn66wltm0000gp/T/tmpf841c51x.py\", line 34, in <module>\n    assert result[0] == {\"name\": \"test\", \"type\": \"doc\"}, f\"Got {result[0]}\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Got {}\n",
+            "code_found": true
+          }
+        },
+        {
+          "test_id": "bug-detection",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 37849.97512504924,
+          "tokens_used": 722,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 0
+          }
+        },
+        {
+          "test_id": "multi-step-plan",
+          "score": 0.85,
+          "passed": true,
+          "latency_ms": 61418.51591691375,
+          "tokens_used": 991,
+          "details": {
+            "steps_found": 5,
+            "steps_required": 5,
+            "ordering_correct": false
+          }
+        },
+        {
+          "test_id": "creative-piece",
+          "score": 0.6018749999999999,
+          "passed": true,
+          "latency_ms": 27731.130874948576,
+          "tokens_used": 231,
+          "details": {
+            "word_count": 63,
+            "length_ok": true,
+            "elements_found": 4,
+            "forbidden_found": 0,
+            "variety_score": 0.88
+          }
+        },
+        {
+          "test_id": "instruction-follow",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 42851.21524997521,
+          "tokens_used": 161,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": false,
+            "check_contains": true,
+            "lines": 7,
+            "check_max_lines": false
+          }
+        }
+      ]
+    }
+  },
+  "hard_results": {
+    "apfel": {
+      "model": "apple-foundationmodel",
+      "provider": "apfel",
+      "total_score": 0.555,
+      "total_latency_ms": 23749.5,
+      "tier_equivalent": "haiku-class",
+      "results": [
+        {
+          "test_id": "hard-ambiguous-class",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 2695.430458057672,
+          "tokens_used": 101,
+          "details": {
+            "reason": "no tags field in output"
+          }
+        },
+        {
+          "test_id": "hard-contradictions",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 4865.323750069365,
+          "tokens_used": 192,
+          "details": {
+            "check_max_words": false,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "hard-noisy-extract",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 2470.557125052437,
+          "tokens_used": 114,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-dependency-chain",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 1004.23049996607,
+          "tokens_used": 27,
+          "details": {
+            "steps_found": 5,
+            "steps_required": 5,
+            "ordering_correct": true
+          }
+        },
+        {
+          "test_id": "hard-numeric-reasoning",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 6952.339499955997,
+          "tokens_used": 228,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-refusal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 459.37420800328255,
+          "tokens_used": 10,
+          "details": {
+            "check_not_contains": true,
+            "check_contains": false
+          }
+        },
+        {
+          "test_id": "hard-schema-transform",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 0,
+          "tokens_used": 0,
+          "details": {
+            "error": "apfel failed (exit 1): error: [unsupported language] Unsupported language: An unsupported language or locale was used"
+          }
+        },
+        {
+          "test_id": "hard-context-stress",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 1219.6402080589905,
+          "tokens_used": 14,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-followup",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2695.5782920122147,
+          "tokens_used": 139,
+          "details": {
+            "word_count": 107,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "hard-prompt-resist",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 1387.015665997751,
+          "tokens_used": 92,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": true,
+            "check_contains": false
+          }
+        }
+      ]
+    },
+    "llama3.2-3b": {
+      "model": "llama3.2:3b",
+      "provider": "ollama",
+      "total_score": 0.665,
+      "total_latency_ms": 33257.5,
+      "tier_equivalent": "haiku-class",
+      "results": [
+        {
+          "test_id": "hard-ambiguous-class",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 3938.2545419503003,
+          "tokens_used": 331,
+          "details": {
+            "reason": "no tags field in output"
+          }
+        },
+        {
+          "test_id": "hard-contradictions",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 2402.2443749709055,
+          "tokens_used": 252,
+          "details": {
+            "check_max_words": false,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "hard-noisy-extract",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 2684.4522079918534,
+          "tokens_used": 460,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-dependency-chain",
+          "score": 0.85,
+          "passed": true,
+          "latency_ms": 752.8557080077007,
+          "tokens_used": 227,
+          "details": {
+            "steps_found": 5,
+            "steps_required": 5,
+            "ordering_correct": false
+          }
+        },
+        {
+          "test_id": "hard-numeric-reasoning",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 4845.477290917188,
+          "tokens_used": 582,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-refusal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 5005.618958035484,
+          "tokens_used": 195,
+          "details": {
+            "check_not_contains": true,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "hard-schema-transform",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 3473.1436669826508,
+          "tokens_used": 378,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-context-stress",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 1581.5678340150043,
+          "tokens_used": 693,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "hard-followup",
+          "score": 0.8500000000000001,
+          "passed": true,
+          "latency_ms": 7985.921915969811,
+          "tokens_used": 458,
+          "details": {
+            "word_count": 223,
+            "length_ok": false,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "hard-prompt-resist",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 587.9897500853986,
+          "tokens_used": 122,
+          "details": {
+            "check_is_valid_json": true,
+            "check_not_contains": true,
+            "check_contains": true
+          }
+        }
+      ]
+    },
+    "phi4-14b": {
+      "model": "phi4:14b",
+      "provider": "ollama",
+      "total_score": 0.61,
+      "total_latency_ms": 116356.8,
+      "tier_equivalent": "haiku-class",
+      "results": [
+        {
+          "test_id": "hard-ambiguous-class",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 37730.949708027765,
+          "tokens_used": 554,
+          "details": {
+            "reason": "no tags field in output"
+          }
+        },
+        {
+          "test_id": "hard-contradictions",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 3874.0235830191523,
+          "tokens_used": 145,
+          "details": {
+            "check_max_words": false,
+            "check_regex_match": false
+          }
+        },
+        {
+          "test_id": "hard-noisy-extract",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 12584.973333985545,
+          "tokens_used": 525,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-dependency-chain",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 4006.6745419753715,
+          "tokens_used": 249,
+          "details": {
+            "steps_found": 5,
+            "steps_required": 5,
+            "ordering_correct": true
+          }
+        },
+        {
+          "test_id": "hard-numeric-reasoning",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 33480.217540985905,
+          "tokens_used": 938,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-refusal",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 3134.391749976203,
+          "tokens_used": 106,
+          "details": {
+            "check_not_contains": true,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "hard-schema-transform",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 6563.2806670619175,
+          "tokens_used": 369,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-context-stress",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 5136.825375026092,
+          "tokens_used": 695,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-followup",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 8173.893708968535,
+          "tokens_used": 309,
+          "details": {
+            "word_count": 114,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "hard-prompt-resist",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 1671.5660420013592,
+          "tokens_used": 119,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": true,
+            "check_contains": true
+          }
+        }
+      ]
+    }
+  }
+}
