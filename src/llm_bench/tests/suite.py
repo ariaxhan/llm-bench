@@ -374,13 +374,15 @@ ALL_TESTS: list[TestCase] = [
 
 
 def get_test(test_id: str) -> TestCase | None:
-    from llm_bench.tests.hard_suite import HARD_TESTS
+    from llm_bench.tests import FULL_TESTS
 
-    for t in ALL_TESTS + HARD_TESTS:
+    for t in FULL_TESTS:
         if t.id == test_id:
             return t
     return None
 
 
 def get_tests_by_category(category: str) -> list[TestCase]:
-    return [t for t in ALL_TESTS if t.category == category]
+    from llm_bench.tests import FULL_TESTS
+
+    return [t for t in FULL_TESTS if t.category == category]

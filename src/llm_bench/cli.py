@@ -36,18 +36,30 @@ def main():
 @click.option("--output", "-o", default=None, help="Save results to JSON file")
 @click.option("--category", "-c", default=None, help="Run only tests in this category")
 @click.option("--hard", is_flag=True, help="Run hard mode tests only")
-@click.option("--full", is_flag=True, help="Run all tests (standard + hard)")
-def run(models, provider, base_url, tests, details, output, category, hard, full):
+@click.option("--agentic", is_flag=True, help="Run agentic capability tests only")
+@click.option("--adversarial", is_flag=True, help="Run adversarial tests only")
+@click.option("--messy", is_flag=True, help="Run real-world messy tests only")
+@click.option("--full", is_flag=True, help="Run all tests (42 total)")
+def run(
+    models, provider, base_url, tests, details, output, category,
+    hard, agentic, adversarial, messy, full,
+):
     """Run benchmarks against one or more models.
 
     Examples:
-        llm-bench run phi4:14b qwen3.5:4b
+        llm-bench run phi4:14b
         llm-bench run phi4:14b --hard
+        llm-bench run phi4:14b --agentic
+        llm-bench run phi4:14b --adversarial --messy
         llm-bench run phi4:14b --full --details
-        llm-bench run apple-foundationmodel -p apfel
-        llm-bench run phi4:14b -t code-gen,bug-detection
     """
-    from llm_bench.tests import FULL_TESTS, HARD_TESTS
+    from llm_bench.tests import (
+        ADVERSARIAL_TESTS,
+        AGENTIC_TESTS,
+        FULL_TESTS,
+        HARD_TESTS,
+        MESSY_TESTS,
+    )
 
     # Resolve tests
     if tests:
@@ -56,10 +68,18 @@ def run(models, provider, base_url, tests, details, output, category, hard, full
         if not test_list:
             console.print("[red]No valid tests found for given IDs[/red]")
             sys.exit(1)
-    elif hard:
-        test_list = HARD_TESTS
     elif full:
         test_list = FULL_TESTS
+    elif any([hard, agentic, adversarial, messy]):
+        test_list = []
+        if hard:
+            test_list += HARD_TESTS
+        if agentic:
+            test_list += AGENTIC_TESTS
+        if adversarial:
+            test_list += ADVERSARIAL_TESTS
+        if messy:
+            test_list += MESSY_TESTS
     elif category:
         test_list = [t for t in FULL_TESTS if t.category == category]
         if not test_list:
@@ -121,22 +141,32 @@ def models(provider, base_url):
 @main.command(name="list-tests")
 def list_tests():
     """List all available benchmark tests."""
-    from llm_bench.tests import FULL_TESTS, HARD_TESTS
+    from llm_bench.tests import (
+        ADVERSARIAL_TESTS,
+        AGENTIC_TESTS,
+        FULL_TESTS,
+        HARD_TESTS,
+        MESSY_TESTS,
+    )
 
-    console.print("\n[bold]Standard Tests[/bold]\n")
-    for t in ALL_TESTS:
-        stars = "★" * t.difficulty.value
-        console.print(f"  [cyan]{t.id:<24}[/cyan] {stars:<6} [{t.category}] {t.name}")
+    suites = [
+        ("Standard Tests", ALL_TESTS, "cyan"),
+        ("Hard Mode", HARD_TESTS, "red"),
+        ("Agentic Capability", AGENTIC_TESTS, "magenta"),
+        ("Adversarial", ADVERSARIAL_TESTS, "yellow"),
+        ("Real-World Messy", MESSY_TESTS, "green"),
+    ]
 
-    console.print("\n[bold]Hard Mode Tests[/bold]\n")
-    for t in HARD_TESTS:
-        stars = "★" * t.difficulty.value
-        console.print(f"  [red]{t.id:<24}[/red] {stars:<6} [{t.category}] {t.name}")
+    for title, tests, color in suites:
+        console.print(f"\n[bold]{title}[/bold] ({len(tests)} tests)\n")
+        for t in tests:
+            stars = "★" * t.difficulty.value
+            console.print(
+                f"  [{color}]{t.id:<30}[/{color}] "
+                f"{stars:<6} [{t.category}] {t.name}"
+            )
 
-    total = len(FULL_TESTS)
-    std = len(ALL_TESTS)
-    hrd = len(HARD_TESTS)
-    console.print(f"\n  {total} tests total ({std} standard + {hrd} hard)\n")
+    console.print(f"\n  {len(FULL_TESTS)} tests total\n")
 
 
 @main.command()
