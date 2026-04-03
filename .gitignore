@@ -15,3 +15,9 @@ results/*.json
 !results/community/
 *.jsonl
 !tests/fixtures/*.jsonl
+# Temp files from code_gen test execution
+/calc_avg.py
+/frontmatter.py
+/merge_intervals.py
+/parse_frontmatter.py
+/MIGRATION_PLAN.md
