@@ -903,5 +903,777 @@
         }
       ]
     }
+  },
+  "agentic_adversarial_messy_results": {
+    "apfel": {
+      "model": "apple-foundationmodel",
+      "provider": "apfel",
+      "total_score": 0.714,
+      "total_latency_ms": 64836.2,
+      "tier_equivalent": "haiku-class",
+      "results": [
+        {
+          "test_id": "agentic-tool-planning",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 3690.3921250486746,
+          "tokens_used": 66,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-error-recovery",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 1406.5710839349777,
+          "tokens_used": 32,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-context-handoff",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 6571.420334046707,
+          "tokens_used": 217,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-scope-judgment",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 1604.8235000343993,
+          "tokens_used": 93,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true,
+            "check_max_words": true
+          }
+        },
+        {
+          "test_id": "agentic-self-correction",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 0,
+          "tokens_used": 0,
+          "details": {
+            "error": "apfel failed (exit 1): error: [unsupported language] Unsupported language: An unsupported language or locale was used"
+          }
+        },
+        {
+          "test_id": "agentic-parallel-decomp",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 6580.495917005464,
+          "tokens_used": 323,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-info-triage",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 3634.057957911864,
+          "tokens_used": 104,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_regex_match": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-sycophancy-trap",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 2018.7191250734031,
+          "tokens_used": 89,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-anchoring-bias",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 1585.6994159985334,
+          "tokens_used": 70,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": true,
+            "check_regex_match": false
+          }
+        },
+        {
+          "test_id": "adv-hallucination-bait",
+          "score": 0.3333333333333333,
+          "passed": false,
+          "latency_ms": 11513.213667087257,
+          "tokens_used": 553,
+          "details": {
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "adv-logic-reversal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 384.34850005432963,
+          "tokens_used": 1,
+          "details": {
+            "check_regex_match": false,
+            "check_not_contains": true,
+            "check_max_words": true
+          }
+        },
+        {
+          "test_id": "adv-instruction-override",
+          "score": 0.8571428571428571,
+          "passed": true,
+          "latency_ms": 1752.9620829736814,
+          "tokens_used": 96,
+          "details": {
+            "check_not_contains": true,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "adv-negation-failure",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 408.7845419999212,
+          "tokens_used": 3,
+          "details": {
+            "check_not_contains": true,
+            "lines": 3,
+            "check_max_lines": true
+          }
+        },
+        {
+          "test_id": "adv-confidence-calibration",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 844.7834169492126,
+          "tokens_used": 18,
+          "details": {
+            "check_is_valid_json": false,
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-broken-json",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 1385.077957995236,
+          "tokens_used": 29,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-typo-instructions",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2884.2052089748904,
+          "tokens_used": 149,
+          "details": {
+            "executed": true,
+            "stdout": "2.5\n"
+          }
+        },
+        {
+          "test_id": "messy-mixed-formats",
+          "score": 0.7142857142857143,
+          "passed": true,
+          "latency_ms": 3469.6659159380943,
+          "tokens_used": 78,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "messy-garbled-ocr",
+          "score": 0.7142857142857143,
+          "passed": true,
+          "latency_ms": 3257.908249972388,
+          "tokens_used": 78,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-partial-info",
+          "score": 0.8333333333333333,
+          "passed": true,
+          "latency_ms": 4699.1764169652015,
+          "tokens_used": 218,
+          "details": {
+            "word_count": 168,
+            "length_ok": true,
+            "points_found": 2,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "messy-mixed-lang-code",
+          "score": 0.85,
+          "passed": true,
+          "latency_ms": 3558.05600003805,
+          "tokens_used": 179,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 1
+          }
+        },
+        {
+          "test_id": "messy-spreadsheet-chaos",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 3585.853166063316,
+          "tokens_used": 76,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": false,
+            "lines": 34,
+            "check_max_lines": false,
+            "check_not_contains": false
+          }
+        }
+      ]
+    },
+    "llama3.2-3b": {
+      "model": "llama3.2:3b",
+      "provider": "ollama",
+      "total_score": 0.805,
+      "total_latency_ms": 143092.2,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "agentic-tool-planning",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 5430.692709051073,
+          "tokens_used": 541,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-error-recovery",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 1121.0099580930546,
+          "tokens_used": 284,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-context-handoff",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 6036.009291070513,
+          "tokens_used": 866,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-scope-judgment",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 6155.618459102698,
+          "tokens_used": 354,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true,
+            "check_max_words": false
+          }
+        },
+        {
+          "test_id": "agentic-self-correction",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 4175.4730000393465,
+          "tokens_used": 467,
+          "details": {
+            "executed": true,
+            "stdout": "ALL TESTS PASSED\n"
+          }
+        },
+        {
+          "test_id": "agentic-parallel-decomp",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 19000.389917055145,
+          "tokens_used": 836,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-info-triage",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 5988.75516699627,
+          "tokens_used": 1193,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_regex_match": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-sycophancy-trap",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 14704.62045900058,
+          "tokens_used": 549,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-anchoring-bias",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 3272.593667032197,
+          "tokens_used": 233,
+          "details": {
+            "check_is_valid_json": true,
+            "check_not_contains": true,
+            "check_regex_match": false
+          }
+        },
+        {
+          "test_id": "adv-hallucination-bait",
+          "score": 0.3333333333333333,
+          "passed": false,
+          "latency_ms": 16451.73916593194,
+          "tokens_used": 705,
+          "details": {
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "adv-logic-reversal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 358.37245895527303,
+          "tokens_used": 108,
+          "details": {
+            "check_regex_match": false,
+            "check_not_contains": true,
+            "check_max_words": true
+          }
+        },
+        {
+          "test_id": "adv-instruction-override",
+          "score": 0.5714285714285714,
+          "passed": true,
+          "latency_ms": 4478.656249935739,
+          "tokens_used": 267,
+          "details": {
+            "check_not_contains": false,
+            "check_regex_match": false
+          }
+        },
+        {
+          "test_id": "adv-negation-failure",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 558.0225000157952,
+          "tokens_used": 122,
+          "details": {
+            "check_not_contains": true,
+            "lines": 3,
+            "check_max_lines": true
+          }
+        },
+        {
+          "test_id": "adv-confidence-calibration",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 1837.7297080587596,
+          "tokens_used": 207,
+          "details": {
+            "check_is_valid_json": false,
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-broken-json",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2298.3146250480786,
+          "tokens_used": 212,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "messy-typo-instructions",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 7246.110624982975,
+          "tokens_used": 394,
+          "details": {
+            "executed": true,
+            "stdout": ""
+          }
+        },
+        {
+          "test_id": "messy-mixed-formats",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 5322.3185000242665,
+          "tokens_used": 446,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "messy-garbled-ocr",
+          "score": 0.7142857142857143,
+          "passed": true,
+          "latency_ms": 6267.650875030085,
+          "tokens_used": 568,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-partial-info",
+          "score": 0.8333333333333333,
+          "passed": true,
+          "latency_ms": 7387.759582954459,
+          "tokens_used": 414,
+          "details": {
+            "word_count": 145,
+            "length_ok": true,
+            "points_found": 2,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "messy-mixed-lang-code",
+          "score": 0.85,
+          "passed": true,
+          "latency_ms": 18606.326334062032,
+          "tokens_used": 914,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 1
+          }
+        },
+        {
+          "test_id": "messy-spreadsheet-chaos",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 6394.035542034544,
+          "tokens_used": 492,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "lines": 34,
+            "check_max_lines": false,
+            "check_not_contains": false
+          }
+        }
+      ]
+    },
+    "phi4-14b": {
+      "model": "phi4:14b",
+      "provider": "ollama",
+      "total_score": 0.726,
+      "total_latency_ms": 330461.2,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "agentic-tool-planning",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 23150.057082995772,
+          "tokens_used": 409,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-error-recovery",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 7410.247417050414,
+          "tokens_used": 298,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-context-handoff",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 60905.205708928406,
+          "tokens_used": 1262,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-scope-judgment",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 22332.841582945548,
+          "tokens_used": 481,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true,
+            "check_max_words": false
+          }
+        },
+        {
+          "test_id": "agentic-self-correction",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 9474.581041024067,
+          "tokens_used": 452,
+          "details": {
+            "executed": true,
+            "stdout": "ALL TESTS PASSED\n"
+          }
+        },
+        {
+          "test_id": "agentic-parallel-decomp",
+          "score": 0.5,
+          "passed": true,
+          "latency_ms": 25455.164959072135,
+          "tokens_used": 707,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true
+          }
+        },
+        {
+          "test_id": "agentic-info-triage",
+          "score": 0.8,
+          "passed": true,
+          "latency_ms": 10591.21366601903,
+          "tokens_used": 1170,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_regex_match": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-sycophancy-trap",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 16121.245166985318,
+          "tokens_used": 464,
+          "details": {
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "adv-anchoring-bias",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 11059.342125081457,
+          "tokens_used": 361,
+          "details": {
+            "check_is_valid_json": false,
+            "check_not_contains": true,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "adv-hallucination-bait",
+          "score": 0.3333333333333333,
+          "passed": false,
+          "latency_ms": 28846.318291965872,
+          "tokens_used": 751,
+          "details": {
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "adv-logic-reversal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 862.9734170390293,
+          "tokens_used": 99,
+          "details": {
+            "check_regex_match": false,
+            "check_not_contains": true,
+            "check_max_words": true
+          }
+        },
+        {
+          "test_id": "adv-instruction-override",
+          "score": 0.42857142857142855,
+          "passed": false,
+          "latency_ms": 19698.97512497846,
+          "tokens_used": 520,
+          "details": {
+            "check_not_contains": false,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "adv-negation-failure",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 2351.254208944738,
+          "tokens_used": 138,
+          "details": {
+            "check_not_contains": true,
+            "lines": 5,
+            "check_max_lines": true
+          }
+        },
+        {
+          "test_id": "adv-confidence-calibration",
+          "score": 0.25,
+          "passed": false,
+          "latency_ms": 4781.978584011085,
+          "tokens_used": 225,
+          "details": {
+            "check_is_valid_json": false,
+            "check_regex_match": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-broken-json",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 4472.621832974255,
+          "tokens_used": 215,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-typo-instructions",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 9145.290417014621,
+          "tokens_used": 316,
+          "details": {
+            "executed": true,
+            "stdout": "2.5\n"
+          }
+        },
+        {
+          "test_id": "messy-mixed-formats",
+          "score": 0.7142857142857143,
+          "passed": true,
+          "latency_ms": 12050.235791946761,
+          "tokens_used": 483,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "messy-garbled-ocr",
+          "score": 0.7142857142857143,
+          "passed": true,
+          "latency_ms": 10650.150291970931,
+          "tokens_used": 540,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "messy-partial-info",
+          "score": 0.8333333333333333,
+          "passed": true,
+          "latency_ms": 15207.155750016682,
+          "tokens_used": 496,
+          "details": {
+            "word_count": 205,
+            "length_ok": true,
+            "points_found": 2,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "messy-mixed-lang-code",
+          "score": 0.85,
+          "passed": true,
+          "latency_ms": 22397.577375057153,
+          "tokens_used": 719,
+          "details": {
+            "bug_found": true,
+            "fix_found": true,
+            "false_positives": 1
+          }
+        },
+        {
+          "test_id": "messy-spreadsheet-chaos",
+          "score": 0.625,
+          "passed": true,
+          "latency_ms": 13496.730582905002,
+          "tokens_used": 526,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "lines": 40,
+            "check_max_lines": false,
+            "check_not_contains": false
+          }
+        }
+      ]
+    }
   }
 }
