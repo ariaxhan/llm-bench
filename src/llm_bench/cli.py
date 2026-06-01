@@ -99,6 +99,9 @@ def run(
         elif provider == "opencode" or model.startswith("opencode/"):
             p = get_provider("opencode")
             model_specs.append((p, model))
+        elif provider == "claude-cli":
+            p = get_provider("claude-cli")
+            model_specs.append((p, model))
         else:
             kwargs = {}
             if base_url:

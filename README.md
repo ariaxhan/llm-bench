@@ -37,6 +37,9 @@ llm-bench run phi4:14b --full --details
 # Apple Intelligence
 llm-bench run apple-foundationmodel -p apfel
 
+# Claude tiers via headless Claude Code (no API key, uses your subscription)
+llm-bench run claude-opus-4-8 claude-opus-4-7 claude-sonnet-4-6 claude-haiku-4-5 -p claude-cli
+
 # Compare models
 llm-bench run phi4:14b llama3.2:3b -o results/comparison.json
 llm-bench compare results/*.json
@@ -68,21 +71,31 @@ Results from community benchmarks. Hardware matters — latency varies by chip a
 | 2 | phi4:14b | Ollama | 0.61 | haiku-class | 116s | M4 Pro 24GB |
 | 3 | apple-foundationmodel | Apfel | 0.55 | haiku-class | 24s | M4 Pro 24GB |
 
-### Claude Reference Baselines
+### Claude Tiers (measured)
 
-| Tier | Estimated Score | Role |
-|------|----------------|------|
-| opus | 0.94 | Planning, creative, architecture |
-| sonnet | 0.78 | Implementation, synthesis |
-| haiku | 0.52 | Validation, triage |
+Run 2026-06-01 via the `claude-cli` provider (headless `claude -p`, default system prompt replaced, tools off, single turn). Divergent hard tasks re-run 4x each to separate signal from variance.
+
+> **Caveat:** these ran through the Claude Code harness, not the raw API, so they are **not** directly comparable to the clean-API Ollama/Apfel scores above. They **are** comparable to each other (identical setup for all four models).
+
+| Model | Standard (11) | Hard (10) | Combined (21) | Honesty traps | Planted bugs |
+|-------|--------------|-----------|---------------|---------------|--------------|
+| Opus 4.8 | 0.903 | 0.73 | 0.821 | 6/6 refused | all caught |
+| Opus 4.7 | 0.904 | 0.81 | 0.859 | 6/6 refused | all caught |
+| Sonnet 4.6 | 0.823 | 0.67 | 0.750 | 6/6 refused | all caught |
+| Haiku 4.5 | 0.876 | 0.67 | 0.778 | 6/6 refused | all caught |
+
+Probes: 6 false-premise honesty traps (a fake SCOTUS case, a nonexistent API param, etc.) + 5 subtle-bug functions including a no-bug control. All four tiers refused every trap and caught every planted bug without hallucinating on the control.
 
 ### Key Findings
 
-- **Code generation is 0.20 across ALL local models** — hard boundary, stays with Claude
-- **Bug detection is 1.00 across ALL models** — local models are great at this
-- **llama3.2:3b (3B params) beats phi4:14b (14B params)** on both standard and hard suites
-- **Apple Intelligence is the speed king** — 2-7x faster than Ollama, at sonnet-class quality on standard tasks
-- **Hard mode exposes real gaps**: ambiguous classification (0.00 universal), numeric precision (0.50 cap), prompt injection resistance (varies widely)
+- **Opus 4.8 vs 4.7 are near-identical on practical single-turn tasks** — 9 of 11 standard tests score the same to the decimal. The version gap only appears on the hard suite, where 4.7 edged ahead on this run while 4.8 was more consistent across repeats (zero variance vs 4.7's higher-but-streakier ceiling).
+- **Honesty and bug-detection don't need the flagship** — Haiku 4.5 matched Opus exactly on refusing false premises and catching planted bugs.
+- **Opus only separates on genuinely hard tasks** — ~6-14 points over Sonnet/Haiku on the hard suite. On everyday tasks Haiku is within ~3 points of Opus, at roughly 1/5 the price.
+- **Code generation is 0.20 across ALL local models** — hard boundary, stays with Claude.
+- **Bug detection is 1.00 across ALL models** — local models are great at this.
+- **llama3.2:3b (3B params) beats phi4:14b (14B params)** on both standard and hard suites.
+- **Apple Intelligence is the speed king** — 2-7x faster than Ollama, at sonnet-class quality on standard tasks.
+- **Hard mode exposes real gaps**: ambiguous classification (0.00 universal), numeric precision (0.50 cap), prompt injection resistance (varies widely).
 
 ## Tests
 
@@ -124,6 +137,8 @@ Results from community benchmarks. Hardware matters — latency varies by chip a
 | Ollama | `-p ollama` | `localhost:11434/v1` | Most models |
 | Apfel | `-p apfel` | CLI-based | macOS 26+, Apple Intelligence |
 | LM Studio | `-p lmstudio` | `localhost:1234/v1` | GUI-based |
+| Claude CLI | `-p claude-cli` | local `claude` binary | Headless Claude Code, uses your subscription (no API key). System prompt replaced, tools off, single turn. Harness overhead in path — see caveat. |
+| Anthropic | `-p anthropic` | `api.anthropic.com/v1` | Raw API via OpenAI-compat endpoint. Needs `ANTHROPIC_API_KEY` env var. Clean (no harness). |
 | Custom | `-p openai-compat -u URL` | — | Any OpenAI-compatible API |
 
 ## Scoring
