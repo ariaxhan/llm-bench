@@ -73,6 +73,14 @@
         "id": "CP-20260616161525-17986-17147",
         "ts": "2026-06-16T23:15:25.539Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-18207\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260616161541-18956-6341",
+        "ts": "2026-06-16T23:15:41.100Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -131,6 +139,24 @@
         "id": 6,
         "tool": "Bash",
         "ts": "2026-06-16T23:12:13.720Z"
+      },
+      {
+        "context": null,
+        "domain": "",
+        "error": "Exit code 1\n  File \"<stdin>\", line 3\n    from llm_bench.floors import get_floor, validity_flag if False else get_floor\n                                                          ^^\nSyntaxError: invalid syntax",
+        "file": "",
+        "id": 7,
+        "tool": "Bash",
+        "ts": "2026-06-16T23:15:30.635Z"
+      },
+      {
+        "context": null,
+        "domain": "testing",
+        "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\nKeyError: 'VERIFIER_WEAK_tests'",
+        "file": "",
+        "id": 8,
+        "tool": "Bash",
+        "ts": "2026-06-16T23:15:39.994Z"
       }
     ],
     "events": [
@@ -933,6 +959,76 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616161518-17542",
         "ts": "2026-06-16T23:15:19.847Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 7000,
+        "event": "session:end",
+        "id": 81,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":6,\"agent\":\"main-17542\",\"duration_s\":7}",
+        "session_id": "",
+        "ts": "2026-06-16T23:15:25.677Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 576,
+        "event": "session-end",
+        "id": 82,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161518-17542",
+        "ts": "2026-06-16T23:15:26.096Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 83,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616161527-18207",
+        "ts": "2026-06-16T23:15:28.573Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 834,
+        "event": "session-start",
+        "id": 84,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161527-18207",
+        "ts": "2026-06-16T23:15:28.589Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 27,
+        "event": "post-compact-restore",
+        "id": 85,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161527-18207",
+        "ts": "2026-06-16T23:15:28.675Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 61,
+        "event": "capture-error",
+        "id": 86,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616151625-89021",
+        "ts": "2026-06-16T23:15:30.681Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 106,
+        "event": "capture-error",
+        "id": 87,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616151625-89021",
+        "ts": "2026-06-16T23:15:40.098Z"
       }
     ],
     "execution_traces": [],
