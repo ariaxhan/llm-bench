@@ -162,3 +162,101 @@ harness as a first-class feature, and run it across the **full suite** to turn t
 pilot into a real result. The structural metric-contamination finding stands on its own
 now and should change reporting today: **publish raw F1 + provenance, not the
 bonus-inflated composite.**
+
+---
+
+# Part 2 — the full-suite run (2026-06-16): what generalized, what didn't
+
+Follow-up commission (`2026-06-16-llm-bench-floor-full-suite.md`). Extended the floor
+to the floor-able subset of all 42 tests (standard 11 + hard 10 + agentic 7 +
+adversarial 7 + messy 7), ran every floor live + 8 stored models + a live opus/llama
+sample. Pre-registration: `experiments/floor/PREREGISTRATION-suite.md` (blind, MARGIN
+reused). Runner: `experiments/floor/run_suite.py`. Per-test n_items = 1 (one fixture);
+the model population (up to 10) gives breadth across MODELS, not items.
+
+## Coverage (honest)
+- **35 FLOOR-ABLE** (a genuine dumb incumbent exists), **7 NO-FLOOR** (generative —
+  write-email ×3, plan ×2, synthesize, poem — excluded from the verdict, not faked).
+- 7 dumb floors by verifier family: regex keyword tagger (tag/thread), constant
+  majority-class (novelty), extractive truncation (fluff), `ruff` linter (bug), null
+  floor (code — the model-requiring control), and the **dumb JSON echo**
+  (`floor_instruction_follow`, 25 tests). Every floor is **prompt-only** — it never
+  reads the verifier's answer key.
+
+## HONEST DEFLATION — the n=1 headline did NOT generalize
+The Part-1 prize (the **+0.2 format-bonus** floats the composite) is **narrow**: it
+recurs on exactly **1 test** (tag-extraction), because tag_extraction is the only
+verifier carrying that bonus. *The "composite floats the floor" finding does not
+generalize across the suite.* It stays a true, local observation about one verifier —
+not the headline. Stating this plainly so the old framing does not outlive its evidence.
+
+## What REPLACED it as the prize — the verifier-broken band (STRUCTURAL, robust)
+The full-suite run forced a **3-band** result, not 2:
+
+| band | count | meaning |
+|---|---|---|
+| **MODEL-REQUIRING** | 13 | floor genuinely fails; the model earns its keep. Code tests (floor 0.00 — null/ruff can't fake code), real refusal (hard-refusal: 8/8 models beat floor), specific-answer + word-limit tests (adv-logic-reversal). The verifier has teeth. |
+| **FLOOR-BEATABLE (trivial-task)** | some | easy task (tag/thread/novelty/fluff); a dumb baseline fairly competes. Expected, not alarming. |
+| **FLOOR-BEATABLE (VERIFIER-BROKEN)** | **6 slam-dunk** | a content-free echo scores **1.00** on a **HARD/EXTREME** test and **0/8 models beat it.** The test does not measure what it claims. |
+
+Overall: **18 FLOOR-BEATABLE / 13 MODEL-REQUIRING / 4 MIXED.**
+
+### The mechanism (structural — n-independent; ANY echo beats it)
+The 25 `instruction_follow` tests score with `contains(X)` against the model's output.
+The dumb floor echoes the **whole prompt**, so any expected token that *already sits in
+the prompt* matches for free. This isn't a model finding — it's a **verifier-design**
+contaminated observable: the test rewards *"are the right words present"* over *"did you
+reason."* WC pathology **#46 single-score-benchmark-capture** at the benchmark-DESIGN
+level. The apparatus audited its own instrument and found it broken — the project
+signature, turned inward.
+
+### Bulletproof worked examples (`experiments/floor/verifier_weak_evidence.json`)
+For each verifier-broken test: the expected token, where it sits in the prompt, how the
+echo matches.
+
+- **hard-context-stress** (EXTREME, floor 1.00): verifier wants `contains('0x04')`,
+  `contains('16')`, `contains('64')` — the answer values the model is supposed to read
+  off a binary-protocol spec. All three sit **in the spec text in the prompt.** Echo
+  copies the spec → 1.00. The test never checks the model *read* anything.
+- **messy-spreadsheet-chaos** (EXTREME, floor 1.00): wants `contains('Chen, Wei')`,
+  `'Martinez'`, `"O'Brien"`, `'145000'`, `'2023-06-15'` — all rows of the **input
+  spreadsheet** in the prompt. Echo copies the messy input → 1.00, with the actual
+  "clean it into JSON" task untested (it only needs the names present + valid JSON).
+- **hard-numeric-reasoning** (EXTREME, floor 1.00): wants `contains('gb_per_day')`,
+  `'total_monthly'` — the **output field names the prompt itself names**, not the
+  computed numbers. Echo mentions the field names → 1.00. The arithmetic is never checked.
+- **agentic-context-handoff** (HARD, floor 1.00): wants `'inventory'`, `'analytics'`,
+  `'uuid'`, `'partition'` — all in the prompt's context. Echo → 1.00.
+- **hard-noisy-extract** (HARD, floor 1.00): wants `'confirmed_facts'`,
+  `'unverified_claims'`, `'contradictions'` — the **output schema key names** stated in
+  the prompt. Echo → 1.00.
+- **adv-negation-failure** (HARD, floor 1.00): a different sub-mode — only
+  `not_contains(<language names>)` + `max_lines ≤ 6`. A 1-line JSON blob with no language
+  names passes **vacuously.** The test rewards saying nothing relevant.
+
+(Plus ~9 more with elevated-but-partial floor scores 0.6–0.86 — weaker signals of the
+same disease; some are still MODEL-REQUIRING because a `not_contains` guard has teeth,
+e.g. messy-broken-json's `not_contains('//')`.)
+
+## THE FIX (named, not built — actionable next step)
+`instruction_follow` (and the other `contains`-based verifiers) must **reject
+content-free prompt-echo** and check **semantic-or-structural correctness**, not
+substring containment. Concretely: (1) verify the value is in the *right JSON field*,
+not merely present in the text; (2) reject output that is a near-copy of the prompt
+(echo-overlap ratio); (3) for numeric/transform tasks, check the *computed* answer, not
+that the field name appears. Until then, the affected hard-test scores measure format,
+not capability — and should be reported with that caveat.
+
+## Scoping (honest)
+- **Structural / robust:** the verifier-broken finding. `contains()` against echoed
+  prompt is broken regardless of n — any echo beats it. The 6 slam-dunks are not a
+  sample; they are a proof.
+- **Pilot / n=1:** the *model ranking within a band* and the trivial-task floor-beats
+  (which specific model ties/loses) — one fixture per test. A demonstration, not a
+  ranking. The model population gives breadth across models, not items.
+
+## Verdict
+P5 reached the model layer; pushed further, the cheap floor became a **benchmark
+self-audit** and found 6 hard/extreme tests whose verifiers a content-free echo maxes.
+That — not the narrow format-bonus finding — is the durable result. Next: implement the
+echo-rejecting verifier fix and re-run.
