@@ -201,6 +201,14 @@
         "id": "CP-20260616161842-28892-31423",
         "ts": "2026-06-16T23:18:42.823Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-29117\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":2}",
+        "contract_id": null,
+        "id": "CP-20260616161850-29655-4861",
+        "ts": "2026-06-16T23:18:50.502Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -1918,6 +1926,66 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616161838-28508",
         "ts": "2026-06-16T23:18:39.809Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 4000,
+        "event": "session:end",
+        "id": 164,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":1,\"agent\":\"main-28508\",\"duration_s\":4}",
+        "session_id": "",
+        "ts": "2026-06-16T23:18:42.980Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 686,
+        "event": "session-end",
+        "id": 165,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161838-28508",
+        "ts": "2026-06-16T23:18:43.472Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 166,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/_meta/chronicles/2026/2026-06-16-floor-full-suite.md\"}",
+        "session_id": "",
+        "ts": "2026-06-16T23:18:45.243Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 167,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616161845-29117",
+        "ts": "2026-06-16T23:18:46.147Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1113,
+        "event": "session-start",
+        "id": 168,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161845-29117",
+        "ts": "2026-06-16T23:18:46.162Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 28,
+        "event": "post-compact-restore",
+        "id": 169,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161845-29117",
+        "ts": "2026-06-16T23:18:46.252Z"
       }
     ],
     "execution_traces": [],
