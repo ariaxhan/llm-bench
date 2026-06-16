@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-06-01T07:11:19.679200+00:00",
+  "runs": [
+    {
+      "model": "claude-opus-4-7",
+      "provider": "claude-cli",
+      "total_score": 0.8,
+      "total_latency_ms": 18970.893499907106,
+      "tier_equivalent": "sonnet-class",
+      "results": [
+        {
+          "test_id": "hard-noisy-extract",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 11915.566374955233,
+          "tokens_used": 479,
+          "details": {
+            "check_is_valid_json": true,
+            "check_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "hard-schema-transform",
+          "score": 0.6,
+          "passed": true,
+          "latency_ms": 7055.327124951873,
+          "tokens_used": 170,
+          "details": {
+            "check_is_valid_json": false,
+            "check_contains": true,
+            "check_not_contains": false
+          }
+        }
+      ]
+    }
+  ]
+}

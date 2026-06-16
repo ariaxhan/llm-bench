@@ -1,0 +1,454 @@
+{
+  "format": 1,
+  "migrations": [
+    "001_init",
+    "002_graph_tracking",
+    "003_telemetry",
+    "004_fix_learnings_schema",
+    "005_learning_system",
+    "006_hypotheses",
+    "007_compaction_telemetry",
+    "008_error_domain",
+    "009_learning_visibility_sensitivity",
+    "010_normalize_timestamps",
+    "011_drop_sync_log",
+    "012_learnings_fts",
+    "013_learning_load_count"
+  ],
+  "tables": {
+    "compaction_events": [],
+    "context": [
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-99168\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":4}",
+        "contract_id": null,
+        "id": "CP-20260616152416-99731-10266",
+        "ts": "2026-06-16T22:24:16.848Z",
+        "type": "checkpoint"
+      }
+    ],
+    "context_sessions": [],
+    "edges": [],
+    "errors": [
+      {
+        "context": null,
+        "domain": null,
+        "error": "Exit code 127\npyenv: python: command not found\n\nThe `python' command exists in these Python versions:\n  3.11.7\n\nNote: See 'pyenv help global' for tips on allowing both\n      python2 and python3 to be found.",
+        "file": "",
+        "id": 1,
+        "tool": "Bash",
+        "ts": "2026-04-03T19:14:46.523Z"
+      },
+      {
+        "context": null,
+        "domain": null,
+        "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nModuleNotFoundError: No module named 'llm_bench'",
+        "file": "",
+        "id": 2,
+        "tool": "Bash",
+        "ts": "2026-04-03T19:14:51.179Z"
+      },
+      {
+        "context": null,
+        "domain": null,
+        "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nModuleNotFoundError: No module named 'llm_bench'",
+        "file": "",
+        "id": 3,
+        "tool": "Bash",
+        "ts": "2026-04-03T19:15:05.357Z"
+      },
+      {
+        "context": null,
+        "domain": null,
+        "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nModuleNotFoundError: No module named 'llm_bench'",
+        "file": "",
+        "id": 4,
+        "tool": "Bash",
+        "ts": "2026-04-03T19:15:44.508Z"
+      },
+      {
+        "context": null,
+        "domain": null,
+        "error": "Exit code 1\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: pip install --upgrade pip\nI001 [*] Import block is un-sorted or un-formatted\n  --> src/llm_bench/providers/self.py:3:1\n   |\n 1 |   \"\"\"OpenCode self-benchmark provider — captures own responses for testing.\"\"\"\n 2 |\n 3 | / from __future__ import annotations\n 4 | |\n 5 | | import json\n 6 | | import time\n 7 | | from dataclasses import asdict\n 8 | |\n 9 | | from llm_bench.providers.base import BaseProvider, LLMResponse\n10 | | from llm_bench.models import TestCase\n11 | | from llm_bench.verify import VERIFIERS\n   | |______________________________________^\n   |\nhelp: Organize imports\n\nF401 [*] `time` imported but unused\n --> src/llm_bench/providers/self.py:6:8\n  |\n5 | import json\n6 | import time\n  |        ^^^^\n7 | from dataclasses import asdict\n  |\nhelp: Remove unused import: `time`\n\nF401 [*] `dataclasses.asdict` imported but unused\n --> src/llm_bench/providers/self.py:7:25\n  |\n5 | import json\n6 | import time\n7 | from dataclasses import asdict\n  |                         ^^^^^^\n8 |\n9 | from llm_bench.providers.base import BaseProvider, LLMResponse\n  |\nhelp: Remove unused import: `dataclasses.asdict`\n\nF541 [*] f-string without any placeholders\n  --> src/llm_bench/providers/self.py:71:19\n   |\n69 |         if test.reference_answer:\n70 |             score, details = verifier(test.reference_answer, test.metadata)\n71 |             print(f\"\\n[Reference Answer Used for Scoring]\")\n   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n72 |         else:\n73 |             print(f\"\\n[No reference answer - needs manual response]\")\n   |\nhelp: Remove extraneous `f` prefix\n\nF541 [*] f-string without any placeholders\n  --> src/llm_bench/providers/self.py:73:19\n   |\n71 |             print(f\"\\n[Reference Answer Used for Scoring]\")\n72 |         else:\n73 |             print(f\"\\n[No reference answer - needs manual response]\")\n   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n74 |             continue\n   |\nhelp: Remove extraneous `f` prefix\n\nFound 5 errors.\n[*] 5 fixable with the `--fix` option.",
+        "file": "",
+        "id": 5,
+        "tool": "Bash",
+        "ts": "2026-04-03T20:26:55.310Z"
+      }
+    ],
+    "events": [
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 212,
+        "event": "capture-error",
+        "id": 1,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:14:46.626Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 127,
+        "event": "capture-error",
+        "id": 2,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:14:51.292Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 76,
+        "event": "log-write",
+        "id": 3,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/tests/agentic_suite.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:14:59.699Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 106,
+        "event": "capture-error",
+        "id": 4,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:15:05.454Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 79,
+        "event": "log-write",
+        "id": 5,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/tests/messy_suite.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:15:38.498Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 102,
+        "event": "capture-error",
+        "id": 6,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:15:44.602Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 81,
+        "event": "log-write",
+        "id": 7,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/tests/__init__.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:16:13.830Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 85,
+        "event": "log-write",
+        "id": 8,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/tests/suite.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:16:27.503Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 93,
+        "event": "log-write",
+        "id": 9,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/cli.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:16:45.747Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 89,
+        "event": "log-write",
+        "id": 10,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/cli.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:17:04.903Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 90,
+        "event": "log-write",
+        "id": 11,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/cli.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T19:17:24.594Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 75,
+        "event": "post-compact-restore",
+        "id": 12,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:28:54.971Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 83,
+        "event": "post-compact-restore",
+        "id": 13,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:35:21.663Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 82,
+        "event": "post-compact-restore",
+        "id": 14,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:35:21.855Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 83,
+        "event": "post-compact-restore",
+        "id": 15,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T19:35:22.043Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 4931,
+        "event": "post-compact-restore",
+        "id": 16,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:25:08.340Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 85,
+        "event": "log-write",
+        "id": 17,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/providers/opencode.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T20:26:17.334Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 82,
+        "event": "log-write",
+        "id": 18,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/providers/__init__.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T20:26:32.285Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 86,
+        "event": "log-write",
+        "id": 19,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/src/llm_bench/cli.py\"}",
+        "session_id": "",
+        "ts": "2026-04-03T20:26:46.899Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 118,
+        "event": "capture-error",
+        "id": 20,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:26:55.415Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 77,
+        "event": "post-compact-restore",
+        "id": 21,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:32:06.634Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 73,
+        "event": "post-compact-restore",
+        "id": 22,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:37:55.930Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 75,
+        "event": "post-compact-restore",
+        "id": 23,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:37:56.113Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 74,
+        "event": "post-compact-restore",
+        "id": 24,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T20:43:04.088Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 76,
+        "event": "post-compact-restore",
+        "id": 25,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "",
+        "ts": "2026-04-03T21:07:32.556Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 76,
+        "event": "log-write",
+        "id": 26,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/ariaxhan/Downloads/Vaults/CodingVault/llm-bench/.gitignore\"}",
+        "session_id": "",
+        "ts": "2026-04-03T21:08:51.788Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "post-compact-restore",
+        "id": 27,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616151625-89021",
+        "ts": "2026-06-16T22:16:31.295Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "log-write",
+        "id": 28,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/_meta/commissions/active/2026-06-16-llm-bench-floor-in-the-harness.md\"}",
+        "session_id": "",
+        "ts": "2026-06-16T22:17:46.364Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 29,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/floors.py\"}",
+        "session_id": "",
+        "ts": "2026-06-16T22:22:22.372Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 30,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/experiments/floor/run_floor.py\"}",
+        "session_id": "",
+        "ts": "2026-06-16T22:22:54.607Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 31,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/experiments/floor/PREREGISTRATION.md\"}",
+        "session_id": "",
+        "ts": "2026-06-16T22:23:23.878Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 32,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616152407-99168",
+        "ts": "2026-06-16T22:24:12.229Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 5195,
+        "event": "session-start",
+        "id": 33,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616152407-99168",
+        "ts": "2026-06-16T22:24:12.244Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "post-compact-restore",
+        "id": 34,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616152407-99168",
+        "ts": "2026-06-16T22:24:12.341Z"
+      }
+    ],
+    "execution_traces": [],
+    "experiments": [],
+    "hypotheses": [],
+    "learnings": [
+      {
+        "domain": "email-content",
+        "evidence": "Emails use: \"Tony Hoare died (Quicksort inventor)\", \"84 commits (7 days)\", \"289.6K stars\". Never generic \"recent commits\".",
+        "hit_count": 98,
+        "id": null,
+        "insight": "Email design principles: specificity (names/numbers/attributions), grid layouts for metrics, cross-domain collision detection, night questions for subconscious processing. Pre-scraped intelligence + live WebSearch combined.",
+        "last_hit": "2026-04-20T13:30:16.997Z",
+        "load_count": 0,
+        "sensitivity": "low",
+        "ts": "2026-03-11T23:15:16.000Z",
+        "type": "pattern",
+        "visibility": "agent"
+      },
+      {
+        "domain": "architecture",
+        "evidence": "_meta/plans/ai-engineering-team.md + dream analysis",
+        "hit_count": 9,
+        "id": null,
+        "insight": "Worktree parallelism dangerous on shared files: agents contaminate each other's working tree. Sequential execution safer when branches share files like tests/. Always commit/stash ALL pending work before creating worktrees.",
+        "last_hit": "2026-04-09T13:30:12.911Z",
+        "load_count": 0,
+        "sensitivity": "low",
+        "ts": "2026-03-26T03:55:55.733Z",
+        "type": "pattern",
+        "visibility": "agent"
+      }
+    ],
+    "nodes": []
+  }
+}
