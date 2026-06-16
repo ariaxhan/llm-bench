@@ -89,6 +89,14 @@
         "id": "CP-20260616161547-19566-24050",
         "ts": "2026-06-16T23:15:47.235Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-19788\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260616161601-20388-10634",
+        "ts": "2026-06-16T23:16:01.970Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -165,6 +173,15 @@
         "id": 8,
         "tool": "Bash",
         "ts": "2026-06-16T23:15:39.994Z"
+      },
+      {
+        "context": null,
+        "domain": "",
+        "error": "Exit code 1\nVERIFIER-WEAK: 15\nTraceback (most recent call last):\n  File \"<stdin>\", line 23, in <module>\nKeyError: 'checks'",
+        "file": "",
+        "id": 9,
+        "tool": "Bash",
+        "ts": "2026-06-16T23:15:51.395Z"
       }
     ],
     "events": [
@@ -1087,6 +1104,66 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616161543-19187",
         "ts": "2026-06-16T23:15:44.207Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 4000,
+        "event": "session:end",
+        "id": 93,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":1,\"agent\":\"main-19187\",\"duration_s\":4}",
+        "session_id": "",
+        "ts": "2026-06-16T23:15:47.374Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 727,
+        "event": "session-end",
+        "id": 94,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161543-19187",
+        "ts": "2026-06-16T23:15:47.938Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 95,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616161549-19788",
+        "ts": "2026-06-16T23:15:50.325Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 849,
+        "event": "session-start",
+        "id": 96,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161549-19788",
+        "ts": "2026-06-16T23:15:50.340Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 26,
+        "event": "post-compact-restore",
+        "id": 97,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616161549-19788",
+        "ts": "2026-06-16T23:15:50.426Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 73,
+        "event": "capture-error",
+        "id": 98,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616151625-89021",
+        "ts": "2026-06-16T23:15:51.447Z"
       }
     ],
     "execution_traces": [],
