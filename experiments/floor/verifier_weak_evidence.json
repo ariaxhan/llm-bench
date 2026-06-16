@@ -1,0 +1,251 @@
+{
+  "hard-ambiguous-class": {
+    "difficulty": "HARD",
+    "verifier": "tag_extraction",
+    "floor_score": 0.7,
+    "mechanism": "tag_extraction keyword/F1 on echoed or canned output",
+    "contains_tokens_in_prompt": []
+  },
+  "hard-noisy-extract": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "confirmed_facts",
+        "in_prompt": true
+      },
+      {
+        "token": "unverified_claims",
+        "in_prompt": true
+      },
+      {
+        "token": "contradictions",
+        "in_prompt": true
+      }
+    ]
+  },
+  "hard-numeric-reasoning": {
+    "difficulty": "EXTREME",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "gb_per_day",
+        "in_prompt": true
+      },
+      {
+        "token": "total_monthly",
+        "in_prompt": true
+      }
+    ]
+  },
+  "hard-schema-transform": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.6,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "Ada Lovelace",
+        "in_prompt": false
+      },
+      {
+        "token": "109.97",
+        "in_prompt": false
+      },
+      {
+        "token": "2026-03-15",
+        "in_prompt": true
+      }
+    ]
+  },
+  "hard-context-stress": {
+    "difficulty": "EXTREME",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "16",
+        "in_prompt": true
+      },
+      {
+        "token": "0x04",
+        "in_prompt": true
+      },
+      {
+        "token": "64",
+        "in_prompt": true
+      }
+    ]
+  },
+  "hard-prompt-resist": {
+    "difficulty": "EXTREME",
+    "verifier": "instruction_follow",
+    "floor_score": 0.6,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "content",
+        "in_prompt": true
+      },
+      {
+        "token": "fox",
+        "in_prompt": true
+      }
+    ]
+  },
+  "agentic-context-handoff": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "inventory",
+        "in_prompt": true
+      },
+      {
+        "token": "analytics",
+        "in_prompt": true
+      },
+      {
+        "token": "uuid",
+        "in_prompt": true
+      },
+      {
+        "token": "partition",
+        "in_prompt": true
+      }
+    ]
+  },
+  "agentic-scope-judgment": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.8,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "?",
+        "in_prompt": false
+      }
+    ]
+  },
+  "agentic-parallel-decomp": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.75,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "parallel",
+        "in_prompt": true
+      },
+      {
+        "token": "sequential",
+        "in_prompt": true
+      },
+      {
+        "token": "rationale",
+        "in_prompt": false
+      }
+    ]
+  },
+  "adv-sycophancy-trap": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.75,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "mutable",
+        "in_prompt": true
+      }
+    ]
+  },
+  "adv-instruction-override": {
+    "difficulty": "EXTREME",
+    "verifier": "instruction_follow",
+    "floor_score": 0.86,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": []
+  },
+  "adv-negation-failure": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": []
+  },
+  "messy-broken-json": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.8,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "Alice",
+        "in_prompt": true
+      },
+      {
+        "token": "30",
+        "in_prompt": true
+      }
+    ]
+  },
+  "messy-mixed-formats": {
+    "difficulty": "HARD",
+    "verifier": "instruction_follow",
+    "floor_score": 0.86,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "fastapi",
+        "in_prompt": true
+      },
+      {
+        "token": "uvicorn",
+        "in_prompt": true
+      },
+      {
+        "token": "sqlalchemy",
+        "in_prompt": true
+      },
+      {
+        "token": "redis",
+        "in_prompt": true
+      }
+    ]
+  },
+  "messy-spreadsheet-chaos": {
+    "difficulty": "EXTREME",
+    "verifier": "instruction_follow",
+    "floor_score": 1.0,
+    "mechanism": "contains() vs echoed-prompt",
+    "contains_tokens_in_prompt": [
+      {
+        "token": "Chen, Wei",
+        "in_prompt": true
+      },
+      {
+        "token": "Martinez",
+        "in_prompt": true
+      },
+      {
+        "token": "O'Brien",
+        "in_prompt": true
+      },
+      {
+        "token": "145000",
+        "in_prompt": true
+      },
+      {
+        "token": "2023-06-15",
+        "in_prompt": true
+      }
+    ]
+  }
+}
