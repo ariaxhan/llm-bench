@@ -92,9 +92,11 @@ def load_community(test_id: str) -> list[dict]:
 
 
 def verdict(model_score: float, floor_score: float) -> str:
-    if model_score <= floor_score + STRICT_TIE:
+    # round to kill float dust (1.0 - 0.95 == 0.0500000004 would fake a survive)
+    gap = round(model_score - floor_score, 6)
+    if gap <= STRICT_TIE:
         return "EVAPORATED (<=floor)"
-    if model_score - floor_score <= MARGIN:
+    if gap <= MARGIN:
         return "EVAPORATED (within margin)"
     return "SURVIVED"
 
@@ -115,17 +117,31 @@ async def main() -> None:
         rows.append(await run_model("claude-cli", m, test))
     rows.extend(load_community(TEST_ID))
 
+    # Decompose: the +format-bonus composite is what the leaderboard reports,
+    # but it is constant noise for model AND floor. The real contest is raw
+    # tag-F1 (dune sharpening #1). Verdict on BOTH; composite is the locked one.
+    floor_f1 = float(floor_details.get("f1", 0.0))
     for r in rows:
         if "score" in r:
             r["verdict"] = verdict(r["score"], floor_score)
+            r["f1"] = float(r.get("details", {}).get("f1", 0.0))
+            r["verdict_rawf1"] = verdict(r["f1"], floor_f1)
 
+    scored = [r for r in rows if "score" in r]
     report = {
         "test_id": TEST_ID,
+        "n_items": 1,  # ONE article — a demonstration / pilot, not a powered verdict
+        "framing": "n=1 item. Claim is 'on THIS item the floor ties/beats models', "
+                   "a pilot like self-gen n=160, not a statistically powered result.",
         "margin": MARGIN,
         "floor": {
             "output": floor_out,
-            "score": round(floor_score, 4),
+            "composite_score": round(floor_score, 4),
+            "raw_tag_f1": floor_f1,
             "details": floor_details,
+            "note": "crude-singular substring false-positived 'open-models' off "
+                    "the word 'models'; also missed 'research'. floor is right for "
+                    "partly-wrong reasons — reported honestly.",
         },
         "models": rows,
     }
@@ -133,21 +149,26 @@ async def main() -> None:
     out_path.write_text(json.dumps(report, indent=2))
 
     # ── console table ──
-    print(f"\nTEST: {TEST_ID}")
-    print(f"FLOOR (dumb regex): score={floor_score:.3f}  tags={floor_details.get('got_tags')}")
-    print(f"  floor output: {floor_out}\n")
-    print(f"{'model':28s} {'prov':10s} {'score':>6s}  verdict")
-    print("-" * 70)
-    scored = [r for r in rows if "score" in r]
-    for r in sorted(scored, key=lambda x: -x["score"]):
+    print(f"\nTEST: {TEST_ID}   (N=1 item — demonstration, not a powered verdict)")
+    print(f"FLOOR (dumb regex): composite={floor_score:.3f}  raw-tag-F1={floor_f1:.3f}  "
+          f"tags={floor_details.get('got_tags')}")
+    print(f"  P={floor_details.get('precision')} R={floor_details.get('recall')} "
+          f"(false-pos 'open-models', missed 'research')\n")
+    print(f"{'model':24s} {'prov':6s} {'comp':>5s} {'verdict(comp)':18s} "
+          f"{'rawF1':>5s} {'verdict(rawF1)':18s}")
+    print("-" * 86)
+    for r in sorted(scored, key=lambda x: (-x["f1"], -x["score"])):
         prov = "live" if str(r.get("provenance", "")).startswith("live") else "prior"
-        print(f"{r['model']:28s} {prov:10s} {r['score']:6.3f}  {r['verdict']}")
+        print(f"{r['model']:24s} {prov:6s} {r['score']:5.3f} {r['verdict']:18s} "
+              f"{r['f1']:5.3f} {r['verdict_rawf1']:18s}")
     for r in rows:
         if "error" in r:
-            print(f"{r['model']:28s} ERROR: {r['error']}")
-    survived = sum(1 for r in scored if r["verdict"] == "SURVIVED")
-    print(f"\n{survived}/{len(scored)} model-results SURVIVED the floor "
-          f"(margin>{MARGIN}). report -> {out_path}")
+            print(f"{r['model']:24s} ERROR: {r['error']}")
+    surv_c = sum(1 for r in scored if r["verdict"] == "SURVIVED")
+    surv_f = sum(1 for r in scored if r["verdict_rawf1"] == "SURVIVED")
+    print(f"\nComposite (locked, format-bonus inflated): {surv_c}/{len(scored)} SURVIVED")
+    print(f"Raw tag-F1 (the real contest):             {surv_f}/{len(scored)} SURVIVED")
+    print(f"report -> {out_path}")
 
 
 if __name__ == "__main__":
