@@ -1,9 +1,12 @@
 {
   "test_id": "tag-extraction",
+  "n_items": 1,
+  "framing": "n=1 item. Claim is 'on THIS item the floor ties/beats models', a pilot like self-gen n=160, not a statistically powered result.",
   "margin": 0.05,
   "floor": {
     "output": "{\"title\": \"Anthropic released a new paper on Constitutional AI training\", \"tags\": [\"agents\", \"safety\", \"tools\", \"open-models\"], \"summary\": \"Anthropic released a new paper on Constitutional AI training methods that improve agent reliability in multi-step tool-use scenarios.\"}",
-    "score": 0.95,
+    "composite_score": 0.95,
+    "raw_tag_f1": 0.75,
     "details": {
       "expected_tags": [
         "agents",
@@ -20,7 +23,8 @@
       "precision": 0.75,
       "recall": 0.75,
       "f1": 0.75
-    }
+    },
+    "note": "crude-singular substring false-positived 'open-models' off the word 'models'; also missed 'research'. floor is right for partly-wrong reasons \u2014 reported honestly."
   },
   "models": [
     {
@@ -49,7 +53,9 @@
       },
       "raw_output": "```\n{\n  \"title\": \"Anthropic Releases New Paper on Constitutional AI Training Methods\",\n  \"tags\": [\n    \"agents\",\n    \"prompting\",\n    \"safety\",\n    \"tools\",\n    \"open-models\",\n    \"research\",\n    \"infrastructure\"\n  ],\n  \"summary\": \"A new paper by Anthropic introduces a method for training agents with improved reliability in multi-step tool-use scenarios.\"\n}\n```",
       "provenance": "live-2026-06-16",
-      "verdict": "EVAPORATED (<=floor)"
+      "verdict": "EVAPORATED (<=floor)",
+      "f1": 0.73,
+      "verdict_rawf1": "EVAPORATED (<=floor)"
     },
     {
       "model": "qwen2.5:3b",
@@ -77,7 +83,9 @@
       },
       "raw_output": "```json\n{\n    \"title\": \"Anthropic's New Paper on Constitutional AI Training Methods\",\n    \"tags\": [\n        \"agents\",\n        \"prompting\",\n        \"safety\",\n        \"tools\",\n        \"open-models\",\n        \"research\",\n        \"infrastructure\"\n    ],\n    \"summary\": \"Anthropic released a new paper detailing how synthetic preference data from Claude can train smaller models to achieve high accuracy in multi-step tool-use scenarios, while also addressing safety concerns through direct embedding of behavioral constraints.\"\n}\n```",
       "provenance": "live-2026-06-16",
-      "verdict": "EVAPORATED (<=floor)"
+      "verdict": "EVAPORATED (<=floor)",
+      "f1": 0.73,
+      "verdict_rawf1": "EVAPORATED (<=floor)"
     },
     {
       "model": "claude-haiku-4-5",
@@ -92,17 +100,20 @@
         ],
         "got_tags": [
           "agents",
+          "open-models",
           "research",
           "safety",
           "tools"
         ],
-        "precision": 1.0,
+        "precision": 0.8,
         "recall": 1.0,
-        "f1": 1.0
+        "f1": 0.89
       },
-      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI Training Improves Agent Reliability in Multi-Step Tool-Use\",\n  \"tags\": [\"agents\", \"safety\", \"tools\", \"research\"],\n  \"summary\": \"Anthropic's Constitutional AI method improves agent reliability and safety in tool-use scenarios by embedding behavioral constraints during training, achieving 94% accuracy on SWE-bench tasks.\"\n}\n```",
+      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI Training for Multi-Step Agent Tool-Use Reliability\",\n  \"tags\": [\"agents\", \"safety\", \"tools\", \"open-models\", \"research\"],\n  \"summary\": \"Anthropic's Constitutional AI training approach improves agent reliability in multi-step tool-use by embedding safety constraints directly into training and using synthetic preference data, achieving 94% tool-call accuracy on SWE-bench tasks.\"\n}\n```",
       "provenance": "live-2026-06-16",
-      "verdict": "SURVIVED"
+      "verdict": "EVAPORATED (within margin)",
+      "f1": 0.89,
+      "verdict_rawf1": "SURVIVED"
     },
     {
       "model": "claude-sonnet-4-6",
@@ -126,9 +137,11 @@
         "recall": 1.0,
         "f1": 0.89
       },
-      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI for Reliable Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"tools\", \"safety\", \"research\", \"prompting\"],\n  \"summary\": \"Anthropic's Constitutional AI training method uses Claude-generated synthetic preference data to improve tool-call accuracy and embed safety constraints directly into the training loop for smaller models.\"\n}\n```",
+      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI for Reliable Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"safety\", \"tools\", \"research\", \"prompting\"],\n  \"summary\": \"Anthropic's Constitutional AI training method uses Claude-generated synthetic preference data to improve smaller models' tool-call accuracy to 94% on SWE-bench while embedding safety constraints directly into the training loop.\"\n}\n```",
       "provenance": "live-2026-06-16",
-      "verdict": "SURVIVED"
+      "verdict": "EVAPORATED (within margin)",
+      "f1": 0.89,
+      "verdict_rawf1": "SURVIVED"
     },
     {
       "model": "claude-opus-4-8",
@@ -143,18 +156,19 @@
         ],
         "got_tags": [
           "agents",
-          "open-models",
           "research",
           "safety",
           "tools"
         ],
-        "precision": 0.8,
+        "precision": 1.0,
         "recall": 1.0,
-        "f1": 0.89
+        "f1": 1.0
       },
-      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI Training Improves Agent Reliability in Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"tools\", \"safety\", \"research\", \"open-models\"],\n  \"summary\": \"Anthropic's new Constitutional AI method uses Claude-generated synthetic preference data to train smaller models, hitting 94% tool-call accuracy on SWE-bench while baking safety constraints directly into the training loop.\"\n}\n```",
+      "raw_output": "{\n  \"title\": \"Constitutional AI Training for Reliable Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"tools\", \"safety\", \"research\"],\n  \"summary\": \"Anthropic's new Constitutional AI training method uses Claude-generated synthetic preference data to train smaller models that hit 94% tool-call accuracy on SWE-bench while embedding safety constraints directly into the training loop.\"\n}",
       "provenance": "live-2026-06-16",
-      "verdict": "SURVIVED"
+      "verdict": "EVAPORATED (within margin)",
+      "f1": 1.0,
+      "verdict_rawf1": "SURVIVED"
     },
     {
       "model": "apple-foundationmodel",
@@ -181,7 +195,9 @@
       },
       "raw_output": null,
       "provenance": "prior-run 2026-04-03 Apple M4 Pro",
-      "verdict": "SURVIVED"
+      "verdict": "EVAPORATED (within margin)",
+      "f1": 0.8,
+      "verdict_rawf1": "EVAPORATED (within margin)"
     },
     {
       "model": "llama3.2:3b",
@@ -209,7 +225,9 @@
       },
       "raw_output": null,
       "provenance": "prior-run 2026-04-03 Apple M4 Pro",
-      "verdict": "EVAPORATED (<=floor)"
+      "verdict": "EVAPORATED (<=floor)",
+      "f1": 0.73,
+      "verdict_rawf1": "EVAPORATED (<=floor)"
     },
     {
       "model": "phi4:14b",
@@ -234,7 +252,9 @@
       },
       "raw_output": null,
       "provenance": "prior-run 2026-04-03 Apple M4 Pro",
-      "verdict": "EVAPORATED (<=floor)"
+      "verdict": "EVAPORATED (<=floor)",
+      "f1": 0.75,
+      "verdict_rawf1": "EVAPORATED (<=floor)"
     }
   ]
 }

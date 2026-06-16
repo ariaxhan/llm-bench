@@ -1,0 +1,173 @@
+{
+  "schema_hint": "EEE-compatible-row (arXiv 2606.14516) + cheap_floor extension",
+  "rows": [
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "llama3.2:3b",
+      "metrics": {
+        "tag_f1": 0.73,
+        "composite_with_format_bonus": 0.9273
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": false
+      },
+      "provenance": {
+        "source": "live-2026-06-16",
+        "harness": "llm-bench ollama",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "qwen2.5:3b",
+      "metrics": {
+        "tag_f1": 0.73,
+        "composite_with_format_bonus": 0.9273
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": false
+      },
+      "provenance": {
+        "source": "live-2026-06-16",
+        "harness": "llm-bench ollama",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "claude-haiku-4-5",
+      "metrics": {
+        "tag_f1": 0.89,
+        "composite_with_format_bonus": 1.0
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": true
+      },
+      "provenance": {
+        "source": "live-2026-06-16",
+        "harness": "llm-bench claude-cli",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "claude-sonnet-4-6",
+      "metrics": {
+        "tag_f1": 0.89,
+        "composite_with_format_bonus": 1.0
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": true
+      },
+      "provenance": {
+        "source": "live-2026-06-16",
+        "harness": "llm-bench claude-cli",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "claude-opus-4-8",
+      "metrics": {
+        "tag_f1": 1.0,
+        "composite_with_format_bonus": 1.0
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": true
+      },
+      "provenance": {
+        "source": "live-2026-06-16",
+        "harness": "llm-bench claude-cli",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "apple-foundationmodel",
+      "metrics": {
+        "tag_f1": 0.8,
+        "composite_with_format_bonus": 1.0
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": false
+      },
+      "provenance": {
+        "source": "prior-run 2026-04-03 Apple M4 Pro",
+        "harness": "llm-bench apfel",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-04-03"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "llama3.2:3b",
+      "metrics": {
+        "tag_f1": 0.73,
+        "composite_with_format_bonus": 0.9273
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": false
+      },
+      "provenance": {
+        "source": "prior-run 2026-04-03 Apple M4 Pro",
+        "harness": "llm-bench ollama",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-04-03"
+      }
+    },
+    {
+      "benchmark": "llm-bench",
+      "task": "tag-extraction",
+      "model": "phi4:14b",
+      "metrics": {
+        "tag_f1": 0.75,
+        "composite_with_format_bonus": 0.95
+      },
+      "cheap_floor": {
+        "kind": "regex-keyword-tagger",
+        "tag_f1": 0.75,
+        "beats_floor_rawf1": false
+      },
+      "provenance": {
+        "source": "prior-run 2026-04-03 Apple M4 Pro",
+        "harness": "llm-bench ollama",
+        "decoding": "temperature=0 (claude-cli ignores; nondeterministic)",
+        "n_items": 1,
+        "date": "2026-04-03"
+      }
+    }
+  ]
+}
