@@ -64,7 +64,7 @@ llm-bench score-certainty --json          # raw scored JSON instead of markdown
 Corpus format: one JSON claim per line (`#` comment lines and blanks skipped).
 The bundled canonical corpus lives at `tests/fixtures/earned_certainty_claims.jsonl`.
 
-## Integration gap (stated plainly — not faked)
+## Integration gap — CLOSED (2026-06-17)
 
 The earned-certainty scorer and llm-bench's task verifiers are **different
 layers**:
@@ -74,18 +74,59 @@ layers**:
   it reads structured claim fields (`provenance_depth`, `evidence_items`,
   `baseline_used`, `instrument_type`, ...) and needs no ground-truth reference.
 
-**The scorer does NOT yet run on raw `llm-bench run` outputs.** A real task run
-produces raw text plus a verifier score, not the structured authority/support
-fields the scorer reads. Bridging the two would require an extractor that infers
-those fields from a model's raw output (or a task schema that carries them).
-That extractor is **not built** — so the scorer ships as a standalone subcommand
-over a structured claims corpus, with this gap documented rather than faked.
+The bridge is now built: `src/llm_bench/scoring/extract.py` maps a real run
+result (`TestResult` / a results-file dict) onto a scorer claim. Two entry points:
 
-## Remaining punch list to shippable (NOT acted on in this commission)
+```bash
+llm-bench score-run results/community/<file>.json   # re-score a saved run
+llm-bench run <model> --certainty                    # score a fresh run inline
+```
+
+### The headline signal: confident-but-wrong
+
+The unique value of scoring a real run (vs a toy corpus) is the verifier ground
+truth. **confident-but-wrong** = high performed authority (text-only, `>= 0.45`)
+on an output the verifier marked **wrong** (`passed == False`, or `score` below a
+tunable floor). Authority is the discriminator: a *hedged* wrong answer is NOT
+flagged, a *confident* wrong answer is. This rests on the reliable axis — the
+verifier verdict — not on heuristics.
+
+### What the extractor honestly derives vs leaves neutral
+
+| signal | source | honesty |
+|--------|--------|---------|
+| performed_authority | `raw_output` text | text-only, real (the scorer was always text-capable here) |
+| passed / score | verifier | **ground truth — the reliable axis** |
+| provenance_depth | citation cues (`[1]`, URLs, "according to", RFC, DOI) | **COARSE proxy** — counts surface cues, a model can fabricate a `[1]` |
+| baseline_used | comparison language ("compared to", "vs", "baseline") | **COARSE proxy** |
+| source_freshness | date cues ("as of 2026", explicit years) | **COARSE proxy** |
+| instrument_type, faithfulness_class, fitting_factor, conflict_level | — | **LEFT NEUTRAL by design** — genuinely undeterminable from a task output; guessing them would fake precision |
+
+The `earned_support` number on a run report is therefore a **coarse text-derived
+proxy, not a measurement** — it is labeled that way in code and in every report
+header. Do not read it as measured support. The metric you can trust on a run is
+the verifier verdict; confident-but-wrong is built on that.
+
+### Residual (stated plainly)
+
+`_save_results` (and the committed community files) **strip `raw_output`** — only
+`test_id/score/passed/latency/tokens/details` persist. So `score-run` on a real
+community file reports **0 records with raw_output**, says so explicitly, and
+cannot compute authority or confident-but-wrong for them (only the verifier-
+failure count survives). The full confident-but-wrong path is exercised on
+`tests/fixtures/run_with_raw_output.json` (a synthetic run that kept raw_output)
+and on `run --certainty` (raw_output is in memory there). To make `score-run`
+fully useful on saved files, a future change would persist `raw_output` in
+`_save_results` (a `--keep-raw` option) — that is the remaining residual, named
+rather than faked.
+
+## Remaining punch list to shippable
 
 - [ ] PyPI publish (Aria triggers — out of scope here).
-- [ ] An adapter that derives claim fields from real `llm-bench run` outputs, so
-      `score-certainty` can score live benchmark runs (closes the integration gap).
-- [ ] A README section pointing at `score-certainty` and this consolidation note.
+- [x] An adapter that derives claim fields from real `llm-bench run` outputs
+      (`scoring/extract.py` + `score-run` / `run --certainty`) — gap closed.
+- [ ] Persist `raw_output` in `_save_results` (`--keep-raw`) so `score-run` can
+      compute confident-but-wrong on saved community files, not just live runs.
+- [ ] A README section pointing at `score-certainty` / `score-run` and this note.
 - [ ] Decide whether the scorer's text heuristics (confidence/caveat/scope word
       lists) should be tunable/configurable rather than hard-coded.
