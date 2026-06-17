@@ -649,6 +649,14 @@
         "id": "CP-20260616211207-18202-10839",
         "ts": "2026-06-17T04:12:07.122Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-18433\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260616211317-19501-26576",
+        "ts": "2026-06-17T04:13:17.299Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -5396,6 +5404,66 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616211159-17789",
         "ts": "2026-06-17T04:12:01.042Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 8000,
+        "event": "session:end",
+        "id": 467,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":1,\"agent\":\"main-17789\",\"duration_s\":8}",
+        "session_id": "",
+        "ts": "2026-06-17T04:12:07.309Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 682,
+        "event": "session-end",
+        "id": 468,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211159-17789",
+        "ts": "2026-06-17T04:12:07.781Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 469,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616211209-18433",
+        "ts": "2026-06-17T04:12:10.718Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1103,
+        "event": "session-start",
+        "id": 470,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211209-18433",
+        "ts": "2026-06-17T04:12:10.735Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "post-compact-restore",
+        "id": 471,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211209-18433",
+        "ts": "2026-06-17T04:12:10.827Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 36,
+        "event": "log-write",
+        "id": 472,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/_meta/canon/precedents/verifier-rewards-presence-not-reasoning.md\"}",
+        "session_id": "",
+        "ts": "2026-06-17T04:12:33.148Z"
       }
     ],
     "execution_traces": [],
