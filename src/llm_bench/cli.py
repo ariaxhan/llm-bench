@@ -230,6 +230,48 @@ def compare(files):
     compare_results(list(files))
 
 
+@main.command(name="score-certainty")
+@click.argument("corpus", required=False)
+@click.option("--json", "as_json", is_flag=True,
+              help="Emit raw scored JSON instead of a markdown report")
+def score_certainty(corpus, as_json):
+    """Score a claims corpus on the earned-certainty axis (overconfidence lint).
+
+    A DIFFERENT layer from `run`: `run` asks "how good is the model on a task";
+    this asks "did an output earn its confidence" — performed authority vs
+    earned support. Absorbed from the wrong-convergence sibling repo.
+
+    Runs on a structured claims corpus (JSONL), NOT yet on raw `run` outputs —
+    those don't carry the provenance/evidence fields it reads. See
+    docs/consolidation.md. With no path, scores the bundled canonical corpus.
+
+    Examples:
+        llm-bench score-certainty
+        llm-bench score-certainty my_claims.jsonl
+        llm-bench score-certainty --json
+    """
+    from llm_bench.scoring.certainty_report import (
+        default_corpus_path,
+        load_claims,
+        render_report,
+        score_corpus,
+    )
+
+    path = corpus or default_corpus_path()
+    try:
+        claims = load_claims(path)
+    except (OSError, ValueError) as e:
+        console.print(f"[red]Could not load corpus '{path}': {e}[/red]")
+        sys.exit(1)
+
+    results = score_corpus(claims)
+    if as_json:
+        console.print_json(json.dumps(results))
+    else:
+        # plain print — the report is markdown, not Rich markup
+        print(render_report(results))
+
+
 def _save_results(runs: list[BenchmarkRun], path: str) -> None:
     """Save results to JSON."""
     output = {
