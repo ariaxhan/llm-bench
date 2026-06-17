@@ -16,21 +16,39 @@
   },
   "summary": {
     "FLOOR_BEATABLE": 18,
-    "MODEL_REQUIRING": 13,
-    "MIXED": 4,
-    "composite_hides_vs_raw": 1
+    "MODEL_REQUIRING": 14,
+    "MIXED": 3,
+    "composite_hides_vs_raw": 1,
+    "VERIFIER_WEAK_tests": [
+      "hard-ambiguous-class",
+      "hard-noisy-extract",
+      "hard-numeric-reasoning",
+      "hard-schema-transform",
+      "hard-context-stress",
+      "hard-prompt-resist",
+      "agentic-context-handoff",
+      "agentic-scope-judgment",
+      "agentic-parallel-decomp",
+      "adv-sycophancy-trap",
+      "adv-instruction-override",
+      "adv-negation-failure",
+      "messy-broken-json",
+      "messy-mixed-formats",
+      "messy-spreadsheet-chaos"
+    ]
   },
   "rows": [
     {
       "test": "novelty-rating",
       "verifier": "novelty_rating",
       "difficulty": "EASY",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "trivial-task-ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -79,6 +97,18 @@
           "score": 0.7,
           "raw": 0.7,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.7,
+          "raw": 0.7,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -92,12 +122,13 @@
       "test": "fluff-strip",
       "verifier": "fluff_strip",
       "difficulty": "EASY",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "trivial-task-ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -146,6 +177,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.76,
+          "raw": 0.76,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -160,12 +203,13 @@
       "test": "thread-match",
       "verifier": "thread_match",
       "difficulty": "MEDIUM",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "trivial-task-ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -214,6 +258,18 @@
           "score": 0.8571,
           "raw": 0.8571,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.8571,
+          "raw": 0.8571,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -234,12 +290,13 @@
       "test": "instruction-follow",
       "verifier": "instruction_follow",
       "difficulty": "MEDIUM",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "trivial-task-ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -288,6 +345,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -302,12 +371,13 @@
       "test": "hard-noisy-extract",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -356,6 +426,18 @@
           "score": 0.0,
           "raw": 0.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -368,12 +450,13 @@
       "test": "hard-numeric-reasoning",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -422,6 +505,18 @@
           "score": 0.0,
           "raw": 0.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -434,12 +529,13 @@
       "test": "hard-context-stress",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -488,6 +584,18 @@
           "score": 0.8,
           "raw": 0.8,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -500,12 +608,13 @@
       "test": "agentic-context-handoff",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -554,6 +663,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -565,12 +686,13 @@
       "test": "adv-negation-failure",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -619,6 +741,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -631,12 +765,13 @@
       "test": "messy-spreadsheet-chaos",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 1.0,
       "floor_raw": 1.0,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -685,6 +820,18 @@
           "score": 0.875,
           "raw": 0.875,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.875,
+          "raw": 0.875,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -699,12 +846,13 @@
       "test": "tag-extraction",
       "verifier": "tag_extraction",
       "difficulty": "TRIVIAL",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.95,
       "floor_raw": 0.75,
       "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 4,
+      "models_beat_floor_raw": 5,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "trivial-task-ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -753,6 +901,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 0.89,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.9273,
+          "raw": 0.73,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -777,12 +937,13 @@
       "test": "adv-instruction-override",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.8571,
       "floor_raw": 0.8571,
-      "models_beat_floor_composite": 3,
-      "models_beat_floor_raw": 3,
+      "models_beat_floor_composite": 4,
+      "models_beat_floor_raw": 4,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -831,6 +992,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5714,
+          "raw": 0.5714,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -842,12 +1015,13 @@
       "test": "agentic-parallel-decomp",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.75,
       "floor_raw": 0.75,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -896,6 +1070,18 @@
           "score": 0.75,
           "raw": 0.75,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -907,12 +1093,13 @@
       "test": "adv-sycophancy-trap",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.75,
       "floor_raw": 0.75,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -961,6 +1148,18 @@
           "score": 0.75,
           "raw": 0.75,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -972,12 +1171,13 @@
       "test": "hard-ambiguous-class",
       "verifier": "tag_extraction",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.7,
       "floor_raw": 0.5,
       "models_beat_floor_composite": 0,
       "models_beat_floor_raw": 0,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1026,6 +1226,18 @@
           "score": 0.0,
           "raw": 0.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1046,12 +1258,13 @@
       "test": "hard-schema-transform",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.6,
       "floor_raw": 0.6,
       "models_beat_floor_composite": 3,
       "models_beat_floor_raw": 3,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1100,6 +1313,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1112,12 +1337,13 @@
       "test": "hard-contradictions",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.5,
       "floor_raw": 0.5,
-      "models_beat_floor_composite": 3,
-      "models_beat_floor_raw": 3,
+      "models_beat_floor_composite": 4,
+      "models_beat_floor_raw": 4,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1166,6 +1392,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1177,12 +1415,13 @@
       "test": "adv-confidence-calibration",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.5,
       "floor_raw": 0.5,
       "models_beat_floor_composite": 3,
       "models_beat_floor_raw": 3,
       "verdict": "FLOOR-BEATABLE",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1231,6 +1470,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.25,
+          "raw": 0.25,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1240,32 +1491,33 @@
       }
     },
     {
-      "test": "messy-mixed-formats",
+      "test": "agentic-scope-judgment",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
-      "floor_composite": 0.8571,
-      "floor_raw": 0.8571,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
+      "n_models": 9,
+      "floor_composite": 0.8,
+      "floor_raw": 0.8,
+      "models_beat_floor_composite": 5,
+      "models_beat_floor_raw": 5,
       "verdict": "MIXED",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
         },
         {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
           "model": "phi4:14b",
-          "score": 0.7143,
-          "raw": 0.7143,
+          "score": 0.8,
+          "raw": 0.8,
           "provenance": "prior 2026-04-03"
         },
         {
@@ -1276,20 +1528,20 @@
         },
         {
           "model": "opencode/big-pickle",
-          "score": 0.7143,
-          "raw": 0.7143,
+          "score": 1.0,
+          "raw": 1.0,
           "provenance": "prior 2026-04-03"
         },
         {
           "model": "opencode/qwen3.6-plus-free",
-          "score": 0.7143,
-          "raw": 0.7143,
+          "score": 1.0,
+          "raw": 1.0,
           "provenance": "prior 2026-04-03"
         },
         {
           "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
+          "score": 0.8,
+          "raw": 0.8,
           "provenance": "prior 2026-04-03"
         },
         {
@@ -1297,24 +1549,31 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": false
+        "check_contains": false,
+        "check_not_contains": true,
+        "check_max_words": true
       }
     },
     {
       "test": "hard-prompt-resist",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.6,
       "floor_raw": 0.6,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
+      "models_beat_floor_composite": 5,
+      "models_beat_floor_raw": 5,
       "verdict": "MIXED",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1363,6 +1622,18 @@
           "score": 0.6,
           "raw": 0.6,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.4,
+          "raw": 0.4,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1372,81 +1643,16 @@
       }
     },
     {
-      "test": "adv-anchoring-bias",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 8,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
-      "verdict": "MIXED",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_not_contains": true,
-        "check_regex_match": false
-      }
-    },
-    {
       "test": "adv-hallucination-bait",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 9,
       "floor_composite": 0.3333,
       "floor_raw": 0.3333,
       "models_beat_floor_composite": 4,
       "models_beat_floor_raw": 4,
       "verdict": "MIXED",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1495,6 +1701,12 @@
           "score": 0.6667,
           "raw": 0.6667,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.3333,
+          "raw": 0.3333,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1503,32 +1715,33 @@
       }
     },
     {
-      "test": "agentic-scope-judgment",
+      "test": "messy-mixed-formats",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
-      "floor_composite": 0.8,
-      "floor_raw": 0.8,
-      "models_beat_floor_composite": 5,
-      "models_beat_floor_raw": 5,
+      "n_models": 10,
+      "floor_composite": 0.8571,
+      "floor_raw": 0.8571,
+      "models_beat_floor_composite": 6,
+      "models_beat_floor_raw": 6,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
         },
         {
-          "model": "llama3.2:3b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
           "model": "phi4:14b",
-          "score": 0.8,
-          "raw": 0.8,
+          "score": 0.7143,
+          "raw": 0.7143,
           "provenance": "prior 2026-04-03"
         },
         {
@@ -1539,20 +1752,20 @@
         },
         {
           "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
+          "score": 0.7143,
+          "raw": 0.7143,
           "provenance": "prior 2026-04-03"
         },
         {
           "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
+          "score": 0.7143,
+          "raw": 0.7143,
           "provenance": "prior 2026-04-03"
         },
         {
           "model": "opencode/gpt-5-nano",
-          "score": 0.8,
-          "raw": 0.8,
+          "score": 1.0,
+          "raw": 1.0,
           "provenance": "prior 2026-04-03"
         },
         {
@@ -1560,24 +1773,37 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
-        "check_contains": false,
-        "check_not_contains": true,
-        "check_max_words": true
+        "check_is_valid_json": true,
+        "check_contains": true,
+        "check_not_contains": false
       }
     },
     {
       "test": "messy-broken-json",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.8,
       "floor_raw": 0.8,
-      "models_beat_floor_composite": 6,
-      "models_beat_floor_raw": 6,
+      "models_beat_floor_composite": 8,
+      "models_beat_floor_raw": 8,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "VERIFIER-WEAK",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1626,6 +1852,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1638,12 +1876,13 @@
       "test": "hard-refusal",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.5,
       "floor_raw": 0.5,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1692,6 +1931,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1703,12 +1954,13 @@
       "test": "agentic-error-recovery",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.5,
       "floor_raw": 0.5,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1757,6 +2009,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1766,15 +2030,95 @@
       }
     },
     {
+      "test": "adv-anchoring-bias",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.5,
+      "floor_raw": 0.5,
+      "models_beat_floor_composite": 6,
+      "models_beat_floor_raw": 6,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "check_is_valid_json": true,
+        "check_not_contains": true,
+        "check_regex_match": false
+      }
+    },
+    {
       "test": "adv-logic-reversal",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.5,
       "floor_raw": 0.5,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1823,6 +2167,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1835,12 +2191,13 @@
       "test": "messy-garbled-ocr",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.4286,
       "floor_raw": 0.4286,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1889,6 +2246,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1901,12 +2270,13 @@
       "test": "agentic-tool-planning",
       "verifier": "instruction_follow",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.4,
       "floor_raw": 0.4,
-      "models_beat_floor_composite": 5,
-      "models_beat_floor_raw": 5,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -1955,6 +2325,18 @@
           "score": 0.0,
           "raw": 0.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -1966,12 +2348,13 @@
       "test": "agentic-info-triage",
       "verifier": "instruction_follow",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.4,
       "floor_raw": 0.4,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2020,6 +2403,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -2033,12 +2428,13 @@
       "test": "code-gen",
       "verifier": "code_gen",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 7,
-      "models_beat_floor_raw": 7,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2087,6 +2483,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.2,
+          "raw": 0.2,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -2097,12 +2505,13 @@
       "test": "bug-detection",
       "verifier": "bug_detection",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2151,6 +2560,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -2163,12 +2584,13 @@
       "test": "agentic-self-correction",
       "verifier": "code_gen",
       "difficulty": "EXTREME",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 7,
-      "models_beat_floor_raw": 7,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2217,6 +2639,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -2227,12 +2661,13 @@
       "test": "messy-typo-instructions",
       "verifier": "code_gen",
       "difficulty": "MEDIUM",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0.0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2281,6 +2716,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
@@ -2291,12 +2738,13 @@
       "test": "messy-mixed-lang-code",
       "verifier": "bug_detection",
       "difficulty": "HARD",
-      "n_models": 8,
+      "n_models": 10,
       "floor_composite": 0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
       "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
       "models": [
         {
           "model": "apple-foundationmodel",
@@ -2345,6 +2793,18 @@
           "score": 1.0,
           "raw": 1.0,
           "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.85,
+          "raw": 0.85,
+          "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {

@@ -255,8 +255,17 @@ not capability — and should be reported with that caveat.
   (which specific model ties/loses) — one fixture per test. A demonstration, not a
   ranking. The model population gives breadth across models, not items.
 
+## Live confirmation (fresh opus-4-8 + llama3.2:3b, 68 model-results)
+Adding the live sample barely moved the verdict (18 / 14 / 3). The proof: on all 6
+slam-dunk tests the echo scores 1.00 and **live opus-4-8 ties or LOSES** — 1.00 ties on
+hard-context-stress / agentic-context-handoff / adv-negation-failure, and opus **loses**
+on messy-spreadsheet-chaos (0.875), hard-noisy-extract (0.60), hard-numeric-reasoning
+(0.50). opus loses *because it does real work* (computes, cleans, reformats) and the
+`contains()` check then misses the raw token the echo trivially keeps. A frontier model
+out-scored by copy-paste on HARD/EXTREME tests, live.
+
 ## Verdict
 P5 reached the model layer; pushed further, the cheap floor became a **benchmark
-self-audit** and found 6 hard/extreme tests whose verifiers a content-free echo maxes.
-That — not the narrow format-bonus finding — is the durable result. Next: implement the
-echo-rejecting verifier fix and re-run.
+self-audit** and found 6 hard/extreme tests whose verifiers a content-free echo maxes —
+beating frontier opus live. That — not the narrow format-bonus finding — is the durable
+result. Next: implement the echo-rejecting verifier fix and re-run.

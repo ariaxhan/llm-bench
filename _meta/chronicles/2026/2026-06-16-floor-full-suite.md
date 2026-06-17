@@ -64,7 +64,24 @@ questions, answered:
    echo-overlap rejection), not substring containment. dune's call: name it, don't build
    it now.
 
-<!-- LIVE-CONFIRM: opus+llama live sample result slotted here after the live run. -->
+### Live confirmation (kills the stored-only caveat)
+Added a fresh live sample (opus-4-8 + llama3.2:3b, 68 model-results) — verdict barely
+moved: **18 FLOOR-BEATABLE / 14 MODEL-REQUIRING / 3 MIXED.** The kicker: on the 6
+slam-dunk verifier-broken tests, **live opus-4-8 ties or LOSES to the content-free echo**:
+
+| test (HARD/EXTREME) | echo floor | live opus-4-8 |
+|---|---|---|
+| hard-context-stress | 1.00 | 1.00 (tie — can't beat) |
+| agentic-context-handoff | 1.00 | 1.00 (tie) |
+| adv-negation-failure | 1.00 | 1.00 (tie) |
+| messy-spreadsheet-chaos | 1.00 | **0.875 (opus loses)** |
+| hard-noisy-extract | 1.00 | **0.60 (opus loses)** |
+| hard-numeric-reasoning | 1.00 | **0.50 (opus loses)** |
+
+opus *loses* on 3 because it does real work (computes the number, cleans the noise,
+reformats) and the `contains()` verifier sometimes no longer finds the raw token — while
+the echo keeps every token by copying. A frontier model out-scored by copy-paste, fresh
+and live, on tests labelled HARD/EXTREME. That is the proof.
 
 ## What failed / honesty
 - **First headline over-reached.** I had to deflate my own n=1 prize when it didn't
