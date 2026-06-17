@@ -97,12 +97,15 @@ async def run_live_sample(floorable: list[str]) -> dict:
                                         user_prompt=t.user_prompt,
                                         max_tokens=t.max_tokens, temperature=0.0)
                 s, det = VERIFIERS[t.verify](resp.content, _meta(t))
+                guard_fired = "echo" in str(det.get("reason", ""))
                 by_test.setdefault(tid, []).append({
                     "model": model, "score": round(s, 4),
                     "raw": round(raw_metric(t.verify, s, det), 4),
+                    "guard_fired": guard_fired,  # did the echo guard reject this REAL answer?
                     "provenance": "live-2026-06-16",
                 })
-                print(f"  live {model} {tid}: {s:.3f}")
+                tag = " [ECHO-GUARD FIRED]" if guard_fired else ""
+                print(f"  live {model} {tid}: {s:.3f}{tag}")
             except Exception as e:  # noqa: BLE001
                 print(f"  live {model} {tid}: ERROR {str(e)[:80]}")
     return by_test
