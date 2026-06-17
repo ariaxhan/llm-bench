@@ -601,6 +601,14 @@
         "id": "CP-20260616211109-13918-4321",
         "ts": "2026-06-17T04:11:09.692Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-14146\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260616211115-14971-10295",
+        "ts": "2026-06-17T04:11:15.241Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -5048,6 +5056,86 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616211102-13174",
         "ts": "2026-06-17T04:11:09.205Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 9000,
+        "event": "session:end",
+        "id": 437,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":0,\"agent\":\"main-12785\",\"duration_s\":9}",
+        "session_id": "",
+        "ts": "2026-06-17T04:11:09.871Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 641,
+        "event": "session-end",
+        "id": 438,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211102-13174",
+        "ts": "2026-06-17T04:11:10.311Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 439,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616211110-14146",
+        "ts": "2026-06-17T04:11:12.022Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1107,
+        "event": "session-start",
+        "id": 440,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211111-14357",
+        "ts": "2026-06-17T04:11:12.037Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "post-compact-restore",
+        "id": 441,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211111-14357",
+        "ts": "2026-06-17T04:11:12.132Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 442,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616211111-14357",
+        "ts": "2026-06-17T04:11:12.891Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1063,
+        "event": "session-start",
+        "id": 443,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211111-14357",
+        "ts": "2026-06-17T04:11:12.907Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "post-compact-restore",
+        "id": 444,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211111-14357",
+        "ts": "2026-06-17T04:11:13.001Z"
       }
     ],
     "execution_traces": [],
