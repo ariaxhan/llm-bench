@@ -32,7 +32,9 @@ async def run_single_test(
         # Verify the response
         verifier = VERIFIERS.get(test.verify)
         if verifier:
-            score, details = verifier(response.content, test.metadata)
+            # inject the prompt so verifiers can reject content-free prompt-echo
+            meta = {**test.metadata, "_user_prompt": test.user_prompt}
+            score, details = verifier(response.content, meta)
         else:
             score, details = 0.0, {"reason": f"no verifier for {test.verify}"}
 

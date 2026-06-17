@@ -341,10 +341,29 @@ def verify_creative_piece(output: str, expected: dict) -> tuple[float, dict]:
 
 
 def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]:
-    """Verify exact instruction following — format, constraints, no extras."""
+    """Verify exact instruction following — format, constraints, no extras.
+
+    Two upgrades over the original substring-only version (2026-06-16, after the
+    floor audit found a content-free prompt-echo scored 1.00 on hard tests):
+
+    1. ECHO-REJECTION GUARD: if the caller injects `_user_prompt` and the output
+       is essentially the prompt copied back (long verbatim overlap), the whole
+       score is 0 — a copy-paste answers nothing. Deterministic, no LLM.
+    2. STRUCTURAL CHECK TYPES: `json_field_contains`, `json_has_keys`,
+       `json_field_numeric_close`, `json_array_of_objects`, `contains_any_of`
+       verify the actual answer (right field / computed value / parsed shape)
+       instead of "is the token present somewhere in the text".
+    """
     checks = expected.get("checks", [])
     output_stripped = output.strip()
 
+    # --- echo-rejection guard (only when the prompt is available) ---
+    prompt = expected.get("_user_prompt")
+    if prompt and _is_prompt_echo(output_stripped, prompt):
+        return 0.0, {"reason": "content-free prompt echo rejected",
+                     "echo_overlap": round(_prompt_echo_ratio(output_stripped, prompt), 3)}
+
+    parsed = _try_json(output_stripped)
     passed = 0
     details = {}
     for check in checks:
@@ -360,15 +379,27 @@ def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]
         elif check_type == "not_contains":
             ok = check["value"].lower() not in output_stripped.lower()
         elif check_type == "is_valid_json":
-            try:
-                json.loads(output_stripped)
-                ok = True
-            except json.JSONDecodeError:
-                ok = False
+            ok = parsed is not None
         elif check_type == "regex_match":
             ok = bool(re.search(check["value"], output_stripped))
         elif check_type == "max_words":
             ok = len(output_stripped.split()) <= check["value"]
+        elif check_type == "json_field_contains":
+            # parsed JSON has `field` whose stringified value contains `value`
+            ok = _json_field_contains(parsed, check["field"], check["value"])
+        elif check_type == "json_has_keys":
+            ok = _json_has_keys(parsed, check["value"])
+        elif check_type == "json_field_numeric_close":
+            ok = _json_field_numeric_close(parsed, check["field"], check["value"],
+                                          check.get("tol", 0.02))
+        elif check_type == "json_array_of_objects":
+            ok = _json_array_of_objects(parsed, check.get("min_len", 1),
+                                       check.get("required_keys", []))
+        elif check_type == "contains_any_of":
+            low = output_stripped.lower()
+            hit = sum(1 for v in check["value"] if v.lower() in low)
+            ok = hit >= check.get("min", 1)
+            details["contains_any_hits"] = hit
         else:
             ok = False
 
@@ -378,6 +409,83 @@ def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]
 
     score = passed / len(checks) if checks else 0
     return score, details
+
+
+# --- Helpers: echo guard + structural checks (2026-06-16 verifier fix) ---
+
+def _norm(s: str) -> str:
+    return re.sub(r"\s+", " ", s.lower()).strip()
+
+
+def _words(s: str) -> set:
+    return set(re.findall(r"[a-z0-9]+", s.lower()))
+
+
+def _prompt_echo_ratio(output: str, prompt: str) -> float:
+    """Fraction of the prompt's distinct vocabulary reproduced in the output.
+    A content-free echo copies the prompt back → reproduces ~all of it → ratio
+    ≈ 1. A real answer is restructured/shorter and shares only the few values it
+    needs → low ratio. Word-coverage (not contiguous substring) so it survives
+    JSON re-escaping of newlines/quotes. Deterministic."""
+    pw = _words(prompt)
+    if len(pw) < 10:          # too short to judge — don't guess
+        return 0.0
+    ow = _words(output)
+    return len(pw & ow) / len(pw)
+
+
+def _is_prompt_echo(output: str, prompt: str) -> bool:
+    """Reject outputs that reproduce most of the prompt's vocabulary — a
+    copy-paste answers nothing. Threshold 0.75 leaves wide room for a legit
+    answer that quotes the input values it needs, while a whole-prompt echo
+    (~1.0 coverage) fails."""
+    return _prompt_echo_ratio(output, prompt) >= 0.75
+
+
+def _try_json(text: str):
+    try:
+        return json.loads(text.strip())
+    except (json.JSONDecodeError, ValueError):
+        return None
+
+
+def _json_field_contains(parsed, field: str, value: str) -> bool:
+    """True if `field`'s stringified value contains `value` — in a dict, or in
+    ANY object of a list of dicts (so it works for JSON arrays of records)."""
+    needle = str(value).lower()
+    if isinstance(parsed, dict):
+        return field in parsed and needle in str(parsed[field]).lower()
+    if isinstance(parsed, list):
+        return any(isinstance(x, dict) and field in x and needle in str(x[field]).lower()
+                   for x in parsed)
+    return False
+
+
+def _json_has_keys(parsed, keys: list) -> bool:
+    """All keys present (in the dict, or in every object of a list of dicts)."""
+    if isinstance(parsed, dict):
+        return all(k in parsed for k in keys)
+    if isinstance(parsed, list) and parsed and all(isinstance(x, dict) for x in parsed):
+        return all(all(k in x for k in keys) for x in parsed)
+    return False
+
+
+def _json_field_numeric_close(parsed, field: str, value: float, tol: float) -> bool:
+    if not isinstance(parsed, dict) or field not in parsed:
+        return False
+    try:
+        got = float(parsed[field])
+    except (TypeError, ValueError):
+        return False
+    return abs(got - value) <= abs(value) * tol + 1e-9
+
+
+def _json_array_of_objects(parsed, min_len: int, required_keys: list) -> bool:
+    if not isinstance(parsed, list) or len(parsed) < min_len:
+        return False
+    if not all(isinstance(x, dict) for x in parsed):
+        return False
+    return all(all(k in x for k in required_keys) for x in parsed)
 
 
 # --- Helpers ---

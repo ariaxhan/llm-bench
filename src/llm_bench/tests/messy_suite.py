@@ -290,13 +290,16 @@ Return a JSON array of employee objects with fields: name, department, start_dat
 """,
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): was contains() of input cell values — all
+        # sit in the prompt, so echoing the messy input scored 1.00 without parsing.
+        # Now require a real JSON ARRAY of employee objects with the right fields
+        # (an echo's {"data":...} dict fails), plus the mangled date is fixed to
+        # 2023-06-15 inside a record.
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "Chen, Wei"},
-            {"type": "contains", "value": "Martinez"},
-            {"type": "contains", "value": "O'Brien"},
-            {"type": "contains", "value": "145000"},
-            {"type": "contains", "value": "2023-06-15"},
+            {"type": "json_array_of_objects", "min_len": 5,
+             "required_keys": ["name", "department", "start_date", "salary"]},
+            {"type": "json_field_contains", "field": "start_date", "value": "2023-06-15"},
             {"type": "max_lines", "value": 20},
             {"type": "not_contains", "value": "```"},
         ],

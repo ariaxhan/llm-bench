@@ -126,6 +126,62 @@ class TestInstructionFollow:
         assert score == 0.0
 
 
+class TestInstructionFollowVerifierFix:
+    """Regression tests for the 2026-06-16 verifier fix: reject content-free
+    prompt-echo, verify the actual answer (structure/value), not substring."""
+
+    PROMPT = (
+        "Read the spec and answer. The max message size is 16 MB. Category 0x04 "
+        "requires retry. Each side gets 64 credits. "
+        'Respond as JSON: {"q1": "...", "q2": "...", "q3": "..."}'
+    )
+    CHECKS = [
+        {"type": "is_valid_json", "value": True},
+        {"type": "json_has_keys", "value": ["q1", "q2", "q3"]},
+        {"type": "json_field_contains", "field": "q1", "value": "16"},
+        {"type": "json_field_contains", "field": "q2", "value": "0x04"},
+        {"type": "json_field_contains", "field": "q3", "value": "64"},
+        {"type": "not_contains", "value": "```"},
+    ]
+
+    def test_echo_of_prompt_rejected(self):
+        # a content-free copy-paste of the prompt must score ~0
+        echo = '{"data": ' + repr(self.PROMPT) + "}"
+        score, details = verify_instruction_follow(
+            echo, {"checks": self.CHECKS, "_user_prompt": self.PROMPT})
+        assert score == 0.0
+        assert "echo" in details.get("reason", "")
+
+    def test_correct_answer_passes(self):
+        good = '{"q1": "16 MB", "q2": "0x04", "q3": "64"}'
+        score, _ = verify_instruction_follow(
+            good, {"checks": self.CHECKS, "_user_prompt": self.PROMPT})
+        assert score == 1.0
+
+    def test_wrong_values_in_right_fields_fail(self):
+        # not an echo, but wrong answers — must not get full credit
+        wrong = '{"q1": "999 MB", "q2": "0x99", "q3": "7"}'
+        score, _ = verify_instruction_follow(
+            wrong, {"checks": self.CHECKS, "_user_prompt": self.PROMPT})
+        assert score < 0.6
+
+    def test_numeric_close_check(self):
+        checks = [{"type": "json_field_numeric_close",
+                   "field": "gb_per_day", "value": 172.8, "tol": 0.08}]
+        ok, _ = verify_instruction_follow('{"gb_per_day": 172.8}', {"checks": checks})
+        gib, _ = verify_instruction_follow('{"gb_per_day": 160.9}', {"checks": checks})  # GiB
+        bad, _ = verify_instruction_follow('{"gb_per_day": 5}', {"checks": checks})
+        assert ok == 1.0 and gib == 1.0 and bad == 0.0
+
+    def test_array_of_objects_check(self):
+        checks = [{"type": "json_array_of_objects", "min_len": 2,
+                   "required_keys": ["name", "salary"]}]
+        good = '[{"name": "A", "salary": 1}, {"name": "B", "salary": 2}]'
+        echo = '{"data": "name salary stuff"}'  # dict, not array of objects
+        assert verify_instruction_follow(good, {"checks": checks})[0] == 1.0
+        assert verify_instruction_follow(echo, {"checks": checks})[0] == 0.0
+
+
 class TestCodeGen:
     def test_working_code(self):
         output = '''```python

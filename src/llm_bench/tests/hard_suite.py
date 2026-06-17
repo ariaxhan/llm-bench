@@ -76,11 +76,14 @@ Return JSON with fields: confirmed_facts (list of strings), unverified_claims (l
 """,
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): was contains() of the SCHEMA KEY NAMES,
+        # which the prompt states — so an echo passed. Now require those to be actual
+        # JSON keys (an echo's {"data":...} has none). Which facts land in which
+        # bucket is not deterministically gradable without an LLM, so structure +
+        # the echo guard is the honest ceiling here (no over-correction).
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "confirmed_facts"},
-            {"type": "contains", "value": "unverified_claims"},
-            {"type": "contains", "value": "contradictions"},
+            {"type": "json_has_keys", "value": ["confirmed_facts", "unverified_claims", "contradictions"]},
             {"type": "not_contains", "value": "```"},
         ],
     },
@@ -155,10 +158,15 @@ Round to 2 decimal places.
 """,
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): was contains('gb_per_day'/'total_monthly')
+        # — the prompt names those OUTPUT FIELDS, so an echo passed without computing.
+        # Now check the COMPUTED values: gb_per_day≈172.8 (2500*800B*86400/1e9),
+        # total_monthly≈350.78 (30d std + 335d glacier). tol covers GB-vs-GiB rounding.
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "gb_per_day"},
-            {"type": "contains", "value": "total_monthly"},
+            {"type": "json_has_keys", "value": ["gb_per_day", "total_monthly"]},
+            {"type": "json_field_numeric_close", "field": "gb_per_day", "value": 172.8, "tol": 0.08},
+            {"type": "json_field_numeric_close", "field": "total_monthly", "value": 350.78, "tol": 0.15},
             {"type": "not_contains", "value": "```"},
         ],
     },
@@ -225,11 +233,16 @@ Calculate subtotals (qty * unit_price) and total. Output raw JSON only.
 """,
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): partial case (floor 0.6 — it already
+        # checked the COMPUTED total 109.97 + concatenated name, neither in the
+        # prompt). Upgraded to require the Format-B keys + values in the right
+        # fields so an echo of Format-A fails outright.
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "Ada Lovelace"},
-            {"type": "contains", "value": "109.97"},
-            {"type": "contains", "value": "2026-03-15"},
+            {"type": "json_has_keys", "value": ["customer_name", "line_items", "total", "order_date"]},
+            {"type": "json_field_contains", "field": "customer_name", "value": "Ada Lovelace"},
+            {"type": "json_field_numeric_close", "field": "total", "value": 109.97, "tol": 0.01},
+            {"type": "json_field_contains", "field": "order_date", "value": "2026-03-15"},
             {"type": "not_contains", "value": "```"},
         ],
     },
@@ -276,11 +289,15 @@ Respond as JSON: {"q1": "...", "q2": "...", "q3": "..."}
 """,
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): was contains('16'/'0x04'/'64') — but
+        # those values sit in the spec, so a prompt-echo scored 1.00. Now require
+        # the answers in the RIGHT JSON fields (q1/q2/q3), not anywhere in text.
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "16"},
-            {"type": "contains", "value": "0x04"},
-            {"type": "contains", "value": "64"},
+            {"type": "json_has_keys", "value": ["q1", "q2", "q3"]},
+            {"type": "json_field_contains", "field": "q1", "value": "16"},
+            {"type": "json_field_contains", "field": "q2", "value": "0x04"},
+            {"type": "json_field_contains", "field": "q3", "value": "64"},
             {"type": "not_contains", "value": "```"},
         ],
     },

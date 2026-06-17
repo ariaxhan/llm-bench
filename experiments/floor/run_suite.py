@@ -35,6 +35,11 @@ COMMUNITY = ROOT / "results" / "community" / "ariaxhan-m4pro-24gb.json"
 TESTS = {t.id: t for t in FULL_TESTS}
 
 
+def _meta(test) -> dict:
+    """metadata + injected prompt (so the echo guard can fire)."""
+    return {**test.metadata, "_user_prompt": test.user_prompt}
+
+
 def raw_metric(verifier: str, score: float, details: dict) -> float:
     """The un-bonused metric where the verifier adds a structure bonus;
     otherwise the score IS the raw metric."""
@@ -45,7 +50,7 @@ def raw_metric(verifier: str, score: float, details: dict) -> float:
 
 def score_floor(test) -> dict:
     out = get_floor(test.id)(test)
-    score, details = VERIFIERS[test.verify](out, test.metadata)
+    score, details = VERIFIERS[test.verify](out, _meta(test))
     return {"score": round(score, 4),
             "raw": round(raw_metric(test.verify, score, details), 4),
             "output": out[:200], "details": details}
@@ -91,7 +96,7 @@ async def run_live_sample(floorable: list[str]) -> dict:
                 resp = await p.complete(model=model, system_prompt=t.system_prompt,
                                         user_prompt=t.user_prompt,
                                         max_tokens=t.max_tokens, temperature=0.0)
-                s, det = VERIFIERS[t.verify](resp.content, t.metadata)
+                s, det = VERIFIERS[t.verify](resp.content, _meta(t))
                 by_test.setdefault(tid, []).append({
                     "model": model, "score": round(s, 4),
                     "raw": round(raw_metric(t.verify, s, det), 4),

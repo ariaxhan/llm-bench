@@ -154,6 +154,11 @@ NEGATION_FAILURE = TestCase(
 Just the names, one per line. No explanations.""",
     verify="instruction_follow",
     metadata={
+        # FIXED 2026-06-16 (verifier-fix): was only not_contains(<modern langs>) +
+        # max_lines — so a 1-line JSON blob naming NO language passed vacuously. Now
+        # also require it to actually NAME ≥1 valid old/static/non-OOP language. The
+        # whitelist is generous (any correct answer names one) so it does not
+        # over-reject; an echo names none → fails.
         "checks": [
             {"type": "not_contains", "value": "Python"},
             {"type": "not_contains", "value": "Ruby"},
@@ -163,6 +168,9 @@ Just the names, one per line. No explanations.""",
             {"type": "not_contains", "value": "Kotlin"},
             {"type": "not_contains", "value": "Swift"},
             {"type": "max_lines", "value": 6},
+            {"type": "contains_any_of", "min": 1, "value": [
+                "Fortran", "Pascal", "Ada", "COBOL", "Algol", "Haskell",
+                "Standard ML", "Modula", "Assembly", "Forth", "Scheme", "Erlang"]},
         ],
     },
 )

@@ -42,7 +42,7 @@ COMMUNITY = ROOT / "results" / "community" / "ariaxhan-m4pro-24gb.json"
 
 
 def score_output(test, output: str) -> tuple[float, dict]:
-    return VERIFIERS[test.verify](output, test.metadata)
+    return VERIFIERS[test.verify](output, {**test.metadata, "_user_prompt": test.user_prompt})
 
 
 async def run_model(provider_name: str, model: str, test) -> dict:
