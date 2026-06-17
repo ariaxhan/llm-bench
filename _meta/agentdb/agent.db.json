@@ -593,6 +593,14 @@
         "id": "CP-20260616211108-13693-32720",
         "ts": "2026-06-17T04:11:08.557Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-12785\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":0}",
+        "contract_id": null,
+        "id": "CP-20260616211109-13918-4321",
+        "ts": "2026-06-17T04:11:09.692Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -5020,6 +5028,26 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616211102-13174",
         "ts": "2026-06-17T04:11:03.504Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 6000,
+        "event": "session:end",
+        "id": 435,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":1,\"agent\":\"main-13174\",\"duration_s\":6}",
+        "session_id": "",
+        "ts": "2026-06-17T04:11:08.739Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 669,
+        "event": "session-end",
+        "id": 436,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616211102-13174",
+        "ts": "2026-06-17T04:11:09.205Z"
       }
     ],
     "execution_traces": [],
