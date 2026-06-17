@@ -465,6 +465,14 @@
         "id": "CP-20260616210750-1591-31241",
         "ts": "2026-06-17T04:07:50.005Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-1830\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260616210800-2300-30662",
+        "ts": "2026-06-17T04:08:00.513Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -4052,6 +4060,56 @@
         "metadata": "{\"exit_code\":0}",
         "session_id": "sess-20260616210741-798",
         "ts": "2026-06-17T04:07:44.653Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 9000,
+        "event": "session:end",
+        "id": 351,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":3,\"agent\":\"main-798\",\"duration_s\":9}",
+        "session_id": "",
+        "ts": "2026-06-17T04:07:50.190Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 670,
+        "event": "session-end",
+        "id": 352,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616210741-798",
+        "ts": "2026-06-17T04:07:50.653Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 353,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260616210752-1830",
+        "ts": "2026-06-17T04:07:53.970Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1067,
+        "event": "session-start",
+        "id": 354,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616210752-1830",
+        "ts": "2026-06-17T04:07:53.986Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "post-compact-restore",
+        "id": 355,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260616210752-1830",
+        "ts": "2026-06-17T04:07:54.084Z"
       }
     ],
     "execution_traces": [],
