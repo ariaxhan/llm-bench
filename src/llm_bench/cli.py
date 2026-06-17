@@ -40,9 +40,11 @@ def main():
 @click.option("--adversarial", is_flag=True, help="Run adversarial tests only")
 @click.option("--messy", is_flag=True, help="Run real-world messy tests only")
 @click.option("--full", is_flag=True, help="Run all tests (42 total)")
+@click.option("--certainty", is_flag=True,
+              help="Also score outputs for confident-but-wrong (earned-certainty axis)")
 def run(
     models, provider, base_url, tests, details, output, category,
-    hard, agentic, adversarial, messy, full,
+    hard, agentic, adversarial, messy, full, certainty,
 ):
     """Run benchmarks against one or more models.
 
@@ -114,6 +116,26 @@ def run(
 
     # Display
     display_results(runs, show_details=details)
+
+    # Earned-certainty scoring on the FRESH run — raw_output is in memory here,
+    # so this is the full-fidelity path (the saved-file path strips raw_output).
+    if certainty:
+        from llm_bench.scoring.certainty_report import render_run_report
+        from llm_bench.scoring.extract import score_result
+
+        scored = []
+        for r in runs:
+            for res in r.results:
+                rec = {
+                    "test_id": res.test_id,
+                    "score": res.score,
+                    "passed": res.passed,
+                    "raw_output": res.raw_output,
+                }
+                s = score_result(rec, claim_id=f"{r.provider}/{res.test_id}")
+                s["test_id"] = f"{r.provider}/{res.test_id}"
+                scored.append(s)
+        print(render_run_report(scored, source="live run (raw_output in memory)"))
 
     # Save if requested
     if output:
@@ -241,9 +263,10 @@ def score_certainty(corpus, as_json):
     this asks "did an output earn its confidence" — performed authority vs
     earned support. Absorbed from the wrong-convergence sibling repo.
 
-    Runs on a structured claims corpus (JSONL), NOT yet on raw `run` outputs —
-    those don't carry the provenance/evidence fields it reads. See
-    docs/consolidation.md. With no path, scores the bundled canonical corpus.
+    Runs on a structured claims corpus (JSONL). To score REAL benchmark runs for
+    confident-but-wrong outputs, use `score-run <results.json>` or `run
+    --certainty` (see docs/consolidation.md). With no path, scores the bundled
+    canonical corpus.
 
     Examples:
         llm-bench score-certainty
@@ -270,6 +293,47 @@ def score_certainty(corpus, as_json):
     else:
         # plain print — the report is markdown, not Rich markup
         print(render_report(results))
+
+
+@main.command(name="score-run")
+@click.argument("results_file", type=click.Path(exists=True, dir_okay=False))
+@click.option("--json", "as_json", is_flag=True,
+              help="Emit raw scored JSON instead of a markdown report")
+def score_run(results_file, as_json):
+    """Score a real `llm-bench run` results file for confident-but-wrong outputs.
+
+    Closes the integration gap: maps each benchmark result onto the
+    earned-certainty scorer. The HEADLINE signal is confident-but-wrong — a
+    high-performed-authority output that the verifier marked wrong. That rests on
+    the verifier ground truth (`passed`/`score`), the reliable axis on a run.
+
+    NOTE on honesty: saved results files strip `raw_output` (see how `run`
+    persists results). Without the text, performed authority and
+    confident-but-wrong CANNOT be computed — the report says so plainly and falls
+    back to the verifier verdict. To score with full fidelity, use
+    `llm-bench run --certainty` (raw_output is in memory on a fresh run).
+
+    Examples:
+        llm-bench score-run results/community/ariaxhan-m4pro-24gb.json
+        llm-bench score-run my_run.json --json
+    """
+    from llm_bench.scoring.certainty_report import render_run_report
+    from llm_bench.scoring.extract import score_run_file
+
+    try:
+        scored = score_run_file(results_file)
+    except (OSError, ValueError, json.JSONDecodeError) as e:
+        console.print(f"[red]Could not load results '{results_file}': {e}[/red]")
+        sys.exit(1)
+
+    if not scored:
+        console.print(f"[yellow]No scorable result records found in '{results_file}'[/yellow]")
+        return
+
+    if as_json:
+        console.print_json(json.dumps(scored))
+    else:
+        print(render_run_report(scored, source=results_file))
 
 
 def _save_results(runs: list[BenchmarkRun], path: str) -> None:

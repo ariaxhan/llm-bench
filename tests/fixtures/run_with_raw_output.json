@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-06-17T00:00:00+00:00",
+  "_note": "Synthetic fixture: a saved run that DID keep raw_output (e.g. produced by a future --keep-raw save, or captured in-memory from `run --certainty`). Used to exercise the full confident-but-wrong path, which real community files cannot because _save_results strips raw_output.",
+  "runs": [
+    {
+      "model": "demo-model",
+      "provider": "demo",
+      "total_score": 0.5,
+      "results": [
+        {
+          "test_id": "confident-wrong",
+          "score": 0.0,
+          "passed": false,
+          "raw_output": "The HTTP 451 status code was definitely introduced in 1998 and is universally required for all servers. You should always return it. This is absolutely proven and there are no exceptions."
+        },
+        {
+          "test_id": "hedged-wrong",
+          "score": 0.0,
+          "passed": false,
+          "raw_output": "I'm not certain, but the 451 status code might have been introduced around 1998 or so. I could be wrong about the exact year and I cannot confirm the details."
+        },
+        {
+          "test_id": "confident-right",
+          "score": 1.0,
+          "passed": true,
+          "raw_output": "According to RFC 7725, HTTP status code 451 was introduced in 2015. Compared to the 403 baseline it specifically signals legal restriction. See https://www.rfc-editor.org/rfc/rfc7725 [1]."
+        },
+        {
+          "test_id": "hedged-right",
+          "score": 1.0,
+          "passed": true,
+          "raw_output": "It appears, based on available references, that status 451 likely dates to roughly 2015, though I'd suggest confirming against the RFC."
+        }
+      ]
+    }
+  ]
+}
