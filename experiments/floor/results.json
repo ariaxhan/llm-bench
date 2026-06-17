@@ -109,7 +109,7 @@
         "recall": 1.0,
         "f1": 0.89
       },
-      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI Training for Multi-Step Agent Tool-Use Reliability\",\n  \"tags\": [\"agents\", \"safety\", \"tools\", \"open-models\", \"research\"],\n  \"summary\": \"Anthropic's Constitutional AI training approach improves agent reliability in multi-step tool-use by embedding safety constraints directly into training and using synthetic preference data, achieving 94% tool-call accuracy on SWE-bench tasks.\"\n}\n```",
+      "raw_output": "```json\n{\n  \"title\": \"Constitutional AI Training Methods for Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"safety\", \"tools\", \"research\", \"open-models\"],\n  \"summary\": \"Anthropic introduces Constitutional AI training that improves agent reliability in multi-step tool use by leveraging synthetic preference data to train smaller models while embedding safety constraints directly into training.\"\n}\n```",
       "provenance": "live-2026-06-16",
       "verdict": "EVAPORATED (within margin)",
       "f1": 0.89,
@@ -164,7 +164,7 @@
         "recall": 1.0,
         "f1": 1.0
       },
-      "raw_output": "{\n  \"title\": \"Constitutional AI Training for Reliable Multi-Step Tool Use\",\n  \"tags\": [\"agents\", \"tools\", \"safety\", \"research\"],\n  \"summary\": \"Anthropic's new Constitutional AI training method uses Claude-generated synthetic preference data to train smaller models that hit 94% tool-call accuracy on SWE-bench while embedding safety constraints directly into the training loop.\"\n}",
+      "raw_output": "{\n  \"title\": \"Constitutional AI Training for Reliable Multi-Step Tool-Use Agents\",\n  \"tags\": [\"agents\", \"tools\", \"safety\", \"research\"],\n  \"summary\": \"Anthropic's new Constitutional AI method trains smaller models on Claude-generated synthetic preference data to hit 94% tool-call accuracy on SWE-bench while embedding safety constraints directly into the training loop.\"\n}",
       "provenance": "live-2026-06-16",
       "verdict": "EVAPORATED (within margin)",
       "f1": 1.0,
