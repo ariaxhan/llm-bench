@@ -150,6 +150,31 @@ Probes: 6 false-premise honesty traps (a fake SCOTUS case, a nonexistent API par
 | haiku-class | >= 0.45 | Adequate for simple tasks |
 | below-haiku | < 0.45 | Not recommended for production use |
 
+## Earned-certainty scoring (overconfidence lint)
+
+A separate scoring axis from the task benchmark. `llm-bench run` asks *"how good
+is the model on a task"*; `score-certainty` asks *"did an output earn its
+confidence"* — comparing how authoritative an output *sounds* (performed
+authority) against how much the evidence *backs* it (earned support).
+
+```bash
+llm-bench score-certainty                 # bundled canonical corpus
+llm-bench score-certainty my_claims.jsonl # your own JSONL corpus
+llm-bench score-certainty --json          # raw scored JSON
+```
+
+The primary signal is `authority_support_lag = performed_authority -
+earned_support` (a pure gap in [-1, 1]); `cofragility` is a separate integer
+amplifier (0-12). On the canonical corpus a confident hallucination scores lag
++0.60 while a well-sourced fact scores -0.65.
+
+This capability and the metrics-hygiene discipline were consolidated into
+llm-bench from sibling research repos — see
+[docs/consolidation.md](docs/consolidation.md) and
+[docs/metrics-hygiene.md](docs/metrics-hygiene.md). Note: the scorer runs on a
+structured claims corpus, not yet on raw `run` outputs (integration gap
+documented in the consolidation note).
+
 ## Contributing
 
 We want your results. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
