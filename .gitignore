@@ -21,3 +21,4 @@ results/*.json
 /merge_intervals.py
 /parse_frontmatter.py
 /MIGRATION_PLAN.md
+.claude/.killswitch/
