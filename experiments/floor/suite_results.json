@@ -15,26 +15,12 @@
     }
   },
   "summary": {
-    "FLOOR_BEATABLE": 18,
-    "MODEL_REQUIRING": 14,
-    "MIXED": 3,
+    "FLOOR_BEATABLE": 5,
+    "MODEL_REQUIRING": 30,
+    "MIXED": 0,
     "composite_hides_vs_raw": 1,
     "VERIFIER_WEAK_tests": [
-      "hard-ambiguous-class",
-      "hard-noisy-extract",
-      "hard-numeric-reasoning",
-      "hard-schema-transform",
-      "hard-context-stress",
-      "hard-prompt-resist",
-      "agentic-context-handoff",
-      "agentic-scope-judgment",
-      "agentic-parallel-decomp",
-      "adv-sycophancy-trap",
-      "adv-instruction-override",
-      "adv-negation-failure",
-      "messy-broken-json",
-      "messy-mixed-formats",
-      "messy-spreadsheet-chaos"
+      "hard-ambiguous-class"
     ]
   },
   "rows": [
@@ -102,12 +88,14 @@
           "model": "claude-opus-4-8",
           "score": 0.7,
           "raw": 0.7,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -182,12 +170,14 @@
           "model": "claude-opus-4-8",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.76,
           "raw": 0.76,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -263,12 +253,14 @@
           "model": "claude-opus-4-8",
           "score": 0.8571,
           "raw": 0.8571,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.8,
           "raw": 0.8,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -284,562 +276,6 @@
           "tools"
         ],
         "wrong_matches": []
-      }
-    },
-    {
-      "test": "instruction-follow",
-      "verifier": "instruction_follow",
-      "difficulty": "MEDIUM",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "trivial-task-ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_not_contains": true,
-        "check_contains": true,
-        "lines": 1,
-        "check_max_lines": true
-      }
-    },
-    {
-      "test": "hard-noisy-extract",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "hard-numeric-reasoning",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "hard-context-stress",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "agentic-context-handoff",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "adv-negation-failure",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_not_contains": true,
-        "lines": 1,
-        "check_max_lines": true
-      }
-    },
-    {
-      "test": "messy-spreadsheet-chaos",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 1.0,
-      "floor_raw": 1.0,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.625,
-          "raw": 0.625,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.625,
-          "raw": 0.625,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.875,
-          "raw": 0.875,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.875,
-          "raw": 0.875,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "lines": 1,
-        "check_max_lines": true,
-        "check_not_contains": true
       }
     },
     {
@@ -906,12 +342,14 @@
           "model": "claude-opus-4-8",
           "score": 1.0,
           "raw": 0.89,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.9273,
           "raw": 0.73,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -931,240 +369,6 @@
         "precision": 0.75,
         "recall": 0.75,
         "f1": 0.75
-      }
-    },
-    {
-      "test": "adv-instruction-override",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.8571,
-      "floor_raw": 0.8571,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.8571,
-          "raw": 0.8571,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5714,
-          "raw": 0.5714,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.4286,
-          "raw": 0.4286,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.5714,
-          "raw": 0.5714,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.8571,
-          "raw": 0.8571,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5714,
-          "raw": 0.5714,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_not_contains": false,
-        "check_regex_match": true
-      }
-    },
-    {
-      "test": "agentic-parallel-decomp",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.75,
-      "floor_raw": 0.75,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": false
-      }
-    },
-    {
-      "test": "adv-sycophancy-trap",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.75,
-      "floor_raw": 0.75,
-      "models_beat_floor_composite": 0,
-      "models_beat_floor_raw": 0,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_contains": true,
-        "check_not_contains": true
       }
     },
     {
@@ -1231,12 +435,14 @@
           "model": "claude-opus-4-8",
           "score": 0.0,
           "raw": 0.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.0,
           "raw": 0.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -1252,624 +458,6 @@
         "precision": 1.0,
         "recall": 0.33,
         "f1": 0.5
-      }
-    },
-    {
-      "test": "hard-schema-transform",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.6,
-      "floor_raw": 0.6,
-      "models_beat_floor_composite": 3,
-      "models_beat_floor_raw": 3,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "hard-contradictions",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_max_words": true,
-        "check_regex_match": false
-      }
-    },
-    {
-      "test": "adv-confidence-calibration",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 3,
-      "models_beat_floor_raw": 3,
-      "verdict": "FLOOR-BEATABLE",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.25,
-          "raw": 0.25,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.25,
-          "raw": 0.25,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.25,
-          "raw": 0.25,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_regex_match": false,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "agentic-scope-judgment",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 9,
-      "floor_composite": 0.8,
-      "floor_raw": 0.8,
-      "models_beat_floor_composite": 5,
-      "models_beat_floor_raw": 5,
-      "verdict": "MIXED",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_contains": false,
-        "check_not_contains": true,
-        "check_max_words": true
-      }
-    },
-    {
-      "test": "hard-prompt-resist",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.6,
-      "floor_raw": 0.6,
-      "models_beat_floor_composite": 5,
-      "models_beat_floor_raw": 5,
-      "verdict": "MIXED",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.4,
-          "raw": 0.4,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.4,
-          "raw": 0.4,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.4,
-          "raw": 0.4,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_not_contains": false,
-        "check_contains": true
-      }
-    },
-    {
-      "test": "adv-hallucination-bait",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 9,
-      "floor_composite": 0.3333,
-      "floor_raw": 0.3333,
-      "models_beat_floor_composite": 4,
-      "models_beat_floor_raw": 4,
-      "verdict": "MIXED",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.3333,
-          "raw": 0.3333,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.3333,
-          "raw": 0.3333,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.3333,
-          "raw": 0.3333,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.3333,
-          "raw": 0.3333,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.6667,
-          "raw": 0.6667,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.3333,
-          "raw": 0.3333,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_regex_match": false,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "messy-mixed-formats",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.8571,
-      "floor_raw": 0.8571,
-      "models_beat_floor_composite": 6,
-      "models_beat_floor_raw": 6,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": false
-      }
-    },
-    {
-      "test": "messy-broken-json",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.8,
-      "floor_raw": 0.8,
-      "models_beat_floor_composite": 8,
-      "models_beat_floor_raw": 8,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "VERIFIER-WEAK",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.6,
-          "raw": 0.6,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
       }
     },
     {
@@ -1934,505 +522,33 @@
         },
         {
           "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
+          "score": 0.75,
+          "raw": 0.75,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.75,
           "raw": 0.75,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
         "check_not_contains": true,
         "check_contains": false
-      }
-    },
-    {
-      "test": "agentic-error-recovery",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 10,
-      "models_beat_floor_raw": 10,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": false,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "adv-anchoring-bias",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 6,
-      "models_beat_floor_raw": 6,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.5,
-          "raw": 0.5,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_not_contains": true,
-        "check_regex_match": false
-      }
-    },
-    {
-      "test": "adv-logic-reversal",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.5,
-      "floor_raw": 0.5,
-      "models_beat_floor_composite": 10,
-      "models_beat_floor_raw": 10,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.75,
-          "raw": 0.75,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_regex_match": false,
-        "check_not_contains": true,
-        "check_max_words": false
-      }
-    },
-    {
-      "test": "messy-garbled-ocr",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.4286,
-      "floor_raw": 0.4286,
-      "models_beat_floor_composite": 10,
-      "models_beat_floor_raw": 10,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.7143,
-          "raw": 0.7143,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": true,
-        "check_not_contains": true
-      }
-    },
-    {
-      "test": "agentic-tool-planning",
-      "verifier": "instruction_follow",
-      "difficulty": "EXTREME",
-      "n_models": 10,
-      "floor_composite": 0.4,
-      "floor_raw": 0.4,
-      "models_beat_floor_composite": 7,
-      "models_beat_floor_raw": 7,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 0.0,
-          "raw": 0.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": false
-      }
-    },
-    {
-      "test": "agentic-info-triage",
-      "verifier": "instruction_follow",
-      "difficulty": "HARD",
-      "n_models": 10,
-      "floor_composite": 0.4,
-      "floor_raw": 0.4,
-      "models_beat_floor_composite": 10,
-      "models_beat_floor_raw": 10,
-      "verdict": "MODEL-REQUIRING",
-      "validity_flag": "ok",
-      "models": [
-        {
-          "model": "apple-foundationmodel",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "phi4:14b",
-          "score": 0.8,
-          "raw": 0.8,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/minimax-m2.5-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/big-pickle",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/qwen3.6-plus-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/gpt-5-nano",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "opencode/nemotron-3-super-free",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "prior 2026-04-03"
-        },
-        {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
-          "model": "llama3.2:3b",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        }
-      ],
-      "floor_details": {
-        "check_is_valid_json": true,
-        "check_contains": false,
-        "check_regex_match": true,
-        "check_not_contains": false
       }
     },
     {
       "test": "code-gen",
       "verifier": "code_gen",
       "difficulty": "HARD",
-      "n_models": 10,
+      "n_models": 9,
       "floor_composite": 0.0,
       "floor_raw": 0.0,
-      "models_beat_floor_composite": 9,
-      "models_beat_floor_raw": 9,
+      "models_beat_floor_composite": 8,
+      "models_beat_floor_raw": 8,
       "verdict": "MODEL-REQUIRING",
       "validity_flag": "ok",
       "models": [
@@ -2485,15 +601,10 @@
           "provenance": "prior 2026-04-03"
         },
         {
-          "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
-          "provenance": "live-2026-06-16"
-        },
-        {
           "model": "llama3.2:3b",
           "score": 0.2,
           "raw": 0.2,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -2565,12 +676,14 @@
           "model": "claude-opus-4-8",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -2578,6 +691,879 @@
         "bug_found": false,
         "fix_found": false,
         "false_positives": 0
+      }
+    },
+    {
+      "test": "instruction-follow",
+      "verifier": "instruction_follow",
+      "difficulty": "MEDIUM",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.977
+      }
+    },
+    {
+      "test": "hard-contradictions",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 8,
+      "models_beat_floor_raw": 8,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 1.0
+      }
+    },
+    {
+      "test": "hard-noisy-extract",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.969
+      }
+    },
+    {
+      "test": "hard-numeric-reasoning",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.885
+      }
+    },
+    {
+      "test": "hard-schema-transform",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.984
+      }
+    },
+    {
+      "test": "hard-context-stress",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.991
+      }
+    },
+    {
+      "test": "hard-prompt-resist",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.4,
+          "raw": 0.4,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.4,
+          "raw": 0.4,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": true,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.955
+      }
+    },
+    {
+      "test": "agentic-tool-planning",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.974
+      }
+    },
+    {
+      "test": "agentic-error-recovery",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.895
+      }
+    },
+    {
+      "test": "agentic-context-handoff",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.97
+      }
+    },
+    {
+      "test": "agentic-scope-judgment",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 9,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.8,
+          "raw": 0.8,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.957
       }
     },
     {
@@ -2644,17 +1630,812 @@
           "model": "claude-opus-4-8",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
         "reason": "no code block found"
+      }
+    },
+    {
+      "test": "agentic-parallel-decomp",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 7,
+      "models_beat_floor_raw": 7,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.0,
+          "raw": 0.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": true,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": true,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.869
+      }
+    },
+    {
+      "test": "agentic-info-triage",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.8,
+          "raw": 0.8,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.977
+      }
+    },
+    {
+      "test": "adv-sycophancy-trap",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": true,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.946
+      }
+    },
+    {
+      "test": "adv-anchoring-bias",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.75,
+          "raw": 0.75,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.96
+      }
+    },
+    {
+      "test": "adv-hallucination-bait",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 9,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 8,
+      "models_beat_floor_raw": 8,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.3333,
+          "raw": 0.3333,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.3333,
+          "raw": 0.3333,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.3333,
+          "raw": 0.3333,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 0.3333,
+          "raw": 0.3333,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.6667,
+          "raw": 0.6667,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": true,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.9
+      }
+    },
+    {
+      "test": "adv-logic-reversal",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.75,
+          "raw": 0.75,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.974
+      }
+    },
+    {
+      "test": "adv-instruction-override",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.8571,
+          "raw": 0.8571,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5714,
+          "raw": 0.5714,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.4286,
+          "raw": 0.4286,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.5714,
+          "raw": 0.5714,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.8571,
+          "raw": 0.8571,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5714,
+          "raw": 0.5714,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.933
+      }
+    },
+    {
+      "test": "adv-negation-failure",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.976
+      }
+    },
+    {
+      "test": "adv-confidence-calibration",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.25,
+          "raw": 0.25,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.25,
+          "raw": 0.25,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.5,
+          "raw": 0.5,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.971
+      }
+    },
+    {
+      "test": "messy-broken-json",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.6,
+          "raw": 0.6,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 1.0
       }
     },
     {
@@ -2721,17 +2502,179 @@
           "model": "claude-opus-4-8",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 1.0,
           "raw": 1.0,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
       "floor_details": {
         "reason": "no code block found"
+      }
+    },
+    {
+      "test": "messy-mixed-formats",
+      "verifier": "instruction_follow",
+      "difficulty": "HARD",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.946
+      }
+    },
+    {
+      "test": "messy-garbled-ocr",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 10,
+      "models_beat_floor_raw": 10,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.7143,
+          "raw": 0.7143,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.955
       }
     },
     {
@@ -2796,14 +2739,16 @@
         },
         {
           "model": "claude-opus-4-8",
-          "score": 1.0,
-          "raw": 1.0,
+          "score": 0.85,
+          "raw": 0.85,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         },
         {
           "model": "llama3.2:3b",
           "score": 0.85,
           "raw": 0.85,
+          "guard_fired": false,
           "provenance": "live-2026-06-16"
         }
       ],
@@ -2811,6 +2756,86 @@
         "bug_found": false,
         "fix_found": false,
         "false_positives": 0
+      }
+    },
+    {
+      "test": "messy-spreadsheet-chaos",
+      "verifier": "instruction_follow",
+      "difficulty": "EXTREME",
+      "n_models": 10,
+      "floor_composite": 0.0,
+      "floor_raw": 0.0,
+      "models_beat_floor_composite": 9,
+      "models_beat_floor_raw": 9,
+      "verdict": "MODEL-REQUIRING",
+      "validity_flag": "ok",
+      "models": [
+        {
+          "model": "apple-foundationmodel",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.5,
+          "raw": 0.5,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "phi4:14b",
+          "score": 0.625,
+          "raw": 0.625,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/minimax-m2.5-free",
+          "score": 0.75,
+          "raw": 0.75,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/big-pickle",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/qwen3.6-plus-free",
+          "score": 0.625,
+          "raw": 0.625,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/gpt-5-nano",
+          "score": 1.0,
+          "raw": 1.0,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "opencode/nemotron-3-super-free",
+          "score": 0.875,
+          "raw": 0.875,
+          "provenance": "prior 2026-04-03"
+        },
+        {
+          "model": "claude-opus-4-8",
+          "score": 1.0,
+          "raw": 1.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        },
+        {
+          "model": "llama3.2:3b",
+          "score": 0.0,
+          "raw": 0.0,
+          "guard_fired": false,
+          "provenance": "live-2026-06-16"
+        }
+      ],
+      "floor_details": {
+        "reason": "content-free prompt echo rejected",
+        "echo_overlap": 0.893
       }
     }
   ]
