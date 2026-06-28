@@ -49,6 +49,11 @@ class Conversation:
     model: str
     turns: list[Turn] = field(default_factory=list)
     error: str | None = None
+    # env-driven mode only: did the frustrated-user env accept a correct fix, and on which
+    # assistant turn (1-indexed). None = never solved within the turn cap.
+    solved: bool = False
+    turns_to_fix: int | None = None
+    probes_revealed: list[str] = field(default_factory=list)
 
     @property
     def assistant_turns(self) -> list[Turn]:
@@ -83,6 +88,9 @@ class Conversation:
             "model": self.model,
             "n_assistant_turns": len(self.assistant_turns),
             "error": self.error,
+            "solved": self.solved,
+            "turns_to_fix": self.turns_to_fix,
+            "probes_revealed": self.probes_revealed,
             "turns": [t.to_dict() for t in self.turns],
         }
 
@@ -156,3 +164,84 @@ async def run_conversation(
         idx += 1
 
     return convo
+
+
+def _env_transcript(turns: list[Turn]) -> str:
+    """Render the conversation for the environment LLM: subject = ASSISTANT, user = USER."""
+    lines = []
+    for t in turns:
+        label = "USER" if t.role == "user" else "ASSISTANT"
+        lines.append(f"[{label}]\n{t.text}")
+    return "\n\n".join(lines)
+
+
+async def run_conversation_env(
+    challenge: ConversationSpec,
+    subject_provider: BaseProvider,
+    subject_model: str,
+    env_provider: BaseProvider,
+    env_model: str,
+    max_turns: int = 8,
+    max_tokens: int = 12000,
+) -> Conversation:
+    """Drive a challenge as a live conversation against an LLM ENVIRONMENT that role-plays the
+    frustrated user. The subject gets the source code up front; the environment reveals runtime
+    probes only when the subject asks for the right diagnostic, and ends the conversation when
+    the subject states the correct fix. Returns the Conversation with solved/turns_to_fix set.
+
+    Lazy import of ``environment`` avoids a circular import (environment imports challenges).
+    """
+    from llm_bench.familiarity import environment as env
+
+    convo = Conversation(challenge_id=challenge.challenge_id, model=subject_model)
+    first = _compose_initial(challenge)
+    assert_clean(first)
+    convo.turns.append(Turn(index=0, role="user", text=first))
+    history: list[dict] = [{"role": "user", "text": first}]
+    idx = 1
+
+    for _ in range(max_turns):
+        # --- subject turn ---
+        try:
+            resp = await subject_provider.converse(
+                model=subject_model, system_prompt="", messages=history,
+                max_tokens=max_tokens, temperature=0.0,
+            )
+        except Exception as e:  # noqa: BLE001
+            convo.error = f"subject: {type(e).__name__}: {e}"
+            return convo
+        answer = resp.content or ""
+        convo.turns.append(Turn(
+            index=idx, role="assistant", text=answer,
+            reasoning_chars=len(resp.reasoning) if resp.reasoning else 0,
+            latency_ms=resp.latency_ms, input_tokens=resp.input_tokens,
+            output_tokens=resp.output_tokens, cost_usd=resp.cost_usd,
+        ))
+        history.append({"role": "assistant", "text": answer if answer.strip() else " "})
+        idx += 1
+
+        # --- environment (frustrated user) reacts ---
+        try:
+            reply = await env.respond(challenge, _env_transcript(convo.turns),
+                                      env_provider, env_model)
+        except Exception as e:  # noqa: BLE001
+            convo.error = f"env: {type(e).__name__}: {e}"
+            return convo
+
+        if reply.revealed:
+            convo.probes_revealed.append(reply.revealed)
+        if reply.solved:
+            convo.solved = True
+            convo.turns_to_fix = len(convo.assistant_turns)
+            # record the env's closing acknowledgement for the transcript, then stop
+            convo.turns.append(Turn(index=idx, role="user", text=reply.reply))
+            return convo
+
+        # not solved -> the user's frustrated reply becomes the next turn
+        user_msg = reply.reply
+        assert_clean(user_msg)
+        convo.turns.append(Turn(index=idx, role="user", text=user_msg))
+        history.append({"role": "user", "text": user_msg})
+        idx += 1
+
+    return convo  # hit the turn cap without solving

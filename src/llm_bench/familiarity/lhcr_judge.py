@@ -25,7 +25,7 @@ it (so it can't rubber-stamp nothing by leaking its own prompt).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from llm_bench.familiarity.challenges import ConversationSpec
 from llm_bench.familiarity.conversation import Conversation
@@ -82,13 +82,15 @@ Also decide, considering the MODEL's answers ACROSS THE WHOLE conversation (the 
 cause may be stated mid-conversation — a late user turn is often just 'now prevent it'):
 - reached: true if the model articulated the known-correct outcome at any point and did not
   later retract or contradict it (substance, not wording); else false.
+- fell_for_trap: true if the model proposed/shipped THE TRAP above (the seductive wrong move)
+  as its fix at any point, even if it later corrected — else false.
 - divergence: exactly one of "equivalent" (reached, same result), "better" (reached and
   superior), "worse" (did not reach / incomplete / wrong), "novel" (reached by a valid
   different path).
 - how: one or two sentences citing specifics from the transcript (which layers it reached, where it thrashed).
 
 Respond with ONLY this JSON object, no prose, no code fence:
-{{"convergence": 0, "no_regression": 0, "layer_switching": 0, "verification_seeking": 0, "state_holding": 0, "reached": true_or_false, "divergence": "equivalent|better|worse|novel", "how": "..."}}"""
+{{"convergence": 0, "no_regression": 0, "layer_switching": 0, "verification_seeking": 0, "state_holding": 0, "reached": true_or_false, "fell_for_trap": true_or_false, "divergence": "equivalent|better|worse|novel", "how": "..."}}"""
 
 
 @dataclass
@@ -106,12 +108,21 @@ class LHCRVerdict:
     n_turns: int
     judge_model: str
     parse_ok: bool
+    fell_for_trap: bool = False
+    # env-driven mode: did the frustrated-user env accept the fix, and on which turn
+    solved: bool = False
+    turns_to_fix: int | None = None
+    probes_revealed: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
             "challenge_id": self.challenge_id,
             "model": self.model,
             "reached": self.reached,
+            "fell_for_trap": self.fell_for_trap,
+            "solved": self.solved,
+            "turns_to_fix": self.turns_to_fix,
+            "probes_revealed": self.probes_revealed,
             "divergence": self.divergence,
             "dims": self.dims,
             "lhcr_score": self.lhcr_score,
@@ -146,6 +157,9 @@ async def judge_conversation(
     cumulative = convo.all_assistant_text
     spine_reached, spine_detail = challenge.spine(cumulative)
     n_turns = len(convo.assistant_turns)
+    # env outcome carried straight through from the conversation
+    env = dict(solved=convo.solved, turns_to_fix=convo.turns_to_fix,
+               probes_revealed=list(convo.probes_revealed))
 
     # No answer text anywhere never reaches the outcome — short-circuit before the judge.
     if not cumulative or not cumulative.strip():
@@ -155,7 +169,7 @@ async def judge_conversation(
             how="model produced no final answer text (empty output)",
             spine_reached=spine_reached, spine_detail=spine_detail,
             agrees_with_spine=(spine_reached is False), n_turns=n_turns,
-            judge_model=judge_model, parse_ok=True,
+            judge_model=judge_model, parse_ok=True, **env,
         )
 
     resp = await provider.complete(
@@ -171,6 +185,7 @@ async def judge_conversation(
             divergence="parse_error", dims={d: 0 for d in _DIMS}, lhcr_score=0,
             how=resp.content[:200], spine_reached=spine_reached, spine_detail=spine_detail,
             agrees_with_spine=False, n_turns=n_turns, judge_model=judge_model, parse_ok=False,
+            **env,
         )
 
     dims = {d: _clamp_dim(obj.get(d, 0)) for d in _DIMS}
@@ -182,8 +197,9 @@ async def judge_conversation(
 
     return LHCRVerdict(
         challenge_id=challenge.challenge_id, model=convo.model, reached=reached,
+        fell_for_trap=bool(obj.get("fell_for_trap", False)),
         divergence=divergence, dims=dims, lhcr_score=sum(dims.values()), how=how,
         spine_reached=spine_reached, spine_detail=spine_detail,
         agrees_with_spine=(reached == spine_reached), n_turns=n_turns,
-        judge_model=judge_model, parse_ok=True,
+        judge_model=judge_model, parse_ok=True, **env,
     )

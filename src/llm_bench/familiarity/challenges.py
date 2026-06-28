@@ -44,11 +44,18 @@ class ConversationSpec:
     spine: Callable[[str], tuple[bool, str]]
     source_episode: str = ""
     notes: str = ""
-    # filename -> code/observation snippet, shown to the model in the first turn. This is
-    # the answer to "how do we give them the code": the harder challenges hand the model
-    # real (genericized) source + a runtime/observation block, so the bug is discoverable
-    # by reading the cascade/seam, not guessable from prose.
+    # filename -> SOURCE snippet, shown to the model in the first turn. This is the answer to
+    # "how do we give them the code": the model gets the real (genericized) source so the bug
+    # is discoverable by reading the cascade/seam. Runtime OBSERVATIONS are NOT here — they're
+    # probes (below), earned only by asking for the right diagnostic.
     code_context: dict[str, str] = field(default_factory=dict)
+    # The minimal correct fix, in one line. The environment uses it to recognise "solved";
+    # the model never sees it.
+    fix_summary: str = ""
+    # Diagnostics the environment reveals ONLY when the model explicitly proposes running that
+    # check. Each: {"ask": "<what the model must propose>", "observation": "<what the user
+    # reports back>"}. This is how verification-seeking is made an earned action.
+    probes: list[dict] = field(default_factory=list)
     _extra: dict = field(default_factory=dict)
 
     @property
@@ -192,6 +199,20 @@ _C1 = ConversationSpec(
         "+ deploy/cache layers the model never inspected."
     ),
     spine=_spine_hidden_override,
+    fix_summary="Add `[hidden] { display: none !important }` (or remove the conflicting "
+                "display rule) so the attribute wins, push to main so the CDN redeploys, and "
+                "bump the ?v= cache-buster. NOT a JS edit.",
+    probes=[
+        {"ask": "inspect the computed style of the button on the live rendered page / open devtools",
+         "observation": "computed style on the live button: display: inline-flex — the [hidden] "
+                        "attribute IS set but a CSS rule is overriding it; the element is in the DOM."},
+        {"ask": "check whether the fix actually deployed / is the latest commit live in prod",
+         "observation": "checked the deploy: the change is committed locally but main was never "
+                        "pushed, so production is still serving the old build."},
+        {"ask": "check the served asset version / whether a stale cached file is being served",
+         "observation": "the page still loads booth-v.js?v=8 — same as before; the cache-buster "
+                        "wasn't bumped so the CDN serves the stale asset."},
+    ],
     notes="4 stacked causes behind one symptom; verify-live (computed style) is the unlock.",
 )
 
@@ -234,6 +255,17 @@ _C2 = ConversationSpec(
         "already works and the bug is purely in promote-and-relaunch activation logic."
     ),
     spine=_spine_ota_not_promoted,
+    fix_summary="After a successful download, mark the new bundle active and reload so it "
+                "actually launches; the bug is the promote/activate-and-reload step, not the "
+                "network.",
+    probes=[
+        {"ask": "check which bundle the app actually loads/runs at launch (not the HTTP status)",
+         "observation": "logged the active bundle path at launch: it's still the old/embedded "
+                        "bundle; the freshly downloaded one is sitting unused in the updates dir."},
+        {"ask": "check the update state machine: is the downloaded update marked pending vs launched",
+         "observation": "the update record shows status 'downloaded' / 'pending', and never "
+                        "advances to 'launched'."},
+    ],
     notes="Trusting 200-OK as 'working' is the trap; verify which bundle actually runs.",
 )
 
@@ -278,6 +310,18 @@ _C3 = ConversationSpec(
         "broken seam the unit tests never exercised."
     ),
     spine=_spine_dead_seam,
+    fix_summary="Repair the inter-module contract where decisions are silently dropped, and "
+                "add an integration test + a 'decisions-per-day > 0' liveness assertion/alert "
+                "so a zero-output run fails loudly instead of looking healthy.",
+    probes=[
+        {"ask": "trace one real tick end-to-end on real data / inspect the decisions store",
+         "observation": "traced a tick on real data: the producer emits candidates, but the "
+                        "scorer receives an empty list and writes nothing — runs clean, exits 0, "
+                        "zero decisions recorded."},
+        {"ask": "check the contract between the producing and scoring modules (the field they pass)",
+         "observation": "the producer writes the field 'prob'; the scorer reads 'probability' — "
+                        "mismatch, so every candidate is silently filtered out."},
+    ],
     notes="'Done = verified live' incarnate; tests-green != pipeline-works.",
 )
 
@@ -358,12 +402,19 @@ _C4 = ConversationSpec(
             "  h('span', { class: 'work-title' }, p.title),\n"
             "]);"
         ),
-        "runtime: getComputedStyle(.work-row)": (
-            "paddingTop=0px  paddingBottom=0px  borderBottomWidth=0px   // zeroed!\n"
-            "fontSize=18px   lineHeight=24.3px                           // font DID apply\n"
-            "// but dist/assets/app.css contains: .work-row { padding: 20px 0 }"
-        ),
     },
+    fix_summary="Make the author row rules win the cascade over the `.pr-app button` reset. The "
+                "clean canonical fix is to wrap the reset in :where(.pr-app button) (zero "
+                "specificity); raising the row selector's specificity (or a targeted override) "
+                "also genuinely works. What does NOT work is bumping padding/margin/font values "
+                "— those never win the cascade (that's the trap).",
+    probes=[
+        {"ask": "inspect the computed style of .work-row on the rendered page / getComputedStyle "
+                "/ dump the CSS rules matching the row",
+         "observation": "getComputedStyle(.work-row): paddingTop=0px paddingBottom=0px "
+                        "borderBottomWidth=0px (but fontSize=18px DID apply) — even though the "
+                        "built dist/assets/app.css literally contains .work-row { padding: 20px 0 }."},
+    ],
     notes="The flagship: simple root (one :where), agonizing path; value-change-no-visual-"
           "change is the unlock. Real multi-session paper-rooms episode (2026-06-28).",
 )
@@ -374,9 +425,9 @@ _C5 = ConversationSpec(
     source_episode="modelmind-revenuecat-iap-attach-circles",
     initial_prompt=(
         "Our React Native subscription app uses RevenueCat. A paying customer's subscription "
-        "shows ACTIVE (premium_monthly), but the app never unlocks Premium. We check the "
-        "'premium_access' entitlement and it comes back empty. The RevenueCat dashboard shows "
-        "the products under 'Unattached products'. Fix it so paying users actually get Premium."
+        "shows ACTIVE (premium_monthly), but the app never unlocks Premium — we check the "
+        "'premium_access' entitlement and it comes back empty. Fix it so paying users actually "
+        "get Premium."
     ),
     followups=[
         "i tried attaching the products via the api and the attach call keeps 404ing even "
@@ -430,11 +481,10 @@ _C5 = ConversationSpec(
             "}\n\n"
             "// --- runtime dump on a real device, paid customer ---\n"
             "//   info.activeSubscriptions -> ['premium_monthly']  // ACTIVE\n"
-            "//   info.entitlements.active -> {}                    // EMPTY\n"
-            "//   RevenueCat dashboard: 'premium_monthly' under 'Unattached products'"
+            "//   info.entitlements.active -> {}                    // EMPTY"
         ),
         "lib/subscription_patch.ts": (
-            "// the band-aid patch that keeps getting reached for\n"
+            "// a quick patch someone on the team proposed\n"
             "export async function isPremiumLoose(): Promise<boolean> {\n"
             "  const info = await Purchases.getCustomerInfo();\n"
             "  if (info.entitlements.active[PREMIUM]) return true;\n"
@@ -443,13 +493,24 @@ _C5 = ConversationSpec(
             "    ['premium_monthly', 'premium_annual'].includes(id));\n"
             "}"
         ),
-        "scripts/attach.sh": (
-            "# wire it up via the RC API -- keeps failing\n"
-            "curl -s -X GET  $RC_API/projects/$P/products            # 200 OK\n"
-            "curl -s -X POST $RC_API/projects/$P/entitlements/$E/attach \\\n"
-            "     -d '{\"product_ids\":[\"premium_monthly\"]}'           # 404 Not Found"
-        ),
     },
+    fix_summary="Config, not code: attach premium_monthly/premium_annual to the 'premium_access' "
+                "entitlement AND to the current offering in RevenueCat, and attach the IAPs to the "
+                "app version in App Store Connect; keep entitlements.active as source of truth. "
+                "NOT the app-side loose-unlock band-aid.",
+    probes=[
+        {"ask": "check the RevenueCat dashboard: are the products attached to the entitlement and "
+                "to an offering",
+         "observation": "RevenueCat dashboard: premium_monthly and premium_annual are listed under "
+                        "'Unattached products' — not attached to the 'premium_access' entitlement "
+                        "or to any offering."},
+        {"ask": "check App Store Connect: are the IAPs attached to the current app version",
+         "observation": "App Store Connect: the IAP products show status Approved, but they are NOT "
+                        "added to the current app version."},
+        {"ask": "try attaching the products to the entitlement via the API",
+         "observation": "the attach POST returns 404 — you're using the wrong endpoint shape; the "
+                        "documented attach endpoint is different (GET on products works fine, 200)."},
+    ],
     notes="Live contradiction (active sub, empty entitlement) lures a code band-aid; root is "
           "two-console config. modelmind app-store-review reality.",
 )
@@ -520,11 +581,18 @@ _C6 = ConversationSpec(
             "cd \"$(dirname \"$0\")\"\n"
             "./venv/bin/python pulse.py    # every job invokes its inner tool this way"
         ),
-        "/tmp/pulse.err": (
-            "./venv/bin/python: Permission denied\n"
-            "# launchd: job com.example.pulse exited with code 126"
-        ),
     },
+    fix_summary="Restore the execute bit on (or absolute-invoke, e.g. via bash) the inner "
+                "venv python interpreter that every job runs — one fix for the whole fleet. NOT "
+                "chmod +x on the already-executable wrapper/plist.",
+    probes=[
+        {"ask": "read the StandardErrorPath log / the stderr of a failed job",
+         "observation": "/tmp/pulse.err contains: './venv/bin/python: Permission denied' "
+                        "followed by 'launchd: job exited with code 126'."},
+        {"ask": "check the permissions of the inner target (the venv python), not the wrapper",
+         "observation": "ls -l venv/bin/python -> -rw-r--r-- : the interpreter every job invokes "
+                        "is NOT executable (the wrapper run.sh is -rwxr-xr-x and fine)."},
+    ],
     notes="'126 == chmod the script' is an irresistible mis-pattern; the wrapper is already "
           "+x, the inner interpreter isn't. Read the stderr log.",
 )
@@ -580,10 +648,11 @@ _C7 = ConversationSpec(
     ),
     code_context={
         "scrape-output.json": (
+            "// output of the current static scraper against the source site\n"
             "{\n"
             "  \"colors\": [\"#1a1a1a\", \"#c9a227\"],\n"
             "  \"text_fragments\": [\"Menu\", \"Contact\", \"(c) 2024\"],\n"
-            "  \"sections\": [],     // empty -- page is client-rendered\n"
+            "  \"sections\": [],\n"
             "  \"menu_items\": []\n"
             "}"
         ),
@@ -591,16 +660,29 @@ _C7 = ConversationSpec(
             "// fills the gaps with plausible content when the scrape is empty\n"
             "const menu = scrape.menu_items.length\n"
             "  ? scrape.menu_items\n"
-            "  : ['Grilled Salmon', 'Caesar Salad', 'Tiramisu'];  // INVENTED fallback\n"
+            "  : ['Grilled Salmon', 'Caesar Salad', 'Tiramisu'];  // fallback\n"
             "export const site = buildSite({ colors: scrape.colors, menu });"
         ),
         "site.test.ts": (
             "// result: tsc clean, 25 passing\n"
             "test('renders the menu', () => {\n"
-            "  expect(render(site)).toContain('Grilled Salmon'); // asserts on INVENTED data\n"
+            "  expect(render(site)).toContain('Grilled Salmon');\n"
             "});"
         ),
     },
+    fix_summary="Headlessly render the live page (Playwright/puppeteer) to get the real post-JS "
+                "content, regenerate from that ground truth, and verify by visual comparison to "
+                "the real site — NOT by unit tests that assert on invented data.",
+    probes=[
+        {"ask": "headlessly render the live page / fetch the actual post-JS rendered DOM "
+                "(playwright/puppeteer)",
+         "observation": "rendered with a headless browser: the real site is client-side "
+                        "(JavaScript) rendered — the live DOM has 6 sections, a 24-item menu, and "
+                        "a full contact block, none of which the static scrape captured."},
+        {"ask": "visually compare the generated output to the real site",
+         "observation": "side-by-side: the generated page's layout, sections, and menu are nothing "
+                        "like the real site — the dishes don't even exist on the real menu."},
+    ],
     notes="False green: the suite validates the model's own fabricated input. You can't "
           "rebuild a page you never rendered.",
 )
@@ -676,14 +758,20 @@ _C8 = ConversationSpec(
             "});\n"
             "video.srcObject = stream;   // <video autoplay playsinline muted>"
         ),
-        "console.log": (
-            "// observed on the NEXT guest, right after resetForNextGuest() ran:\n"
-            "//   MediaStreamTrack readyState -> 'ended'  (capture failure)\n"
-            "//   navigator.mediaDevices.getUserMedia() -> permission prompt shown AGAIN\n"
-            "// note: also re-prompts on a cold launch from the home-screen icon,\n"
-            "//       but NOT when opened in a Safari tab"
-        ),
     },
+    fix_summary="Two fixes: (1) don't display:none the live <video> between guests — keep it "
+                "rendered but inert (opacity:0/off-screen) and keep the tracks alive all session; "
+                "(2) the cold-launch prompt is a PWA-standalone platform limit (can't persist "
+                "getUserMedia permission) — run in a Safari tab with 'Allow for This Website'. "
+                "NOT another permission patch.",
+    probes=[
+        {"ask": "check the camera track's readyState in the console when it re-prompts / between guests",
+         "observation": "console: MediaStreamTrack readyState -> 'ended' (capture failure) "
+                        "immediately after resetForNextGuest() runs; the next getUserMedia re-prompts."},
+        {"ask": "compare behaviour in a plain Safari tab vs the home-screen / installed PWA",
+         "observation": "in a Safari tab with 'Allow for This Website' it does NOT re-prompt on "
+                        "relaunch; launched from the home-screen icon it re-prompts on every cold launch."},
+    ],
     notes="Two causes: a code bug (display:none ends the track) AND a platform constraint with "
           "no code fix (PWA can't persist permission). Reflex is a third patch.",
 )

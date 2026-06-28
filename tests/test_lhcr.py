@@ -11,8 +11,13 @@ from __future__ import annotations
 import pytest
 
 from llm_bench.familiarity.challenges import get_challenge, load_challenges
-from llm_bench.familiarity.conversation import Conversation, Turn, run_conversation
-from llm_bench.familiarity.lhcr import _floor_conversations
+from llm_bench.familiarity.conversation import (
+    Conversation,
+    Turn,
+    run_conversation,
+    run_conversation_env,
+)
+from llm_bench.familiarity.lhcr import _synth_convo
 from llm_bench.familiarity.lhcr_judge import _clamp_dim, judge_conversation
 from llm_bench.familiarity.redact import verify_clean
 
@@ -140,11 +145,14 @@ def test_spine_dead_engine_needs_silent_seam():
 # --- floor calibration (synthetic transcripts) ---
 
 
-def test_floor_transcripts_calibrate_spine():
-    for kind, cid, convo in _floor_conversations():
-        ch = get_challenge(cid)
-        reached, _ = ch.spine(convo.all_assistant_text)
-        assert reached is (kind == "converge"), f"floor spine wrong for {kind}"
+def test_floor_synth_spine_calibration():
+    # the generic judge-floor's converge input (correct answer) must satisfy each spine.
+    # (The trap string is NOT spine-checked: traps are written to describe the wrong move by
+    # contrasting it with the real cause, so they mention root-cause keywords on purpose. The
+    # live judge floor reads the trap semantically as a proposed fix and scores it not-reached.)
+    for ch in load_challenges():
+        converge = _synth_convo(ch, f"{ch.fix_summary}\n\n{ch.known_outcome}", "_c")
+        assert ch.spine(converge.all_assistant_text)[0] is True, f"{ch.challenge_id} converge"
 
 
 # --- judge empty-guard + clamp ---
@@ -175,7 +183,10 @@ def test_all_challenge_content_is_clean():
     leaks = []
     for c in load_challenges():
         parts = [c.initial_prompt, *c.followups, c.known_outcome, c.trap, *c.layer_sequence]
-        parts += list(c.code_context.values())  # code/observation blocks ship too
+        parts += list(c.code_context.values())  # source shown to the model
+        parts += [c.fix_summary]  # sent to the env model
+        for p in c.probes:  # probe text is sent to the env model
+            parts += [p.get("ask", ""), p.get("observation", "")]
         for msg in parts:
             leaks += verify_clean(msg)
     assert leaks == [], f"unredacted content in shipped challenges: {leaks}"
@@ -223,3 +234,87 @@ def test_signal_spine_factory():
             "and PWA standalone mode can't persist the permission")
     assert c.spine(good)[0] is True
     assert c.spine("just request camera permission again on startup")[0] is False
+
+
+def test_all_challenges_have_fix_summary_and_probes():
+    for c in load_challenges():
+        assert c.fix_summary, f"{c.challenge_id} missing fix_summary (env needs it)"
+        assert c.probes, f"{c.challenge_id} has no probes"
+        for p in c.probes:
+            assert p.get("ask") and p.get("observation")
+
+
+# --- env-driven conversation loop ---
+
+
+class _FakeEnvProvider:
+    """Returns env JSON via complete(); solves on the Nth call. Records nothing else."""
+
+    name = "fakeenv"
+
+    def __init__(self, solve_on=2, reveal=""):
+        self.calls = 0
+        self.solve_on = solve_on
+        self.reveal = reveal
+
+    async def complete(self, model, system_prompt, user_prompt, max_tokens=1024, temperature=0.0):
+        import json as _json
+
+        from llm_bench.providers.base import LLMResponse
+
+        self.calls += 1
+        solved = self.calls >= self.solve_on
+        body = {
+            "reply": "oh that fixed it" if solved else "still broken, figure it out",
+            "solved": solved,
+            "revealed": "" if solved else self.reveal,
+        }
+        return LLMResponse(content=_json.dumps(body), latency_ms=1.0, tokens_used=1, model=model)
+
+    async def converse(self, *a, **k):
+        raise AssertionError("env provider should use complete(), not converse()")
+
+    async def list_models(self):
+        return []
+
+    async def is_available(self):
+        return True
+
+
+async def test_env_conversation_solves_and_counts_turns():
+    ch = get_challenge("reset_specificity_override")
+    subject = _ScriptedProvider([f"attempt {i}" for i in range(6)])
+    envp = _FakeEnvProvider(solve_on=2)
+    convo = await run_conversation_env(ch, subject, "subj", envp, "envm", max_turns=6)
+    assert convo.error is None
+    assert convo.solved is True
+    assert convo.turns_to_fix == 2  # solved after the 2nd subject turn
+    assert "pr-app button" in convo.turns[0].text  # code context shown up front
+
+
+async def test_env_conversation_hits_turn_cap_unsolved():
+    ch = get_challenge("launchd_exit126_phantom")
+    subject = _ScriptedProvider([f"attempt {i}" for i in range(10)])
+    envp = _FakeEnvProvider(solve_on=99, reveal="read the stderr log")  # never solves
+    convo = await run_conversation_env(ch, subject, "subj", envp, "envm", max_turns=4)
+    assert convo.solved is False
+    assert convo.turns_to_fix is None
+    assert len(convo.assistant_turns) == 4  # ran exactly the cap
+    assert "read the stderr log" in convo.probes_revealed  # probe reveal recorded
+
+
+async def test_env_respond_parses_and_failsafe():
+    from llm_bench.familiarity import environment as env
+
+    ch = get_challenge("silent_dead_engine")
+    good = _FakeEnvProvider(solve_on=1)
+    r = await env.respond(ch, "[ASSISTANT]\nfixed the seam", good, "envm")
+    assert r.parse_ok is True and r.solved is True
+
+    class _Garbage(_FakeEnvProvider):
+        async def complete(self, *a, **k):
+            from llm_bench.providers.base import LLMResponse
+            return LLMResponse(content="not json", latency_ms=1.0, tokens_used=1, model="m")
+
+    r2 = await env.respond(ch, "[ASSISTANT]\nhmm", _Garbage(), "envm")
+    assert r2.parse_ok is False and r2.solved is False and r2.revealed == ""
