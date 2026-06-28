@@ -33,7 +33,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 _CORPUS_PATH = (
-    Path(__file__).resolve().parents[3] / "results" / "familiarity" / "pilot_corpus.json"
+    Path(__file__).resolve().parents[3]
+    / "results" / "familiarity" / "runs" / "one-shot" / "pilot_corpus.json"
 )
 
 

@@ -913,6 +913,46 @@
         "id": "CP-20260627221430-986-22789",
         "ts": "2026-06-28T05:14:30.525Z",
         "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-48587\",\"event\":\"session-end\",\"branch\":\"feat/familiarity-bedrock-sweep\",\"uncommitted_files\":1}",
+        "contract_id": null,
+        "id": "CP-20260627233306-49063-4424",
+        "ts": "2026-06-28T06:33:06.818Z",
+        "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-49827\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":2}",
+        "contract_id": null,
+        "id": "CP-20260627233347-51294-20800",
+        "ts": "2026-06-28T06:33:47.723Z",
+        "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-35842\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":2}",
+        "contract_id": null,
+        "id": "CP-20260627233716-54578-18444",
+        "ts": "2026-06-28T06:37:16.126Z",
+        "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-12040\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":2}",
+        "contract_id": null,
+        "id": "CP-20260627233718-54876-23664",
+        "ts": "2026-06-28T06:37:18.114Z",
+        "type": "checkpoint"
+      },
+      {
+        "agent": "orchestrator",
+        "content": "{\"agent\":\"main-26833\",\"event\":\"session-end\",\"branch\":\"main\",\"uncommitted_files\":2}",
+        "contract_id": null,
+        "id": "CP-20260627233719-55299-19682",
+        "ts": "2026-06-28T06:37:19.798Z",
+        "type": "checkpoint"
       }
     ],
     "context_sessions": [],
@@ -1007,6 +1047,15 @@
         "id": 10,
         "tool": "Bash",
         "ts": "2026-06-28T04:01:53.403Z"
+      },
+      {
+        "context": null,
+        "domain": "",
+        "error": "Exit code 1\n=== current topics ===",
+        "file": "",
+        "id": 11,
+        "tool": "Bash",
+        "ts": "2026-06-28T05:55:55.192Z"
       }
     ],
     "events": [
@@ -8099,6 +8148,796 @@
         "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/_meta/commissions/complete/2026-06-27-model-familiarity-engine.md\"}",
         "session_id": "",
         "ts": "2026-06-28T05:13:57.498Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 49,
+        "event": "post-compact-restore",
+        "id": 710,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627211858-35842",
+        "ts": "2026-06-28T05:20:17.381Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 711,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:21:55.509Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 50,
+        "event": "post-compact-restore",
+        "id": 712,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627211858-35842",
+        "ts": "2026-06-28T05:22:32.079Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 28,
+        "event": "log-write",
+        "id": 713,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:23:49.197Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 714,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:04.255Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "log-write",
+        "id": 715,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:19.214Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 716,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:26.467Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 717,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:33.490Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 718,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:40.285Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 719,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/replay.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:24:54.688Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 28,
+        "event": "log-write",
+        "id": 720,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/replay.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:25:02.682Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 27,
+        "event": "log-write",
+        "id": 721,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/tests/test_familiarity.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:25:08.345Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 722,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:26:07.343Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 723,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:26:11.639Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "log-write",
+        "id": 724,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:26:16.825Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 725,
+        "metadata": "{\"branch\":\"feat/replay-bootstrap\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:29:15.559Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 3447,
+        "event": "session-start",
+        "id": 726,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:29:15.574Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "post-compact-restore",
+        "id": 727,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:29:45.187Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 35,
+        "event": "log-write",
+        "id": 728,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/README.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:31:56.452Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 47,
+        "event": "post-compact-restore",
+        "id": 729,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:33:12.639Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 730,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/providers/bedrock.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:33:55.651Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 731,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:34:27.203Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 732,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:34:42.911Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 733,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:35:08.516Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "post-compact-restore",
+        "id": 734,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:39:34.315Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 735,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/docs/archive/benchmark-era.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:41:16.714Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "log-write",
+        "id": 736,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/README.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:41:23.384Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 51,
+        "event": "post-compact-restore",
+        "id": 737,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:51:57.096Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 65,
+        "event": "post-compact-restore",
+        "id": 738,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:55:35.278Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "post-compact-restore",
+        "id": 739,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:55:51.508Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 71,
+        "event": "capture-error",
+        "id": 740,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627222912-12040",
+        "ts": "2026-06-28T05:55:55.247Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 741,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T05:58:57.999Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1173,
+        "event": "session-start",
+        "id": 742,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T05:58:58.015Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "post-compact-restore",
+        "id": 743,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T05:59:11.766Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 744,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:59:19.520Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 745,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:59:26.201Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 746,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:59:35.228Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 34,
+        "event": "post-compact-restore",
+        "id": 747,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T05:59:39.989Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 748,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:59:43.407Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 749,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T05:59:56.172Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 750,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/card.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:00:05.667Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 28,
+        "event": "log-write",
+        "id": 751,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:01:55.839Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "log-write",
+        "id": 752,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:02:02.988Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 753,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:02:09.295Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 754,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/tasks.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:02:18.878Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 755,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/replay.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:02:25.606Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 756,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/providers/bedrock.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:02:47.243Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 29,
+        "event": "log-write",
+        "id": 757,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:03:07.060Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 758,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:03:14.039Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 759,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:05:55.238Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 760,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:06:26.752Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 28,
+        "event": "log-write",
+        "id": 761,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:06:36.922Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 32,
+        "event": "post-compact-restore",
+        "id": 762,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T06:11:24.815Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 48,
+        "event": "post-compact-restore",
+        "id": 763,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T06:12:09.121Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 764,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/report.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:16:35.633Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 42,
+        "event": "log-write",
+        "id": 765,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/report.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:17:51.342Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 47,
+        "event": "post-compact-restore",
+        "id": 766,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T06:20:09.610Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 767,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/report.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:23:08.411Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 768,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:24:23.715Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 30,
+        "event": "log-write",
+        "id": 769,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench/src/llm_bench/familiarity/pilot.py\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:24:30.542Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 33,
+        "event": "log-write",
+        "id": 770,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/.claude/projects/-Users-slowember-Documents-Vaults-CodingVault-llm-bench/memory/guided-followup-content-free.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:27:40.054Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 771,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/.claude/projects/-Users-slowember-Documents-Vaults-CodingVault-llm-bench/memory/familiarity-sweep-gotchas.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:27:52.664Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 31,
+        "event": "log-write",
+        "id": 772,
+        "metadata": "{\"exit_code\":0,\"file\":\"/Users/slowember/.claude/projects/-Users-slowember-Documents-Vaults-CodingVault-llm-bench/memory/MEMORY.md\"}",
+        "session_id": "",
+        "ts": "2026-06-28T06:28:02.823Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 60,
+        "event": "post-compact-restore",
+        "id": 773,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627225856-26833",
+        "ts": "2026-06-28T06:33:03.400Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 2000,
+        "event": "session:end",
+        "id": 774,
+        "metadata": "{\"branch\":\"feat/familiarity-bedrock-sweep\",\"files_changed\":1,\"agent\":\"main-48587\",\"duration_s\":2}",
+        "session_id": "",
+        "ts": "2026-06-28T06:33:07.090Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 832,
+        "event": "session-end",
+        "id": 775,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233305-48587",
+        "ts": "2026-06-28T06:33:07.614Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 776,
+        "metadata": "{\"branch\":\"feat/familiarity-bedrock-sweep\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260627233305-48587",
+        "ts": "2026-06-28T06:33:08.454Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 3318,
+        "event": "session-start",
+        "id": 777,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233305-48587",
+        "ts": "2026-06-28T06:33:08.474Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 778,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260627233310-49827",
+        "ts": "2026-06-28T06:33:11.352Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 1112,
+        "event": "session-start",
+        "id": 779,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233310-49827",
+        "ts": "2026-06-28T06:33:11.373Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 37000,
+        "event": "session:end",
+        "id": 780,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":2,\"agent\":\"main-49827\",\"duration_s\":37}",
+        "session_id": "",
+        "ts": "2026-06-28T06:33:47.965Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 754,
+        "event": "session-end",
+        "id": 781,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233310-49827",
+        "ts": "2026-06-28T06:33:48.445Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": null,
+        "event": "session:start",
+        "id": 782,
+        "metadata": "{\"branch\":\"main\",\"profile\":\"github-oss\",\"project\":\"/Users/slowember/Documents/Vaults/CodingVault/llm-bench\"}",
+        "session_id": "sess-20260627233350-51575",
+        "ts": "2026-06-28T06:33:51.914Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 965,
+        "event": "session-start",
+        "id": 783,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233350-51575",
+        "ts": "2026-06-28T06:33:51.932Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 50,
+        "event": "post-compact-restore",
+        "id": 784,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233350-51575",
+        "ts": "2026-06-28T06:36:56.198Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 8298000,
+        "event": "session:end",
+        "id": 785,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":2,\"agent\":\"main-35842\",\"duration_s\":8298}",
+        "session_id": "",
+        "ts": "2026-06-28T06:37:16.358Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 813,
+        "event": "session-end",
+        "id": 786,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233350-51575",
+        "ts": "2026-06-28T06:37:16.903Z"
+      },
+      {
+        "agent": "",
+        "category": "session",
+        "duration_ms": 4086000,
+        "event": "session:end",
+        "id": 787,
+        "metadata": "{\"branch\":\"main\",\"files_changed\":2,\"agent\":\"main-12040\",\"duration_s\":4086}",
+        "session_id": "",
+        "ts": "2026-06-28T06:37:18.347Z"
+      },
+      {
+        "agent": "",
+        "category": "hook",
+        "duration_ms": 746,
+        "event": "session-end",
+        "id": 788,
+        "metadata": "{\"exit_code\":0}",
+        "session_id": "sess-20260627233350-51575",
+        "ts": "2026-06-28T06:37:18.831Z"
       }
     ],
     "execution_traces": [],
@@ -8138,7 +8977,7 @@
         "id": "LRN-20260627221430-898-15578",
         "insight": "LLM judge over deterministic script for divergence: spine string-matchers both false-pos and false-neg on free-form answers; every spine/judge disagreement in the replay pilot was a spine error the judge corrected",
         "last_hit": null,
-        "load_count": 0,
+        "load_count": 5,
         "sensitivity": "low",
         "ts": "2026-06-28T05:14:30.439Z",
         "type": "pattern",
@@ -8151,7 +8990,7 @@
         "id": "LRN-20260627221430-941-18729",
         "insight": "Floor tests must include degenerate (empty/blank) inputs, not just garbage + correct-but-different. A reasoning model emitted empty content and the outcome-anchored judge leaked the answer key from its own prompt, scoring empty as reached",
         "last_hit": null,
-        "load_count": 0,
+        "load_count": 5,
         "sensitivity": "low",
         "ts": "2026-06-28T05:14:30.501Z",
         "type": "failure",

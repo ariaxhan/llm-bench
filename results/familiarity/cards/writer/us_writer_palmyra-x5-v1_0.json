@@ -1,0 +1,74 @@
+{
+  "model": "us.writer.palmyra-x5-v1:0",
+  "provider": "writer",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "n": 1,
+    "date": "2026-06-28",
+    "reached_rate": "1/1",
+    "by_condition": {
+      "cold": {
+        "reached": 1,
+        "total": 1
+      },
+      "guided": {
+        "reached": 0,
+        "total": 0
+      }
+    },
+    "divergence_counts": {
+      "better": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (mobile front-end)"
+    ],
+    "failure_modes": [],
+    "avg_latency_ms": 3306.7,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 0,
+    "confidence": "Low (pilot, n=1 observations across 1 task types)"
+  },
+  "long_horizon": {
+    "n": 1,
+    "solved_rate": 1.0,
+    "reached_rate": 0.0,
+    "trap_rate": 1.0,
+    "mean_lhcr": 4.0,
+    "mean_turns_to_fix": 1.0,
+    "dims": {
+      "convergence": 1.0,
+      "no_regression": 1.0,
+      "layer_switching": 1.0,
+      "verification_seeking": 0.0,
+      "state_holding": 1.0
+    },
+    "per_challenge": {
+      "reset_specificity_override": {
+        "n": 1,
+        "solved": 1,
+        "reached": 0,
+        "trap": 1,
+        "hows": [
+          "The model identified the button reset as the source of the problem (layer 4) and correctly attributed the issue to specificity/order, but fell for the trap by recommending increasing specificity via `.pr-app button.work-row` \u2014 which works but is not the minimal fix. It failed to propose the correct solution of using `:where()` to neutralize the reset's specificity (layer 5), and did not suggest inspecting computed styles or dumped rules to verify the cascade (missing verification_seeking). It also did not rule out value-based fixes effectively, leaving the user to stumble through trial and error."
+        ],
+        "mean_lhcr": 4.0
+      }
+    },
+    "notable_failures": []
+  }
+}

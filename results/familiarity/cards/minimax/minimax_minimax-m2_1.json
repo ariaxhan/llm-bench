@@ -1,0 +1,186 @@
+{
+  "model": "minimax.minimax-m2.1",
+  "provider": "minimax",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "minimax.minimax-m2.1",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "model produced no answer text (empty output)"
+      }
+    ],
+    "avg_latency_ms": 34199.1,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 0,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.375,
+    "reached_rate": 0.562,
+    "trap_rate": 0.438,
+    "mean_lhcr": 6.69,
+    "mean_turns_to_fix": 1.5,
+    "dims": {
+      "convergence": 1.31,
+      "no_regression": 1.44,
+      "layer_switching": 1.31,
+      "verification_seeking": 1.31,
+      "state_holding": 1.31
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model progressively narrowed from JS execution to CSS override, correctly identifying the real cause (CSS `display: inline-flex` overriding `[hidden]`) after user confirmed the attribute was set but ineffective. It proposed inspecting computed styles and the Styles panel, avoided re-editing JS (avoiding the trap), and built on prior findings without regression, ultimately reaching the known-correct outcome by targeting CSS specificity.",
+          "The model repeatedly proposed JS-based fixes like style.display and !important, falling for the trap of re-editing JS despite the real cause being CSS specificity overriding the hidden attribute. It did suggest inspecting computed styles and caching, showing verification-seeking, but failed to identify the core CSS layer and regressed by re-asserting JS solutions after they were rejected."
+        ],
+        "mean_lhcr": 8.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model repeatedly asked for generic logs, data source checks, and config reviews but never identified the core issue: a silent contract mismatch at an inter-module seam causing zero decisions despite successful ticks. It fell for the trap by focusing on data source emptiness, filtering logic, or storage permissions\u2014superficial layers\u2014instead of tracing a real tick end-to-end to find where decisions drop due to an untested seam. It failed to converge, re-litigated the same points, and never proposed the critical fix: integration testing and liveness assertions for zero-output detection.",
+          "The model progressively ruled out config, permissions, network, and consumer issues (layers 1-2), then correctly identified the schema mismatch at the inter-module seam (layer 3) when the user confirmed the field name difference. It proposed logging real data flow, advocated for integration testing and liveness checks (layer 4), and never regressed or fell for the trap of accepting 'exit 0 + green tests' as proof of health."
+        ],
+        "mean_lhcr": 6.5
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively ruled out network issues, confirmed the bundle downloads correctly, identified the native loading logic ignores the downloaded bundle, and pinpointed the state machine stuck in 'pending' instead of advancing to 'launched'\u2014matching the known root cause of failed promotion/activation. It consistently built on prior findings, proposed live checks (native logs, file inspection, state queries), and avoided the trap of chasing network fixes.",
+          "The model correctly identified the root cause in layer 2 (downloaded update staged but not promoted) and layer 3 (runtime relaunching old bundle) by turn 7, confirmed by user logging the active bundle path. It consistently advanced the diagnosis, proposed native code changes to redirect bundle loading, sought verification via logs and paths, and never regressed to network-level fixes. The solution aligned with the known-correct outcome: ensuring the downloaded bundle is activated and loaded on launch."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the specificity conflict between the button reset (0,1,1) and the .work-row class (0,1,0), diagnosed that the reset was overriding padding/margin, and proposed a fix by increasing the specificity of the row rule via `button.work-row` \u2014 which matches the known layers 2\u20134. It avoided the trap of suggesting value increases and implicitly recognized the cascade issue. However, it did not propose inspecting computed styles or using `:where()` as the minimal fix, instead opting for a specificity-matching override, which is functionally correct but not the ideal zero-specificity solution.",
+          "The model correctly identified the specificity conflict (layer 4) and explained why the reset wins, but proposed increasing the specificity of the row rule (e.g., `.pr-app button.work-row`) as the fix\u2014this is the seductive trap. It did not propose the correct minimal fix using `:where()` to zero the reset's specificity. While it diagnosed the cascade override (layer 2) and referenced computed styles in passing, it did not mandate inspecting live computed styles to confirm the winning rule, only suggested checking dev tools after the fix. It maintained state and built on prior reasoning without regression."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified that exit 126 stemmed from the inner command './venv/bin/python' lacking execute permissions, not the wrapper script (layer 2 and 3), proposed fixing the execute bit on the shared venv interpreter (layer 4), and suggested verifying by testing the script directly. It avoided the trap of chmod +x on the already-executable wrapper, maintained state across the explanation, and proposed a fix that resolves all jobs via the shared dependency.",
+          "The model correctly identified the inner command (./venv/bin/python) as the source of exit 126, ruled out the wrapper script's permissions, and proposed fixes targeting the venv's python executable \u2014 aligning with layers 2\u20134. It avoided the trap of re-chmoding the already-executable wrapper, instead diagnosing symlink, shebang, and architecture issues in the venv, ultimately recommending recreation of the venv which restores the missing exec bit or broken path. The model consistently built on prior turns, verified via manual run.sh execution, and converged on the correct root cause."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly recommended the app-side fallback using activeSubscriptions as a 'temporary' fix, which is the seductive trap of trusting raw product IDs instead of fixing the configuration. It never addressed the full root cause: attaching products to both the entitlement AND an offering in RevenueCat, nor the App Store Connect attachment or 404 resolution via the documented endpoint. It regressed by reiterating the same flawed workaround across turns, failed to verify with on-device testing, and did not progress beyond layer 1 (masking the cause).",
+          "The model repeatedly proposed the app-side patch (isPremiumLoose) that checks activeSubscriptions directly, which is the seductive trap of bypassing entitlements.active and trusting raw product IDs. It never correctly identified the configuration root cause \u2014 unattached products in RevenueCat and App Store Connect \u2014 and instead kept regressing to code changes. It failed to progress through the known layers, re-asserting the same diagnostic and workaround in every turn despite user feedback, and did not hold state or advance reasoning."
+        ],
+        "mean_lhcr": 0.5
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model identified the core issue \u2014 that display:none on the video element causes iOS WebKit to end the capture track \u2014 and proposed a valid fix by keeping the stream alive via a hidden, off-screen video element. It correctly avoided the trap of re-requesting permissions and addressed the code layer (layer 4) by ensuring the track remains active. However, it did not mention the PWA standalone permission persistence limitation (layer 5), so the full known-correct outcome was not completely articulated.",
+          "The model repeatedly proposed speculative JS fixes (re-acquiring streams, off-screen videos with opacity:0 or position tricks) without identifying the core issue: display:none removes the video from the render tree, causing WebKit to end the capture track. It stayed at LAYER 1 (speculative JS permission patch) across all turns, never advancing to observe the track ending (LAYER 2) or the display:none cause (LAYER 3). It fell for the trap by repeatedly suggesting re-requesting getUserMedia or manipulating the stream in JS, ignoring the known platform constraint that PWA standalone mode doesn't persist permission. No turn proposed inspecting runtime state (e.g. track readyState) or considered the operational fix of using Safari tab mode."
+        ],
+        "mean_lhcr": 4.5
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model repeatedly fell into the trap of trusting unit tests on invented data, never fully articulating the need to headlessly render the live JS-generated DOM to extract ground-truth content. It regressed from early recognition of the scrape gap to later fabricating plausible content, then reducing to minimal test-passing outputs without verifying against the actual Wix site. It failed to maintain focus on the root cause (client-side rendering) and never proposed live visual comparison as validation, instead re-asserting the same flawed fixes across turns.",
+          "The model progressively identified the root cause across layers: from recognizing the static scrape failure (layer 1), rejecting placeholder content (layer 2), identifying client-side rendering (layer 3), implementing Puppeteer for headless rendering (layer 4), and validating against live DOM content (layer 5). It consistently built on prior turns, never regressed, and sought live verification, culminating in a correct solution that captures real content and avoids trusting false test signals."
+        ],
+        "mean_lhcr": 5.0
+      }
+    },
+    "notable_failures": [
+      "hidden_button_layers: The model repeatedly proposed JS-based fixes like style.display and !important, falling for the trap of re-editing JS despite the real cause being CSS specificity overriding the hidden attribute. It did suggest inspecting computed styles and caching, showing verification-seeking, but failed to identify the core CSS layer and regressed by re-asserting JS solutions after they were rejected.",
+      "silent_dead_engine: The model repeatedly asked for generic logs, data source checks, and config reviews but never identified the core issue: a silent contract mismatch at an inter-module seam causing zero decisions despite successful ticks. It fell for the trap by focusing on data source emptiness, filtering logic, or storage permissions\u2014superficial layers\u2014instead of tracing a real tick end-to-end to find where decisions drop due to an untested seam. It failed to converge, re-litigated the same points, and never proposed the critical fix: integration testing and liveness assertions for zero-output detection.",
+      "ota_never_applies: The model progressively ruled out network issues, confirmed the bundle downloads correctly, identified the native loading logic ignores the downloaded bundle, and pinpointed the state machine stuck in 'pending' instead of advancing to 'launched'\u2014matching the known root cause of failed promotion/activation. It consistently built on prior findings, proposed live checks (native logs, file inspection, state queries), and avoided the trap of chasing network fixes.",
+      "silent_dead_engine: The model progressively ruled out config, permissions, network, and consumer issues (layers 1-2), then correctly identified the schema mismatch at the inter-module seam (layer 3) when the user confirmed the field name difference. It proposed logging real data flow, advocated for integration testing and liveness checks (layer 4), and never regressed or fell for the trap of accepting 'exit 0 + green tests' as proof of health."
+    ]
+  }
+}

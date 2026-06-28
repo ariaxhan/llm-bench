@@ -34,4 +34,4 @@ _meta/research/frustration-mining-2026-06-27.md
 
 # LHCR raw transcripts: 13MB+ of full conversations per run — regenerable blob, keep local.
 # The reviewable scores + judge rationale live in lhcr_env_verdicts.json (committed).
-results/familiarity/lhcr_env_transcripts.json
+results/familiarity/runs/long-horizon/transcripts.json

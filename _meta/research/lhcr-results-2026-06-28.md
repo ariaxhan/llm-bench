@@ -17,15 +17,16 @@ judge and the env are floor-gated on all 8 challenges before any verdict.
 Metrics: **solved** (env accepted the fix), **reached** (judge confirmed the root cause was
 stated), **trap** (shipped the seductive wrong fix — lower better), **→fix** (turns to solve),
 **lhcr** (mean of 5 behaviour dims: convergence, no-regression, layer-switching,
-verification-seeking, state-holding). Full table: `results/familiarity/lhcr_env_comparison.md`.
+verification-seeking, state-holding). Full table: `results/familiarity/leaderboards/long-horizon.md`.
 
 ## Headline: the test discriminates
 
-solved spans **62% → 0%**, trap **6% → 93%**, lhcr **8.6 → 2.0** — a real gradient, unlike the
-one-shot pilot where the top tier saturated.
+solved spans **75% → 0%**, trap **6% → 93%**, lhcr **8.6 → 2.0** — a real gradient, unlike the
+one-shot pilot where the top tier saturated. (Ranked among the 31 models with a full run;
+`palmyra-x5` errored on 15/16 cells and is listed separately as insufficient data.)
 
-- **Top:** `zai.glm-5` & `qwen.qwen3-coder-480b` (62% solved); `moonshotai.kimi-k2.5`
-  (56% solved, 88% reached).
+- **Top:** `qwen.qwen3-next-80b` & `mistral.mistral-large-3` (75% solved); `nvidia.nemotron-super-3-120b`
+  (69% solved, 8.6 lhcr, 12% trap).
 - **Most interesting profile:** `openai.gpt-oss-120b` — only 44% solved but **94% reached,
   6% trap (lowest), 8.6 lhcr (highest)**. It understands the bugs and resists the trap but
   doesn't always land the env-accepted fix inside 6 turns. "Understands ≠ closes."
@@ -59,4 +60,4 @@ the source, strong models spot the specificity conflict directly — but ~1 in 5
 - `solved` vs `reached` diverge meaningfully (e.g. gpt-oss-120b 44% vs 94%) — that gap, plus
   trap-rate and →fix, is the real signal; no single number captures a model here.
 - Raw transcripts (13MB) are gitignored; per-cell scores + judge rationale are in
-  `lhcr_env_verdicts.json`. Regenerate the table with `python -m llm_bench.familiarity.lhcr rebuild`.
+  `runs/long-horizon/verdicts.json`. Regenerate the table with `python -m llm_bench.familiarity.lhcr rebuild`.

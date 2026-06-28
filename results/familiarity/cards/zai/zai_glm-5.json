@@ -1,0 +1,186 @@
+{
+  "model": "zai.glm-5",
+  "provider": "zai",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "zai.glm-5",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model answer incorrectly presents the viewport-lock fix (maximum-scale=1.0, user-scalable=no) as a valid fallback, even though the known-correct outcome explicitly states it is inferior and harms accessibility. It also fails to clearly prioritize the font-size fix as the only correct solution, instead suggesting a 'fail-safe' that contradicts the guidance. The answer downplays the accessibility tradeoff of the viewport lock, despite the known outcome emphasizing it as a critical flaw."
+      }
+    ],
+    "avg_latency_ms": 10218.4,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 1,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.625,
+    "reached_rate": 0.688,
+    "trap_rate": 0.312,
+    "mean_lhcr": 7.81,
+    "mean_turns_to_fix": 2.6,
+    "dims": {
+      "convergence": 1.56,
+      "no_regression": 1.75,
+      "layer_switching": 1.62,
+      "verification_seeking": 1.31,
+      "state_holding": 1.56
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the real cause (CSS overriding the hidden attribute) and provided the fix with [hidden] { display: none !important }, while also addressing deploy and cache layers. It proposed checking computed styles via DevTools, avoided JS rewrites, and maintained consistent, accurate reasoning across layers without regression.",
+          "The model correctly identified the real cause (CSS specificity overriding [hidden]) and proposed the correct fix ([hidden] with !important). It addressed deploy and cache layers by explaining why the JS was not the issue, avoided the trap of re-editing JS, and recommended live verification via hard refresh and computed styles, maintaining state across reasoning."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively isolated the issue from process health to data flow, correctly identifying the silent failure at the inter-module seam (producer/scorer contract mismatch on 'prob' vs 'probability') after ruling out stream emptiness, config drift, and serialization. It consistently built on prior findings, proposed live tracing and logging of runtime state, and ultimately articulated the core issue: a mismatched contract causing zero decisions with no error, which aligns with the known-correct outcome.",
+          "The model progressively isolated the issue from general silent failure (layer 1) to data filtering (layer 2), then identified the field name mismatch (layer 3) via structured logging and rejection logging. It consistently built on prior findings, never regressed, and proposed live checks (trace a real tick, log raw data). It articulated the need for schema guards and integration testing, matching the known-correct outcome's substance by fixing the seam and adding liveness checks."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively advanced through the known layers: from initial download verification (layer 1) to identifying the failure to promote the downloaded bundle (layer 2), and finally diagnosing the state machine stuck in 'pending' without activation (layer 3). It consistently built on user feedback, proposed runtime checks (e.g., logging active bundle path, adding alerts), avoided network-focused traps, and ultimately articulated the correct fix\u2014ensuring the native loader checks the pending state and promotes the update\u2014without regressing or re-litigating prior conclusions.",
+          "The model progressively advanced through the known layers: from restart logic (layer 1, ruled out network), to file pathing and native loading (layer 2), and finally to the activation state machine (layer 3). It never regressed, consistently built on prior user feedback, proposed concrete runtime checks (file existence, path logging, state inspection), and culminated in identifying the missing 'pending to launched' transition\u2014the known-correct outcome\u2014without falling into the network trap."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model correctly identified specificity as the issue and noted the button reset overriding the row styles, aligning with layer 4. However, it proposed increasing specificity on the row rules (e.g., `.pr-app .work-row`) as the fix, which is not the minimal or correct solution \u2014 it fell for the trap of promoting !important-like specificity escalation instead of using `:where()`. It did not suggest inspecting computed styles or using browser devtools to verify the live cascade, missing verification_seeking. The correct outcome \u2014 wrapping the reset in `:where()` \u2014 was not articulated.",
+          "The model correctly identified the specificity conflict and that the button reset was overriding the spacing, but proposed increasing the specificity of the author rules (e.g. `.pr-app .work-row`) to win \u2014 which is the seductive trap. This fix works superficially but is incorrect in substance: the real solution is to reduce the reset's specificity with `:where()`, not increase the author's. The model never mentioned `:where()` or zero-specificity resets, and failed to propose inspecting computed styles or dumped rules to verify the cascade."
+        ],
+        "mean_lhcr": 6.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 0,
+        "hows": [
+          "The model never identified the correct root cause: the inner command './venv/bin/python' failing due to missing execute permission or path resolution in launchd's environment. It repeatedly proposed incorrect fixes (shebang, venv recreation, quarantine, codesign, plist structure) without progressing through the known layers. It failed to read the StandardErrorPath log evidence that the error came from './venv/bin/python: Permission denied', instead inventing new theories each turn and contradicting prior assumptions without incorporating ruled-out causes.",
+          "The model correctly moved from a shebang/line-ending hypothesis (layer 1) to identifying the inner Python binary's execute permission (layer 3 and 4) after user rejection, avoiding the trap of re-chmodding the already-executable wrapper. It built on prior turns, did not regress, and ultimately fixed the shared inner target. However, verification was limited to manual script run and kickstart, not checking live output or exit 0 in context."
+        ],
+        "mean_lhcr": 4.5
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified that hiding the video with display:none causes the capture track to be torn down (Layer 3) and proposed keeping the video rendered but obscured via z-index (Layer 4), which matches the known-correct code fix. It did not propose the trap of a speculative JS permission patch. While it explained the behavior accurately and provided a working solution, it did not suggest checking runtime state like MediaStreamTrack.readyState or the computed style to verify the fix, limiting verification_seeking to 1.",
+          "The model correctly identified the display:none issue in turn 3 (layer 3) and proposed keeping the video rendered with opacity:0, aligning with the known fix. It avoided the trap of re-requesting permission and instead focused on keeping the track alive. It also implicitly recognized the platform constraint by not suggesting further JS fixes after the CSS solution. The model built on prior turns, verified via runtime behavior (readyState, visibility), and did not regress."
+        ],
+        "mean_lhcr": 9.5
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model correctly identified the root cause in turns 7, 9, and 11 by recognizing 'unattached products' as the core configuration issue and directing attachment to the entitlement and offering. It progressively ruled out code patches and dashboard mismatches, held state across turns, and proposed live verification via the Customers tab. However, in turn 1 and turn 3, it explicitly proposed and endorsed the 'loose' unlock patch\u2014trusting activeSubscriptions over entitlements.active\u2014which is THE TRAP: a seductive wrong move that masks the config root cause. Though later corrected, proposing the trap at all constitutes falling for it.",
+          "The model repeatedly proposed app-side fallbacks (e.g., checking activeSubscriptions, purchase dates) that directly implement THE TRAP of trusting raw product IDs instead of fixing the config root cause. It never correctly identified that products must be attached to both an entitlement AND an offering in RevenueCat, nor addressed App Store Connect attachment. While it mentioned dashboard attachment to entitlements, it failed to progress through the known LAYERS, regressed by re-asserting code fixes after they were rejected, and did not verify with a real on-device purchase as required."
+        ],
+        "mean_lhcr": 6.5
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model repeatedly identified the scrape failure due to JavaScript rendering (layer 3) but never proposed headless rendering to capture the real DOM (layer 4). It fell for the trap by initially allowing fallback placeholders and asserting fixes based on static code changes, while ignoring the need for live verification. It regressed not by contradicting itself but by failing to advance beyond error-throwing as a solution, reiterating the same response across turns without incorporating prior feedback or progressing toward the correct outcome.",
+          "The model progressively identified the layers: from recognizing empty scrape (layer 1), rejecting fallback content (layer 2), diagnosing JS-rendering as root (layer 3), prescribing headless scraping (layer 4), and emphasizing real-data regeneration (layer 5). It consistently avoided the trap of trusting unit tests, demanded live DOM inspection, and maintained state across turns, culminating in correct dynamic scraping and validation logic that aligns with the known-correct outcome."
+        ],
+        "mean_lhcr": 6.0
+      }
+    },
+    "notable_failures": [
+      "launchd_exit126_phantom: The model never identified the correct root cause: the inner command './venv/bin/python' failing due to missing execute permission or path resolution in launchd's environment. It repeatedly proposed incorrect fixes (shebang, venv recreation, quarantine, codesign, plist structure) without progressing through the known layers. It failed to read the StandardErrorPath log evidence that the error came from './venv/bin/python: Permission denied', instead inventing new theories each turn and contradicting prior assumptions without incorporating ruled-out causes.",
+      "silent_dead_engine: The model progressively isolated the issue from general silent failure (layer 1) to data filtering (layer 2), then identified the field name mismatch (layer 3) via structured logging and rejection logging. It consistently built on prior findings, never regressed, and proposed live checks (trace a real tick, log raw data). It articulated the need for schema guards and integration testing, matching the known-correct outcome's substance by fixing the seam and adding liveness checks.",
+      "iap_entitlement_phantom: The model correctly identified the root cause in turns 7, 9, and 11 by recognizing 'unattached products' as the core configuration issue and directing attachment to the entitlement and offering. It progressively ruled out code patches and dashboard mismatches, held state across turns, and proposed live verification via the Customers tab. However, in turn 1 and turn 3, it explicitly proposed and endorsed the 'loose' unlock patch\u2014trusting activeSubscriptions over entitlements.active\u2014which is THE TRAP: a seductive wrong move that masks the config root cause. Though later corrected, proposing the trap at all constitutes falling for it.",
+      "wix_regen_green_tests_blind: The model repeatedly identified the scrape failure due to JavaScript rendering (layer 3) but never proposed headless rendering to capture the real DOM (layer 4). It fell for the trap by initially allowing fallback placeholders and asserting fixes based on static code changes, while ignoring the need for live verification. It regressed not by contradicting itself but by failing to advance beyond error-throwing as a solution, reiterating the same response across turns without incorporating prior feedback or progressing toward the correct outcome."
+    ]
+  }
+}

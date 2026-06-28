@@ -22,8 +22,8 @@ from __future__ import annotations
 import asyncio
 import datetime
 import json
-from pathlib import Path
 
+from llm_bench.familiarity import layout, model_cards
 from llm_bench.familiarity.challenges import load_challenges
 from llm_bench.familiarity.conversation import Conversation, Turn, run_conversation_env
 from llm_bench.familiarity.judge import DEFAULT_JUDGE_MODEL
@@ -46,7 +46,15 @@ TOP10_MODELS = [
     "openai.gpt-oss-20b-1:0",
 ]
 
-OUT_DIR = Path(__file__).resolve().parents[3] / "results" / "familiarity"
+def _regenerate_cards(today: str) -> None:
+    """Refresh the unified per-model cards from whatever run data exists on disk."""
+    obs_path = layout.ONE_SHOT / "observations.json"
+    ver_path = layout.LONG_HORIZON / "verdicts.json"
+    observations = json.loads(obs_path.read_text()) if obs_path.exists() else []
+    verdicts = json.loads(ver_path.read_text()) if ver_path.exists() else []
+    if observations or verdicts:
+        n = model_cards.regenerate(layout.CARDS, observations, verdicts, today)
+        print(f"regenerated {n} unified model cards in {layout.CARDS}")
 
 
 def _all_pilot_models() -> list[str]:
@@ -59,25 +67,24 @@ def _all_pilot_models() -> list[str]:
 
 
 def rebuild_comparison(today: str, out_tag: str = "") -> None:
-    """Re-render the comparison from the canonical env verdicts shard (e.g. after a run was
-    killed before its final render, or to regenerate the table)."""
-    verdicts_path = OUT_DIR / f"{OUT_PREFIX}_verdicts{out_tag}.json"
+    """Re-render the long-horizon leaderboard + the unified cards from the saved verdicts
+    (e.g. after a run was killed before its final render, or to regenerate the table)."""
+    verdicts_path = layout.LONG_HORIZON / f"verdicts{out_tag}.json"
     if not verdicts_path.exists():
-        print(f"no verdicts shard at {verdicts_path}")
+        print(f"no verdicts at {verdicts_path}")
         return
     verdicts = json.loads(verdicts_path.read_text())
     order = _all_pilot_models()
     present = {v["model"] for v in verdicts}
     ordered = [m for m in order if m in present] + [m for m in present if m not in order]
     comparison = render_comparison(verdicts, ordered, load_challenges(), today)
-    (OUT_DIR / f"{OUT_PREFIX}_comparison{out_tag}.md").write_text(comparison)
+    layout.ensure()
+    (layout.LEADERBOARDS / f"long-horizon{out_tag}.md").write_text(comparison)
     print("\n" + comparison)
-    print(f"\nrebuilt comparison from {len(verdicts)} verdicts across {len(present)} models")
+    print(f"\nrebuilt leaderboard from {len(verdicts)} verdicts across {len(present)} models")
+    _regenerate_cards(today)
 
 
-# env-mode results live in their own file family (the schema + measurement differ from the
-# old scripted-followup runs, so they are never merged together).
-OUT_PREFIX = "lhcr_env"
 DEFAULT_ENV_MODEL = DEFAULT_JUDGE_MODEL  # held-out infra model; never a subject
 
 
@@ -157,9 +164,9 @@ async def run_sweep(
     print(f"subjects: {len(subjects)} models · k={k} samples · max_turns={max_turns} "
           f"· {len(subjects) * len(challenges) * k} cells\n")
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    verdicts_path = OUT_DIR / f"{OUT_PREFIX}_verdicts{out_tag}.json"
-    transcripts_path = OUT_DIR / f"{OUT_PREFIX}_transcripts{out_tag}.json"
+    layout.ensure()
+    verdicts_path = layout.LONG_HORIZON / f"verdicts{out_tag}.json"
+    transcripts_path = layout.LONG_HORIZON / f"transcripts{out_tag}.json"
 
     # --- RESUME at SAMPLE granularity: (model, challenge, sample) already recorded -> skip ---
     verdicts_dump: list[dict] = (
@@ -220,13 +227,14 @@ async def run_sweep(
     await asyncio.gather(*[run_cell(m, c, s) for m, c, s in cells])
 
     if errors:
-        (OUT_DIR / f"{OUT_PREFIX}_errors{out_tag}.json").write_text(json.dumps(errors, indent=2))
-        print(f"\n{len(errors)} cell(s) errored (recorded in {OUT_PREFIX}_errors{out_tag}.json)")
+        (layout.LONG_HORIZON / f"errors{out_tag}.json").write_text(json.dumps(errors, indent=2))
+        print(f"\n{len(errors)} cell(s) errored (recorded in runs/long-horizon/errors{out_tag}.json)")
 
     comparison = render_comparison(verdicts_dump, subjects, challenges, today)
-    (OUT_DIR / f"{OUT_PREFIX}_comparison{out_tag}.md").write_text(comparison)
+    (layout.LEADERBOARDS / f"long-horizon{out_tag}.md").write_text(comparison)
     print("\n" + comparison)
-    print(f"\nwrote {len(verdicts_dump)} verdicts + comparison to {OUT_DIR}")
+    print(f"\nwrote {len(verdicts_dump)} verdicts to {layout.LONG_HORIZON}")
+    _regenerate_cards(today)
 
 
 def render_comparison(verdicts: list[dict], subjects, challenges, today: str) -> str:
@@ -261,6 +269,12 @@ def render_comparison(verdicts: list[dict], subjects, challenges, today: str) ->
     samples = max((len([1 for v in verdicts
                         if v["model"] == m and v["challenge_id"] == c.challenge_id])
                    for m in by_model for c in challenges), default=0)
+    full_n = len(challenges) * samples
+    # models whose cells mostly errored (n below half a full run) are NOT ranked with the
+    # rest — a single lucky cell must not top the board. They go in a separate section.
+    threshold = max(1, full_n // 2)
+    ranked = [r for r in rows if r[7] >= threshold]
+    partial = [r for r in rows if r[7] < threshold]
 
     out = ["# Long-Horizon Conversational Replay — model comparison (env-driven)", ""]
     out.append(f"> {n_models} models · {len(challenges)} challenges · k≈{samples} samples/cell "
@@ -273,18 +287,25 @@ def render_comparison(verdicts: list[dict], subjects, challenges, today: str) ->
                "**trap** = shipped the seductive wrong fix (lower is better) · **→fix** = mean "
                "turns to solve · **lhcr** = mean of 5 behaviour dims (0–10).")
     out.append("")
-    out.append("| model | n | solved | reached | trap↓ | →fix | lhcr | conv | no-reg | layer | "
-               "verify | state |")
-    out.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
-    full_n = len(challenges) * samples
-    for model, sr, rr, tr, lh, ttf, da, n in rows:
-        nflag = f"{n}" if n >= full_n else f"{n}⚠"  # ⚠ = partial (errored cells)
-        out.append(
-            f"| `{model}` | {nflag} | **{sr*100:.0f}%** | {rr*100:.0f}% | {tr*100:.0f}% | {ttf} | "
-            f"{lh:.1f} | {da['convergence']:.1f} | {da['no_regression']:.1f} | "
-            f"{da['layer_switching']:.1f} | {da['verification_seeking']:.1f} | "
-            f"{da['state_holding']:.1f} |"
-        )
+    header = ("| model | n | solved | reached | trap↓ | →fix | lhcr | conv | no-reg | layer | "
+              "verify | state |")
+    sep = "|---|---|---|---|---|---|---|---|---|---|---|---|"
+
+    def _row(model, sr, rr, tr, lh, ttf, da, n):
+        nflag = f"{n}" if n >= full_n else f"{n}⚠"
+        return (f"| `{model}` | {nflag} | **{sr*100:.0f}%** | {rr*100:.0f}% | {tr*100:.0f}% | "
+                f"{ttf} | {lh:.1f} | {da['convergence']:.1f} | {da['no_regression']:.1f} | "
+                f"{da['layer_switching']:.1f} | {da['verification_seeking']:.1f} | "
+                f"{da['state_holding']:.1f} |")
+
+    out += [header, sep]
+    for r in ranked:
+        out.append(_row(*r))
+    if partial:
+        out += ["", f"### Insufficient data (< {threshold} of {full_n} cells — most errored)",
+                "", header, sep]
+        for r in partial:
+            out.append(_row(*r))
     out.append("")
     out.append(f"_**n**=verdicts (full = {full_n}: {len(challenges)} challenges × {samples} "
                "samples); ⚠ = partial (some cells errored, treat with caution). "

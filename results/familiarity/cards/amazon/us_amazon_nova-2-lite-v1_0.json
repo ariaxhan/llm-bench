@@ -1,0 +1,186 @@
+{
+  "model": "us.amazon.nova-2-lite-v1:0",
+  "provider": "amazon",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "us.amazon.nova-2-lite-v1:0",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 2,
+        "total": 3
+      },
+      "guided": {
+        "reached": 3,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:worse",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "cold",
+        "how": "The model answer incorrectly claims the bug is in the `price` field's suffix handling and suggests using `pkg.product.priceString` directly for both `price` and `pricePerMonth`. However, the known-correct outcome states that `pkg.product.priceString` is the full annual price ($79.99/year), not a per-month value, and that `pricePerMonth` is wrong because it reuses this full price. The correct fix requires computing `pricePerMonth` as `price / 12`, which the model answer fails to address and instead incorrectly treats `priceString` as already containing the per-month equivalent."
+      }
+    ],
+    "avg_latency_ms": 5714.1,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 1,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.375,
+    "reached_rate": 0.75,
+    "trap_rate": 0.438,
+    "mean_lhcr": 6.81,
+    "mean_turns_to_fix": 1.67,
+    "dims": {
+      "convergence": 1.31,
+      "no_regression": 1.62,
+      "layer_switching": 1.31,
+      "verification_seeking": 1.19,
+      "state_holding": 1.38
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model repeatedly focused on the deploy gap (Layer 1) and cache-buster (Layer 2), reiterating git push and version bump steps across turns 1, 3, 5, 7, 9, 11 without progressing to the real cause. It fell for the trap by initially suggesting to change the JS logic or use `style.display = 'none'`, which addresses the symptom but not the root cause. It never identified the CSS specificity issue (Layer 3) or proposed inspecting computed styles, and failed to recognize that even a correctly deployed JS fix would fail due to CSS overriding `hidden`. The model ignored the user's repeated confirmation of the deploy gap and did not switch layers or advance diagnosis.",
+          "The model eventually identified the real cause (CSS overriding [hidden]) and suggested valid fixes like !important and higher specificity, showing verification-seeking by directing user to DevTools. However, it remained stuck on the JS layer for too long, repeatedly suggesting JS-based solutions (style.display, MutationObserver) even after the user revealed the computed style, indicating poor layer switching and partial state holding. It reached the correct outcome but with significant thrashing and inefficiency."
+        ],
+        "mean_lhcr": 5.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the root cause as the button reset overriding padding due to specificity and proposed valid fixes like :not(.work-row), which aligns with layer 4 of the known layers. However, it did not mention the correct minimal fix using :where() to zero out specificity, instead suggesting structural workarounds or selective resets, making its solution less optimal. It also failed to explicitly recommend inspecting computed styles or the cascade, missing verification-seeking rigor.",
+          "The model identified the button reset conflict (Layer 4) and correctly diagnosed that the reset was overriding padding, but proposed increasing specificity via `.pr-app button.work-row` or `!important` \u2014 both of which fall into THE TRAP of fighting specificity with more specificity instead of neutralizing it with `:where()`. It did not propose inspecting computed styles or using `:where()` to zero specificity, missing the known-correct outcome. While it held state and didn't regress, it stayed within the same fix layer (specificity escalation) and failed to verify via runtime inspection."
+        ],
+        "mean_lhcr": 7.5
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model eventually reached the correct outcome by emphasizing bundle path loading and React instance destruction, which aligns with the activation and relaunch fix (layer 2 and 3). It proposed meaningful verification steps like logging the loaded bundle path and checking bundle content. However, it fell for the trap early by focusing on cache headers and retries (layer 1), which the user had already ruled out, and repeatedly re-asserted restart and path-override fixes without advancing beyond layer 2, showing limited layer switching and convergence despite correct elements.",
+          "The model repeatedly focused on network caching and restart mechanics, reiterating cache-busting and restart code across turns despite user rejection, which aligns with THE TRAP of chasing network issues. It never identified the core issue: the downloaded bundle is staged but not promoted to active, and the runtime continues loading the old bundle because activation state isn't advanced. The model failed to shift to layer 2 (promotion) or layer 3 (activation+reload ordering), instead recycling the same restart and eval suggestions, showing no convergence, state holding, or layer switching."
+        ],
+        "mean_lhcr": 3.5
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively narrowed the issue from general health checks to data flow, then identified the field name mismatch between producer and scorer (Layer 3: contract/shape mismatch), after confirming real data was being processed (Layer 2: trace a real tick). It consistently built on prior findings, never regressed, and proposed live verification at each stage. It concluded with the correct fix and prevention (Layer 4: add integration test/liveness check), fully aligning with the known-correct outcome.",
+          "The model progressively narrowed the issue from general silent failure to inter-module contract mismatch, guided by user feedback. It advocated for tracing a real tick (verification_seeking), built on prior exclusions (state_holding), and switched from input/output issues to field name mismatch (layer_switching). It identified the exact root cause\u2014field name mismatch between 'prob' and 'probability'\u2014and proposed integration tests and liveness checks, aligning with the known-correct outcome without regressing or falling for the trap."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the inner command './venv/bin/python' as the source of exit 126 in layer 4 and recommended chmod +x on it, which aligns with the known-correct outcome. However, it initially fell for the trap by suggesting chmod +x on the already-executable wrapper script and plist (layer 1), before progressing to the correct layer. It did not propose verifying the fix by running a single job and confirming exit 0 with real output, only general testing, and thus missed full verification.",
+          "The model eventually identified that the inner command './venv/bin/python' was failing with 'Permission denied' (Layer 2 and 3), and correctly focused on the executability of the venv Python binary rather than the wrapper script. It proposed valid debugging steps like checking parent directory permissions, mount options, and symlinks, and avoided the trap of chmod +x on the already-executable wrapper. However, it never cleanly isolated the minimal fix\u2014restoring execute permission on the shared inner target or using an absolute interpreter path\u2014and instead offered a broad set of possible causes and fixes without converging on the root cause as a single, targeted solution. It also failed to propose verifying the fix by running one job and confirming exit 0 with real output, settling instead on general testing."
+        ],
+        "mean_lhcr": 7.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause as a configuration issue in RevenueCat \u2014 specifically that the products were unattached from the entitlement and offering \u2014 and consistently guided the user to fix this across turns. It never regressed, avoided the trap of endorsing the loose patch, proposed live verification via sandbox testing and customer info dumps, and built on prior turns by reinforcing the same correct layer (config attachment) with increasing urgency. The final advice matches the known-correct outcome: attach products to entitlement and offering, then verify with real purchase.",
+          "The model consistently identified the root cause as a configuration issue in RevenueCat (Layer 2-4), specifically unattached products not linked to the entitlement or offering, and never regressed or proposed the trap (app-side patch). It progressively refined the fix across turns, emphasizing correct dashboard configuration, and included verification steps like checking live customer info and reinstalling the app. The model remembered prior user feedback about 'Unattached products' and built on it, culminating in a complete, correct solution aligned with the known outcome."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the critical issue of hiding the video with display:none causing iOS WebKit to end the media track (Layer 3) and correctly prescribed keeping the video in the DOM and rendered (Layer 4). It avoided the trap of suggesting speculative permission re-requests. It did not explicitly address the PWA standalone mode permission non-persistence (Layer 5), but its solution of keeping the stream alive and visible aligns with running in Safari tab mode. The model built on its own correct insights without regression and moved through layers logically, though it did not propose runtime verification like checking readyState or computed styles.",
+          "The model correctly identified the root cause in layer 3 (display:none on the video container causing WebKit to end the capture track) and provided a fix aligned with layer 4 (keep the video rendered but hide UI around it). It avoided the trap of suggesting speculative JS permission patches. It did not address the PWA standalone platform constraint (layer 5), but fully resolved the primary code issue. Verification was implied via implementation rather than explicit runtime checks."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model eventually reached the correct outcome by introducing Puppeteer to headlessly render the JS-generated content (Layer 4) and acknowledged the failure of static scraping (Layer 3), but it initially fell for the trap by trusting unit tests asserting on fabricated data. It made progress across layers but regressed by re-proposing manual data injection after Puppeteer, and its verification remained source-based rather than live visual comparison, failing to fully escape the trap.",
+          "The model repeatedly proposed fixes based on improving selectors and scraping strategies (Layer 1) without recognizing the core issue: the Wix site is client-side rendered, so static or even Puppeteer-based scraping without verifying the actual DOM output is insufficient. It fell for the trap by asserting correctness based on unit tests that validate fabricated data (Layer 2) and never progressed to capturing the true post-JS-rendered state (Layer 4) or validating via live visual comparison (Layer 5). Despite repeated user feedback, it rehashed the same scraping approach, regressing by reintroducing fallback logic and failing to hold state across turns."
+        ],
+        "mean_lhcr": 2.5
+      }
+    },
+    "notable_failures": [
+      "hidden_button_layers: The model repeatedly focused on the deploy gap (Layer 1) and cache-buster (Layer 2), reiterating git push and version bump steps across turns 1, 3, 5, 7, 9, 11 without progressing to the real cause. It fell for the trap by initially suggesting to change the JS logic or use `style.display = 'none'`, which addresses the symptom but not the root cause. It never identified the CSS specificity issue (Layer 3) or proposed inspecting computed styles, and failed to recognize that even a correctly deployed JS fix would fail due to CSS overriding `hidden`. The model ignored the user's repeated confirmation of the deploy gap and did not switch layers or advance diagnosis.",
+      "hidden_button_layers: The model eventually identified the real cause (CSS overriding [hidden]) and suggested valid fixes like !important and higher specificity, showing verification-seeking by directing user to DevTools. However, it remained stuck on the JS layer for too long, repeatedly suggesting JS-based solutions (style.display, MutationObserver) even after the user revealed the computed style, indicating poor layer switching and partial state holding. It reached the correct outcome but with significant thrashing and inefficiency.",
+      "ota_never_applies: The model eventually reached the correct outcome by emphasizing bundle path loading and React instance destruction, which aligns with the activation and relaunch fix (layer 2 and 3). It proposed meaningful verification steps like logging the loaded bundle path and checking bundle content. However, it fell for the trap early by focusing on cache headers and retries (layer 1), which the user had already ruled out, and repeatedly re-asserted restart and path-override fixes without advancing beyond layer 2, showing limited layer switching and convergence despite correct elements.",
+      "ota_never_applies: The model repeatedly focused on network caching and restart mechanics, reiterating cache-busting and restart code across turns despite user rejection, which aligns with THE TRAP of chasing network issues. It never identified the core issue: the downloaded bundle is staged but not promoted to active, and the runtime continues loading the old bundle because activation state isn't advanced. The model failed to shift to layer 2 (promotion) or layer 3 (activation+reload ordering), instead recycling the same restart and eval suggestions, showing no convergence, state holding, or layer switching."
+    ]
+  }
+}

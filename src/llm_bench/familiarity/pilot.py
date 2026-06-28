@@ -14,11 +14,9 @@ from __future__ import annotations
 import asyncio
 import datetime
 import json
-from pathlib import Path
 
 from llm_bench.familiarity.card import (
     Observation,
-    build_card,
     render_comparison,
 )
 from llm_bench.familiarity.floor import run_floor
@@ -76,7 +74,6 @@ SUBJECT_MODELS = [
     # Writer
     "us.writer.palmyra-x5-v1:0",
 ]
-OUT_DIR = Path(__file__).resolve().parents[3] / "results" / "familiarity"
 
 
 async def run_pilot(
@@ -152,39 +149,38 @@ async def run_pilot(
         replays_dump.append(rep.to_dict())
         verdicts_dump.append(v.to_dict())
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    (OUT_DIR / "observations.json").write_text(
+    from llm_bench.familiarity import layout, model_cards
+
+    layout.ensure()
+    (layout.ONE_SHOT / "observations.json").write_text(
         json.dumps([o.to_dict() for o in observations], indent=2)
     )
-    (OUT_DIR / "replays.json").write_text(json.dumps(replays_dump, indent=2))
-    (OUT_DIR / "verdicts.json").write_text(json.dumps(verdicts_dump, indent=2))
+    (layout.ONE_SHOT / "replays.json").write_text(json.dumps(replays_dump, indent=2))
+    (layout.ONE_SHOT / "verdicts.json").write_text(json.dumps(verdicts_dump, indent=2))
     if errors:
-        (OUT_DIR / "errors.json").write_text(json.dumps(errors, indent=2))
-        print(f"\n{len(errors)} cell(s) errored (recorded in errors.json):")
+        (layout.ONE_SHOT / "errors.json").write_text(json.dumps(errors, indent=2))
+        print(f"\n{len(errors)} cell(s) errored (recorded in runs/one-shot/errors.json):")
         for e in errors:
             print(f"  {e['model']} {e['task']}/{e['condition']}: {e['error'][:80]}")
 
-    # --- structured (.json) card per subject that produced at least one observation ---
+    # cross-model one-shot leaderboard
     print()
-    models_with_obs = {o.model for o in observations}
-    for model in subjects:
-        if model not in models_with_obs:
-            continue
-        card = build_card(model, observations, today)
-        safe = model.replace(".", "_").replace(":", "_").replace("/", "_")
-        (OUT_DIR / f"card-{safe}.json").write_text(json.dumps(card, indent=2))
-
-    # cross-model comparison leaderboard (quick table)
     comparison = render_comparison(observations, today)
-    (OUT_DIR / "comparison.md").write_text(comparison)
+    (layout.LEADERBOARDS / "one-shot.md").write_text(comparison)
     print(comparison)
 
-    # detailed quote-backed cards (.md) + cross-model report, rendered from the dumps
-    # we just wrote (report reads observations.json + replays.json off disk).
+    # quote-backed deep dive (report reads runs/one-shot/{observations,replays}.json)
     from llm_bench.familiarity import report
 
     report.main([])
-    print(f"\nwrote {len(models_with_obs)} cards + comparison + detailed report to {OUT_DIR}")
+
+    # unified per-model cards (one-shot + any long-horizon data), by provider
+    lh_path = layout.LONG_HORIZON / "verdicts.json"
+    verdicts = json.loads(lh_path.read_text()) if lh_path.exists() else []
+    obs_dicts = [o.to_dict() for o in observations]
+    n_cards = model_cards.regenerate(layout.CARDS, obs_dicts, verdicts, today)
+    print(f"\nwrote one-shot leaderboard + detailed report + {n_cards} unified cards "
+          f"to {layout.ROOT}")
 
 
 def main():

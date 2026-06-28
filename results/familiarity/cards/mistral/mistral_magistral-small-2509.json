@@ -1,0 +1,209 @@
+{
+  "model": "mistral.magistral-small-2509",
+  "provider": "mistral",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "mistral.magistral-small-2509",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "1/6",
+    "by_condition": {
+      "cold": {
+        "reached": 1,
+        "total": 3
+      },
+      "guided": {
+        "reached": 0,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "worse": 5,
+      "better": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": false,
+        "divergences": [
+          "cold:worse",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": false,
+        "divergences": [
+          "cold:worse",
+          "guided:worse"
+        ]
+      }
+    },
+    "strengths": [
+      "CSS layout / aspect-ratio debugging"
+    ],
+    "weaknesses": [
+      "mobile-web debugging (iOS WKWebView)",
+      "payments-logic / API-semantics debugging"
+    ],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "cold",
+        "how": "The model answer incorrectly identifies the root cause as general touch handling and suggests viewport locking or CSS workarounds, while missing the key fact that iOS auto-zooms on inputs with font-size below 16px. It recommends `maximum-scale=1.0, user-scalable=no` which is explicitly called out in the correct outcome as inferior due to accessibility harm, and fails to prescribe the correct fix of setting the input font-size to >=16px."
+      },
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model answer incorrectly identifies the root cause as general touch handling differences rather than the specific iOS behavior of zooming on inputs with font-size below 16px. It recommends the inferior viewport-lock fix (maximum-scale=1, user-scalable=no), which the known-correct outcome explicitly states harms accessibility and is not the correct solution. The correct fix\u2014setting the input font-size to >=16px\u2014is not mentioned."
+      },
+      {
+        "task_id": "cover_crop",
+        "capability": "CSS layout / aspect-ratio debugging",
+        "condition": "guided",
+        "how": "The model incorrectly recommends changing the cover card's aspect ratio to 16/9, which is the inverse of the correct 9/16 ratio, and suggests using object-fit: contain, which would not fill the container as intended. The known-correct outcome requires matching the card's aspect ratio to the image's 9:16 and retaining object-fit: cover to avoid letterboxing, which the model fails to correctly specify."
+      },
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "cold",
+        "how": "The model answer incorrectly identifies the bug as a double-appending of period units or a flag/priceString formatting issue with RevenueCat, when the actual bug is misusing the full-period priceString as a per-month value. The known-correct outcome requires computing pricePerMonth as price divided by 12, but the model suggests using priceString directly, which fails to fix the core issue."
+      },
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "guided",
+        "how": "The model incorrectly states that the existing code is correct and suggests no real fix is needed, even recommending logging and external checks instead of addressing the core issue. The known-correct outcome requires computing pricePerMonth as price divided by 12 for annual plans, but the model falsely claims pkg.product.priceString is already correctly computed per-period by RevenueCat, which contradicts the bug report and the correct outcome."
+      }
+    ],
+    "avg_latency_ms": 5850.7,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 4,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.188,
+    "reached_rate": 0.25,
+    "trap_rate": 0.812,
+    "mean_lhcr": 2.5,
+    "mean_turns_to_fix": 5.0,
+    "dims": {
+      "convergence": 0.38,
+      "no_regression": 0.56,
+      "layer_switching": 0.38,
+      "verification_seeking": 0.81,
+      "state_holding": 0.38
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed re-editing the JS to set `display: none` or `hidden`, falling directly into THE TRAP by focusing on JavaScript fixes despite the real cause being CSS specificity overriding the `hidden` attribute. It ignored the deploy and cache layers until turn 11, only after the user explicitly mentioned the unpushed commit, and never identified the core CSS issue (layer 3) or proposed inspecting computed styles. It regressed by re-asserting the same JS-based solutions across turns, failed to hold state, and did not reach the known-correct outcome.",
+          "The model repeatedly proposed re-editing the JS to set `hidden` or `display: none`, falling directly into THE TRAP by focusing on JavaScript fixes despite the real cause being CSS specificity overriding the `hidden` attribute. It never identified the core issue \u2014 that `[hidden]` loses to `.primary { display: inline-flex }` \u2014 and instead escalated to brute-force removals and MutationObservers. Only in turn 11, after the user revealed the computed style, did it acknowledge CSS override, but still defaulted to JS-based `style.display = 'none !important'` rather than fixing the CSS layer. It failed to recognize deploy/cache gaps and never addressed the layered root causes in order, re-litigating early suggestions throughout."
+        ],
+        "mean_lhcr": 1.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively narrowed the issue from general failure modes to the inter-module seam (producer/scorer), identified the field name mismatch (prob vs probability) as the contract break, and proposed schema validation and logging to prevent silent failures\u2014hitting all four known layers. It built on user feedback, never regressed, and sought live verification through tracing and test writes.",
+          "The model progressively narrowed from general integration issues to the specific inter-module contract mismatch (field name 'prob' vs 'probability'), guided by user feedback. It consistently built on prior findings, never regressed, and proposed live tracing and logging of real data flow. It reached the known-correct outcome by identifying the silent seam failure and implied the need for liveness checks, aligning with the required fix and prevention."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly suggested cache busting, cache clearing, and network-level fixes despite the user confirming the download succeeds\u2014falling directly into THE TRAP. It never correctly identified the core issue: the downloaded bundle is staged but not promoted to active, and the runtime continues loading the old embedded bundle. Although it proposed some runtime checks (e.g., logging bundle path), it failed to focus on activation state and reload ordering, instead recycling the same debugging steps across turns without progressing through the known layers. It abandoned correct partial insights and regressed, re-asking basic questions after user refutations.",
+          "The model repeatedly chased network, cache, and bundle-loading fixes (Layer 1: network/download) despite user confirming downloads succeed and logs show the new bundle is present. It never correctly identified Layer 2 (staged but not promoted/activated) or Layer 3 (relaunch order), instead re-asserting manual loadBundle calls and restarts. It fell for the trap by focusing on cache busting, query params, and reload mechanics despite the root cause being activation state and launch ordering. Even after the user revealed the active bundle path is still the old one, the model continued prescribing loadBundle and file path fixes rather than diagnosing why the staged update wasn't promoted at launch."
+        ],
+        "mean_lhcr": 1.5
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 1,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed increasing specificity with !important and more specific selectors (layer 1: values), which is the trap. It never identified the reset rule's specificity (layer 4) or suggested :where(). It regressed by suggesting nuclear JS fixes and file loading issues despite confirmed class application. It only briefly sought verification via DevTools but ignored the computed style evidence that pointed to cascade override, not missing styles.",
+          "The model repeatedly proposed !important overrides and more specific selectors, which are the seductive trap of treating it as a values/specificity war rather than a reset design flaw. It failed to recognize the core issue \u2014 that the button reset's high specificity was zeroing padding \u2014 and never suggested the correct :where() fix until the user discovered it. The model regressed by reiterating the same failed !important solutions and did not build on the user's computed style clue to identify the cascade override."
+        ],
+        "mean_lhcr": 1.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model correctly identified the configuration issue (unattached products) in later turns and instructed to attach products to entitlements and offerings, aligning with the known-correct outcome. However, it repeatedly proposed the 'loose unlock' fallback in code (checking activeSubscriptions) across multiple turns, which is the seductive trap of trusting raw product IDs instead of fixing config. This undermines the root cause fix and contradicts the principle of keeping entitlements.active as the source of truth. While it eventually reached the correct configuration steps, it failed to drop the harmful workaround, creating a mixed and dangerous solution.",
+          "The model repeatedly suggested app-side fallbacks checking activeSubscriptions, which is the seductive trap of trusting raw product IDs instead of fixing the configuration. It never identified the 'Unattached products' root cause or the need to attach products to entitlements and offerings in RevenueCat and App Store Connect. Every response regressed to the same flawed workaround, ignoring the user's repeated rejection of the patch, and failed to progress through the known layers of root cause."
+        ],
+        "mean_lhcr": 3.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model eventually identified the inner command './venv/bin/python' as the source of the 126 exit code and correctly focused on its permissions, aligning with layer 3 and 4 of the root cause. However, it repeatedly proposed broad chmod +R and chown fixes rather than the minimal, targeted fix of making just the shared inner target executable or using an absolute interpreter. It did not fully converge on the fleet-wide implication of a single shared failing binary, instead treating each job in isolation, and its verification steps were thorough but generic, not leveraging the fact that fixing one job should fix all due to shared dependency.",
+          "The model repeatedly focused on the wrapper script's shebang and permissions (layer 1), despite the user confirming it was already executable and the error log pointing to './venv/bin/python: Permission denied' (layer 2). It never correctly identified the inner target's missing execute bit or the relative path resolution in launchd's environment (layer 3), instead proposing redundant fixes like chmod +x on the wrapper, shebang repairs, and plist restructuring. It fell for the trap by prioritizing fixes on the already-executable run.sh, and failed to converge on the true root cause across all turns."
+        ],
+        "mean_lhcr": 3.5
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model never identified that the Wix site is client-side rendered and requires headless browsing to extract real content. Instead, it repeatedly invented fallback content and adjusted tests to match fabricated data, falling directly into the trap of trusting unit tests that assert on invented content. It never progressed beyond layer 1 (inventing content) and regressed by simplifying the solution each time, losing even basic structure in later turns.",
+          "The model never identified that the Wix site is client-side rendered and static scraping yields empty content. Instead, it repeatedly fabricated detailed scrape outputs and regenerated code based on invented data, falling directly into the trap of trusting unit tests that assert on hallucinated content. It never proposed headless rendering (Playwright/puppeteer) to observe the real DOM, nor suggested visual comparison for verification, and regressed by re-asserting the same flawed approach across all turns."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed speculative JS permission patches (re-requesting, tracking flags, service workers) across all turns, staying at LAYER 1 (speculative JS fix) without progressing to observe the runtime state. It never identified the display:none causing track termination (LAYER 3) or the PWA standalone constraint (LAYER 5), instead deepening into the trap of adding hidden videos, canvases, and service workers \u2014 all variants of the same wrong layer. It showed no state holding, re-proposing similar fixes after each rejection, and never sought verification via console logs or computed styles.",
+          "The model repeatedly proposed speculative JS permission patches (Layer 1) without ever diagnosing the display:none issue (Layer 3) or the PWA standalone constraint (Layer 5). It fell for the trap by persistently suggesting re-requesting getUserMedia, hiding video elements, and creating hidden videos \u2014 all variants of the same flawed approach \u2014 while ignoring the root cause: removing the video from the render tree ends the track. It never advanced beyond Layer 1, contradicted earlier attempts by re-implementing similar fixes, and failed to suggest inspecting runtime state like track readyState or computed styles."
+        ],
+        "mean_lhcr": 0.0
+      }
+    },
+    "notable_failures": [
+      "hidden_button_layers: The model repeatedly proposed re-editing the JS to set `display: none` or `hidden`, falling directly into THE TRAP by focusing on JavaScript fixes despite the real cause being CSS specificity overriding the `hidden` attribute. It ignored the deploy and cache layers until turn 11, only after the user explicitly mentioned the unpushed commit, and never identified the core CSS issue (layer 3) or proposed inspecting computed styles. It regressed by re-asserting the same JS-based solutions across turns, failed to hold state, and did not reach the known-correct outcome.",
+      "hidden_button_layers: The model repeatedly proposed re-editing the JS to set `hidden` or `display: none`, falling directly into THE TRAP by focusing on JavaScript fixes despite the real cause being CSS specificity overriding the `hidden` attribute. It never identified the core issue \u2014 that `[hidden]` loses to `.primary { display: inline-flex }` \u2014 and instead escalated to brute-force removals and MutationObservers. Only in turn 11, after the user revealed the computed style, did it acknowledge CSS override, but still defaulted to JS-based `style.display = 'none !important'` rather than fixing the CSS layer. It failed to recognize deploy/cache gaps and never addressed the layered root causes in order, re-litigating early suggestions throughout.",
+      "ota_never_applies: The model repeatedly suggested cache busting, cache clearing, and network-level fixes despite the user confirming the download succeeds\u2014falling directly into THE TRAP. It never correctly identified the core issue: the downloaded bundle is staged but not promoted to active, and the runtime continues loading the old embedded bundle. Although it proposed some runtime checks (e.g., logging bundle path), it failed to focus on activation state and reload ordering, instead recycling the same debugging steps across turns without progressing through the known layers. It abandoned correct partial insights and regressed, re-asking basic questions after user refutations.",
+      "ota_never_applies: The model repeatedly chased network, cache, and bundle-loading fixes (Layer 1: network/download) despite user confirming downloads succeed and logs show the new bundle is present. It never correctly identified Layer 2 (staged but not promoted/activated) or Layer 3 (relaunch order), instead re-asserting manual loadBundle calls and restarts. It fell for the trap by focusing on cache busting, query params, and reload mechanics despite the root cause being activation state and launch ordering. Even after the user revealed the active bundle path is still the old one, the model continued prescribing loadBundle and file path fixes rather than diagnosing why the staged update wasn't promoted at launch."
+    ]
+  }
+}

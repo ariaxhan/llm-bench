@@ -1,0 +1,204 @@
+{
+  "model": "minimax.minimax-m2",
+  "provider": "minimax",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "minimax.minimax-m2",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "2/6",
+    "by_condition": {
+      "cold": {
+        "reached": 0,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "worse": 4,
+      "better": 2
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": false,
+        "divergences": [
+          "cold:worse",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:worse",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:worse",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [
+      "mobile-web debugging (iOS WKWebView)"
+    ],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "cold",
+        "how": "model produced no answer text (empty output)"
+      },
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "model produced no answer text (empty output)"
+      },
+      {
+        "task_id": "cover_crop",
+        "capability": "CSS layout / aspect-ratio debugging",
+        "condition": "cold",
+        "how": "model produced no answer text (empty output)"
+      },
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "cold",
+        "how": "model produced no answer text (empty output)"
+      }
+    ],
+    "avg_latency_ms": 65773.3,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 0,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.312,
+    "reached_rate": 0.562,
+    "trap_rate": 0.25,
+    "mean_lhcr": 4.81,
+    "mean_turns_to_fix": 3.6,
+    "dims": {
+      "convergence": 0.94,
+      "no_regression": 1.06,
+      "layer_switching": 0.94,
+      "verification_seeking": 0.94,
+      "state_holding": 0.94
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model systematically ruled out deploy, cache, and JS logic layers, then correctly identified the CSS specificity issue as the root cause after prompting for computed styles. It proposed a valid fix using !important in CSS or style.setProperty with 'important', aligning with the known-correct outcome without reverting or falling into the trap of re-editing JS alone.",
+          "The model progressively identified the real cause (CSS overriding hidden) by turn 11 after the user revealed computed styles, having already listed CSS specificity as a top candidate in turn 1. It avoided the trap of only re-editing JS, proposed live verification via DevTools and computed styles, remembered prior debugging steps, and switched from JS timing to CSS layer after rejection. The final fix matched the known-correct outcome by enforcing display: none !important for venues."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 0,
+        "hows": [
+          "The model eventually identified that the downloaded bundle is not being loaded at launch (aligning with layer 2: not promoted/activated), and proposed checking the active bundle path, which is strong verification-seeking. However, it never clearly distinguished the staging vs. activation lifecycle or addressed the relaunch ordering (layer 3), instead focusing on dynamic import and entry-point logic. It made progress across layers but did not fully articulate the known-correct outcome of activation-state advancement and reload timing, proposing a workaround rather than fixing the promotion step in the OTA system itself.",
+          "The model repeatedly focused on bundle paths, restarts, caching, and native loading configuration across all turns, never advancing beyond Layer 2 (downloaded update is staged but never marked active). It failed to identify the core issue: the activation state and reload ordering (Layer 3). Despite user confirmations that paths, restarts, and file writes were correct, the model re-litigated the same layers without progressing, never proposing to check which bundle actually executes at launch or the activation state machine. It did not fall for the network trap but never reached the known-correct outcome of promotion and reload sequencing."
+        ],
+        "mean_lhcr": 3.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the specificity conflict between the button reset and the row class, diagnosed that the reset was overriding padding due to higher specificity, and offered valid fixes including scoping adjustments. It reached the core issue (layer 4) and avoided the trap of adjusting values. However, it did not explicitly recommend inspecting computed styles or using getComputedStyle to verify the cascade, settling for source-level reasoning and general advice to check the DOM.",
+          "The model correctly identified the root cause as a specificity conflict between the button reset (0,1,1) and the row class (0,1,0), not a values issue, and proposed valid fixes that address layer 4 and 5. It avoided the trap of suggesting value increases and instead focused on selector specificity. It recommended checking the DOM and overrides, but did not explicitly suggest inspecting computed styles or dumping matched rules, missing full verification depth."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively narrowed the issue from general health checks (layer 1) to data flow (layer 2), identified the inter-module seam failure (layer 3) when the user revealed the field mismatch, and guided toward fixing the contract and implied prevention via logging/schema (layer 4). It built on prior turns, never regressed, and sought live verification through logging at each stage, culminating in the correct root cause.",
+          "The model progressively isolated the issue from general health checks to the inter-module seam (Layer 2), confirmed the silent drop via end-to-end tracing (Layer 3), and focused on the contract between producer and scorer. It consistently built on prior findings, never regressed, and sought live verification. The final direction aligns with the known-correct outcome: expose the broken seam, fix the contract, and add integration/liveness checks to prevent silent failure."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model correctly identified the configuration issue (Layer 2) and eventually stated the fix of attaching products to entitlements and offerings (Layer 4), satisfying the known-correct outcome. However, it repeatedly proposed the app-side 'loose unlock' fallback using activeSubscriptions, which is the explicit trap of trusting raw product IDs instead of fixing config. While it made progress and remembered prior findings, it failed to converge decisively, reiterating workarounds even after identifying the root cause, and did not emphasize verifying with a real on-device purchase as required.",
+          "The model repeatedly proposed the app-side patch (isPremiumLoose) that trusts activeSubscriptions instead of fixing the configuration, which is the exact trap. It never correctly identified the root cause as unattached products in RevenueCat and App Store Connect, instead oscillating around code workarounds and debugging without progressing through the known layers. It re-litigated the same failed approaches across turns, never incorporating the user's final clue about 'Unattached products' into a correct fix."
+        ],
+        "mean_lhcr": 3.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause (client-side rendering requiring headless browser) and proposed a Playwright-based solution to extract real content, thus reaching layer 4 and 5. It advocated for live DOM inspection, satisfying verification_seeking. However, it failed to fully abandon the flawed unit test paradigm (still updating tests on real data without rejecting the false signal of green tests), and it repeated the same core fix across turns without evolving its strategy after user rejection, showing limited layer_switching and state_holding. It avoided the trap by not trusting static tests as proof of fidelity, but did not explicitly condemn the false signal, making its resolution incomplete.",
+          "model produced no final answer text (empty output)"
+        ],
+        "mean_lhcr": 3.5
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed speculative JS permission patches (re-requesting getUserMedia, checking permissions, using iframes, WebRTC, service workers) \u2014 directly falling into THE TRAP. It never identified the true root cause: display:none removes the video from the render tree, ending the capture track on iOS WebKit. It also failed to recognize the PWA standalone mode permission persistence limitation. Each response regressed, added complexity, and re-litigated earlier layers without ever inspecting runtime state or suggesting keeping the video rendered but inert.",
+          "The model repeatedly proposed speculative JavaScript fixes centered on reinitializing the camera, manipulating the video element, or re-requesting permissions\u2014directly falling into THE TRAP of shipping another JS permission patch. It never identified the root cause: display:none removes the video from the render tree, causing WebKit to end the capture track. It also never recognized the platform constraint around PWA standalone mode. Instead, it regressed across turns, proposing increasingly complex and invasive workarounds while ignoring the actual runtime behavior and layer progression."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 0,
+        "hows": [
+          "model produced no final answer text (empty output)",
+          "model produced no final answer text (empty output)"
+        ],
+        "mean_lhcr": 0.0
+      }
+    },
+    "notable_failures": [
+      "ota_never_applies: The model eventually identified that the downloaded bundle is not being loaded at launch (aligning with layer 2: not promoted/activated), and proposed checking the active bundle path, which is strong verification-seeking. However, it never clearly distinguished the staging vs. activation lifecycle or addressed the relaunch ordering (layer 3), instead focusing on dynamic import and entry-point logic. It made progress across layers but did not fully articulate the known-correct outcome of activation-state advancement and reload timing, proposing a workaround rather than fixing the promotion step in the OTA system itself.",
+      "ota_never_applies: The model repeatedly focused on bundle paths, restarts, caching, and native loading configuration across all turns, never advancing beyond Layer 2 (downloaded update is staged but never marked active). It failed to identify the core issue: the activation state and reload ordering (Layer 3). Despite user confirmations that paths, restarts, and file writes were correct, the model re-litigated the same layers without progressing, never proposing to check which bundle actually executes at launch or the activation state machine. It did not fall for the network trap but never reached the known-correct outcome of promotion and reload sequencing.",
+      "silent_dead_engine: The model progressively isolated the issue from general health checks to the inter-module seam (Layer 2), confirmed the silent drop via end-to-end tracing (Layer 3), and focused on the contract between producer and scorer. It consistently built on prior findings, never regressed, and sought live verification. The final direction aligns with the known-correct outcome: expose the broken seam, fix the contract, and add integration/liveness checks to prevent silent failure.",
+      "iap_entitlement_phantom: The model correctly identified the configuration issue (Layer 2) and eventually stated the fix of attaching products to entitlements and offerings (Layer 4), satisfying the known-correct outcome. However, it repeatedly proposed the app-side 'loose unlock' fallback using activeSubscriptions, which is the explicit trap of trusting raw product IDs instead of fixing config. While it made progress and remembered prior findings, it failed to converge decisively, reiterating workarounds even after identifying the root cause, and did not emphasize verifying with a real on-device purchase as required."
+    ]
+  }
+}

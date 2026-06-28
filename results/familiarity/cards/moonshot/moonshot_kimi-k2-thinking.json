@@ -1,0 +1,178 @@
+{
+  "model": "moonshot.kimi-k2-thinking",
+  "provider": "moonshot",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "moonshot.kimi-k2-thinking",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "6/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 3,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 6
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [],
+    "avg_latency_ms": 16717.5,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 0,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.625,
+    "reached_rate": 0.812,
+    "trap_rate": 0.25,
+    "mean_lhcr": 8.44,
+    "mean_turns_to_fix": 1.8,
+    "dims": {
+      "convergence": 1.56,
+      "no_regression": 1.88,
+      "layer_switching": 1.62,
+      "verification_seeking": 1.62,
+      "state_holding": 1.75
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the real cause (CSS overriding `hidden`) and provided the fix (`[hidden] { display: none !important }`), while also addressing deploy/cache layers and suggesting computed style inspection. It avoided the trap of re-editing JS and proposed live verification steps, maintaining state across layers without regression.",
+          "The model eventually identified the real cause (CSS overriding [hidden]) and proposed correct fixes, including inspecting computed styles and using !important. It progressed through layers: from JS/cache (turn 1) to CSS override (turn 5), building on user feedback. However, it initially fell into the trap by prioritizing JS fixes like `button.hidden = true` and `style.display`, despite the JS being correct all along, which delayed reaching the true root cause."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the core issue in layer 2 \u2014 the downloaded update not being marked active or promoted \u2014 by emphasizing the need for `notifyAppReady()` and checking the bundle load path. It avoided the trap of focusing on network issues, provided concrete verification steps (logging paths, file existence), and maintained state across layers, advancing from download success to activation and reload logic. The fix proposed aligns with the known-correct outcome: ensuring the update is committed and used on relaunch.",
+          "The model progressively ruled out network, save path, native persistence, and bundle integrity, aligning with the known layers. It culminated in identifying the activation/relaunch ordering issue\u2014specifically that the native bridge initializes before the OTA path is checked, causing the old bundle to load. It proposed live verification (survival marker, path logging) and preserved prior exclusions, ultimately articulating the correct outcome: the downloaded bundle is staged but never promoted into active use due to initialization timing."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified silent failure and added logging to verify runtime state (verification_seeking=2, state_holding=2), but fixated on stream/consumer configuration (Layer 2: trace end-to-end) and never reached the true root cause \u2014 a broken inter-module seam causing zero decisions despite data flow. It fell for the trap by initially accepting 'exit 0 + green tests = working' as plausible and focusing on infrastructure (scheduler, stream, consumer) rather than contract mismatches between modules. While it adapted within Layer 2 (layer_switching=1), it never advanced to Layer 3 (contract/shape mismatch) or proposed integration tests/liveness checks (Layer 4).",
+          "The model converged on the true root cause by guiding the user to trace a real tick end-to-end (verification_seeking), identifying the inter-module seam failure (layer 2), then diagnosing the field name mismatch (layer 3), and prescribing integration tests and liveness checks (layer 4). It built on each user response, never regressed, and avoided the trap of accepting green tests and exit 0 as evidence of health."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the button reset as the source of the problem and suggested checking computed styles, which aligns with layer 4 and verification_seeking. However, it proposed increasing specificity via `.pr-app .work-row`, which is a partial fix that falls into THE TRAP of addressing symptoms with higher specificity instead of fixing the root cause (layer 5) by using `:where()`. It did not reach the known-correct outcome and missed the canonical solution, making its advice suboptimal and prone to future cascade issues.",
+          "The model correctly identified the specificity conflict (layer 4), explained why value changes wouldn't work (layer 2), and proposed both a direct fix (.pr-app .work-row) and the ideal modern solution using :where() (layer 5). It advised checking computed styles for verification, maintained consistent reasoning, and never regressed or fell into the trap of suggesting value increases."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause as unattached products in RevenueCat from turn 1 and consistently directed the user to attach products to the entitlement and offering, never regressing or suggesting the dangerous patch as a solution. It maintained focus on the configuration fix across all turns, proposed concrete verification steps including uninstalling the app and checking live logs, and built on prior responses by refining instructions without re-litigating earlier points.",
+          "The model correctly identified the root cause as a configuration issue in RevenueCat (Layer 2: register contradiction) and consistently guided the user to attach products to the entitlement and offering (Layer 4: attach products), which aligns with the known-correct outcome. It avoided the trap of endorsing the app-side patch, insisted on using entitlements.active as the source of truth, and included live verification steps like calling syncPurchases() and logging runtime state. Each turn built on the previous, maintaining state and progressing toward the full fix without regression."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified that exit 126 stemmed from the inner Python interpreter not being executable, not the wrapper script, and moved through layers: from quarantine on venv files (turn 1) to deeper quarantine on symlink targets (turn 3), then correctly prescribed recreating venvs on-machine, which restores execute permissions on the shared inner target. It proposed concrete diagnostic commands (file, ls -l, xattr, sudo run) to verify the runtime state, adapted after user rejection, and remembered prior fixes were attempted, avoiding repetition. The final fix aligns with the known-correct outcome: the relative './venv/bin/python' was non-executable due to environment issues, and fixing the single shared dependency (by recreation) resolved all jobs.",
+          "The model correctly identified the inner command execution failure (layer 2) and focused on the venv's python binary (layer 3), avoiding the trap of chmod +x on the wrapper. It progressed through layers by ruling out quarantine attrs and considering symlink targets and permissions. However, it never fully grasped the shared dependency aspect \u2014 all jobs fail due to one common inner target \u2014 and instead recommended recreating each venv individually, which is a broader, less precise fix than restoring execute permission on the single shared interpreter or using an absolute path. It proposed manual testing but not verification via a single job's real output."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the root cause in layer 3 (display:none tearing down the track) and provided a correct fix (keep video rendered via visibility or off-screen), avoided the trap of speculative permission patches, and implicitly supported the second layer (PWA standalone permission non-persistence) by emphasizing iOS's behavior \u2014 aligning with both known root causes without regression.",
+          "The model correctly identified the root cause in layer 3 (display:none ends capture track) and provided a fix in layer 4 (keep video rendered but inert, maintain stream alive). It avoided the trap of suggesting speculative JS permission patches. It did not address the PWA standalone platform constraint (layer 5), but the fix ensures the stream persists across resets, which is sufficient under the known outcome. The solution aligns with the core code fix and does not regress or contradict itself."
+        ],
+        "mean_lhcr": 9.5
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the need for headless rendering (layer 4) and rejected static scraping, but failed to progress beyond proposing the same Puppeteer scraper across all turns without adapting to the user's repeated feedback that the real DOM content was still not being captured. It never addressed the core issue that the scraper selectors were likely incorrect or insufficient for the actual Wix structure, and did not propose verifying against the live render or adjusting selectors based on inspection. The model stuck to the same solution without layer switching or state holding, despite the user's persistent indication that the problem remained unresolved.",
+          "The model repeatedly proposed using Puppeteer to scrape the Wix site, but never acknowledged that the unit tests asserting on invented data (like 'Grilled Salmon') were a false signal. It reasserted the same scraper fix across turns without progressing through the known layers, failed to recognize that green tests were meaningless when based on fabricated content, and never proposed verifying against the live render or abandoning the invented fallbacks. It fell for the trap by treating tsc + passing tests as validation, despite the content never being observed from the real page."
+        ],
+        "mean_lhcr": 1.0
+      }
+    },
+    "notable_failures": [
+      "ota_never_applies: The model progressively ruled out network, save path, native persistence, and bundle integrity, aligning with the known layers. It culminated in identifying the activation/relaunch ordering issue\u2014specifically that the native bridge initializes before the OTA path is checked, causing the old bundle to load. It proposed live verification (survival marker, path logging) and preserved prior exclusions, ultimately articulating the correct outcome: the downloaded bundle is staged but never promoted into active use due to initialization timing.",
+      "iap_entitlement_phantom: The model correctly identified the root cause as unattached products in RevenueCat from turn 1 and consistently directed the user to attach products to the entitlement and offering, never regressing or suggesting the dangerous patch as a solution. It maintained focus on the configuration fix across all turns, proposed concrete verification steps including uninstalling the app and checking live logs, and built on prior responses by refining instructions without re-litigating earlier points.",
+      "iap_entitlement_phantom: The model correctly identified the root cause as a configuration issue in RevenueCat (Layer 2: register contradiction) and consistently guided the user to attach products to the entitlement and offering (Layer 4: attach products), which aligns with the known-correct outcome. It avoided the trap of endorsing the app-side patch, insisted on using entitlements.active as the source of truth, and included live verification steps like calling syncPurchases() and logging runtime state. Each turn built on the previous, maintaining state and progressing toward the full fix without regression.",
+      "launchd_exit126_phantom: The model correctly identified the inner command execution failure (layer 2) and focused on the venv's python binary (layer 3), avoiding the trap of chmod +x on the wrapper. It progressed through layers by ruling out quarantine attrs and considering symlink targets and permissions. However, it never fully grasped the shared dependency aspect \u2014 all jobs fail due to one common inner target \u2014 and instead recommended recreating each venv individually, which is a broader, less precise fix than restoring execute permission on the single shared interpreter or using an absolute path. It proposed manual testing but not verification via a single job's real output."
+    ]
+  }
+}

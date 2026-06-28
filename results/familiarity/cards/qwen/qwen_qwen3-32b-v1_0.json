@@ -1,0 +1,198 @@
+{
+  "model": "qwen.qwen3-32b-v1:0",
+  "provider": "qwen",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "qwen.qwen3-32b-v1:0",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "3/6",
+    "by_condition": {
+      "cold": {
+        "reached": 2,
+        "total": 3
+      },
+      "guided": {
+        "reached": 1,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 3,
+      "worse": 3
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": false,
+        "divergences": [
+          "cold:worse",
+          "guided:worse"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging"
+    ],
+    "weaknesses": [
+      "payments-logic / API-semantics debugging"
+    ],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model answer recommends the inferior viewport-lock fix (maximum-scale=1.0, user-scalable=no), which the known-correct outcome explicitly warns against because it harms accessibility by disabling pinch-zoom app-wide. While it does suggest increasing font-size to 16px (a correct fix), it pairs it with the harmful viewport change, failing to prioritize the accessible solution."
+      },
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "cold",
+        "how": "The model incorrectly identifies the bug as appending '/yr' to priceString, but the real issue is assigning the full annual priceString to pricePerMonth without dividing by 12. The model's fix leaves pricePerMonth unchanged, which perpetuates the bug by showing $79.99/mo for an annual plan. The known-correct outcome requires computing pricePerMonth as price/12, which the model fails to address."
+      },
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "guided",
+        "how": "The model misidentifies the root cause, claiming `priceString` contains the per-period price when it actually contains the full-period price. It incorrectly suggests using `pricePerMonth` as if it were already correct, while the known-correct outcome states that `pricePerMonth` must be computed as `price / 12` because `pkg.product.priceString` is the annual amount. The model fails to recognize that `pricePerMonth` is currently being incorrectly set to `priceString` and needs to be recalculated."
+      }
+    ],
+    "avg_latency_ms": 4353.4,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 3,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.5,
+    "reached_rate": 0.5,
+    "trap_rate": 0.375,
+    "mean_lhcr": 5.56,
+    "mean_turns_to_fix": 1.88,
+    "dims": {
+      "convergence": 1.0,
+      "no_regression": 1.38,
+      "layer_switching": 0.94,
+      "verification_seeking": 1.25,
+      "state_holding": 1.0
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the CSS override of the `hidden` attribute as a potential issue (Layer 3) by recommending `display: none !important` for `[hidden]`, which matches the real cause. It also addressed deploy/cache layers (2 and 1) via cache-busting checks and deployment verification, and suggested inspecting DevTools to confirm runtime state. The model did not fall into the trap of focusing solely on JS fixes and progressed through layers logically, retaining prior insights.",
+          "The model identified the real cause (CSS overriding `hidden`) by recommending `button[hidden] { display: none !important }` and suggested checking DevTools, addressing deploy/cache layers indirectly via cache-busting and version checks. It progressed through layers: logic, CSS, caching, and rendering, without regressing or re-litigating. The fix matches the known-correct outcome."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model identified the button reset as the source of the issue (layer 4) and suggested increasing specificity to override it, which aligns with layer 4 diagnosis but proposes a trap solution (Option 1: .pr-app .work-row) that reinforces the specificity war instead of using :where(). It failed to recognize that values were irrelevant (layer 2) and did not diagnose the core issue of reset specificity. While it suggested DevTools inspection (verification_seeking), it never reached the correct outcome of using :where() to neutralize specificity.",
+          "The model correctly identified the button reset as the source of the override and suggested using DevTools to inspect computed styles, showing verification-seeking and state-holding. However, it fell for the trap by recommending increasing specificity via more specific selectors or !important, which are not minimal fixes and miss the root cause: the reset's high specificity should be neutralized with :where(), not fought. It never mentioned :where() or zero-specificity resets, failing to reach the known-correct outcome."
+        ],
+        "mean_lhcr": 6.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause across layers: first diagnosing unattached products in RevenueCat (layer 2), then guiding attachment to entitlement and offering (layer 4), and finally identifying IAPs not added to the current app version in App Store Connect (layer 3). It consistently rejected the trap of using the loose unlock patch, maintained state across turns, and proposed real on-device testing via sandbox users to verify the fix (layer 5).",
+          "The model correctly identified the root cause as a configuration issue in RevenueCat (Layer 2 and 3) and consistently advised attaching unattached products to the entitlement, which aligns with the known-correct outcome. It never regressed or proposed the trap (using the loose patch as a fix), and explicitly warned against it. However, it repeatedly gave the same instructions across turns without advancing the reasoning or diagnosing further (e.g., offering or App Store Connect setup), showing no layer switching and poor state holding. It mentioned verification but only generically, not requiring a real on-device sandbox purchase as specified."
+        ],
+        "mean_lhcr": 7.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 0,
+        "hows": [
+          "The model repeatedly focused on native module-based bundle loading and app restarts (Layer 3: relaunch), never advancing to the core issue of bundle activation state (Layer 2: staged but not marked active). Despite the user confirming the downloaded bundle is unused at launch, the model reasserted the same fix across turns without switching layers. It correctly proposed checking the live bundle path (verification), but failed to interpret that evidence as proof the activation step was missing, instead insisting on flawed reload mechanisms. It did not articulate the known-correct outcome of promotion/activation state management.",
+          "The model progressively narrowed from network issues to bundle loading and state management, correctly identifying that the downloaded bundle was not being activated. It validated user findings about the pending state and emphasized checking runtime behavior (which bundle loads). By turn 7, it articulated the core issue: the update is pending but not applied on launch, aligning with the known-correct outcome. It avoided the trap of blaming downloads and focused on activation logic."
+        ],
+        "mean_lhcr": 5.5
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 0,
+        "hows": [
+          "The model repeatedly suggested logging and debugging steps but never identified the core issue: a silent contract mismatch at an inter-module seam causing zero decisions despite clean runs. It failed to progress beyond surface-level diagnostics (Layer 1 and 2 guesses) and never reached the known-correct outcome involving untested seams, integration tests, or liveness assertions. Despite correct verification-seeking by asking to trace a tick, it did not interpret the user's repeated 'traced a tick' feedback as evidence of a broken seam, instead recycling the same suggestions.",
+          "The model progressively narrowed the issue from general silence to a contract mismatch between modules, validated by end-to-end tracing of a real tick (turn 7), identified the field name mismatch ('prob' vs 'probability') as a silent seam failure (layer 3), and implicitly rejected the trap of trusting exit 0 + green tests. It built on prior findings, never regressed, and proposed live checks and integration safeguards consistent with the known-correct outcome."
+        ],
+        "mean_lhcr": 7.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the core issue \u2014 that display:none causes the stream to be released \u2014 and correctly advised keeping the video element in the render tree using visibility:hidden instead. It also emphasized keeping the stream alive, aligning with the known-correct outcome. It did not propose the trap fix (re-requesting permission or editing Info.plist), and maintained consistent, correct reasoning across layers 3 and 4. However, it did not explicitly mention the PWA standalone permission limitation (layer 5), focusing only on the code fix, so while it reached the primary code solution, it omitted the full platform constraint context.",
+          "The model correctly identified the core issue \u2014 that hiding the video element causes the browser to release the camera stream \u2014 and advised keeping the video in the DOM (off-screen) to maintain the active stream, aligning with Layer 4 of the known root cause. It avoided the trap of suggesting speculative permission re-requests and maintained consistent, correct reasoning across turns, building on the user's prior attempts without regression. However, it did not explicitly mention the PWA standalone permission limitation (Layer 5), focusing only on the code fix, so while it reached the practical outcome, it omitted the full platform constraint context."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed chmod +x on the wrapper script and reworked the plist structure, ignoring the user's confirmation that the script is already executable and the error log points to an inner command. It never identified the real issue: the venv interpreter's missing execute bit or path resolution in launchd's environment. Instead, it regressed into increasingly incorrect fixes like using /bin/sh, rewriting the plist to use sh -c, and suggesting binary wrappers, all while ignoring the StandardErrorPath evidence of './venv/bin/python: Permission denied'. It fell for the trap by focusing on the wrapper's permissions and shebang, despite the known-correct root cause being the non-executable inner target shared across jobs.",
+          "The model repeatedly fell for the trap by focusing on chmod +x, shebang fixes, and wrapper script executability despite the wrapper already being -rwxr-xr-x and the error log pointing inside the script. It never correctly identified layer 3 (inner target './venv/bin/python' not executable) or layer 4 (shared dependency fix), instead re-litigating layer 1 fixes across all turns. It ignored the StandardErrorPath log evidence and failed to propose checking the venv interpreter's permissions, regressing repeatedly and never converging on the true root cause."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly re-asserted the same fix (injecting hand-crafted scrape data) without addressing the root cause: the static scrape fails because the Wix site is client-side rendered. It never progressed beyond Layer 1 (invented content) and never acknowledged Layer 3 (JS rendering) or proposed headless rendering (Layer 4). It fell for the trap by trusting unit tests on fabricated data as proof of correctness, and regressed by re-asserting identical solutions after each 'still broken'. It failed to hold state, verify live output, or switch layers, remaining stuck on static fixes despite rejection.",
+          "The model repeatedly reasserted the same fix (using assumed scrape data and regenerating code) without addressing the core issue: the static scrape fails because Wix is client-side rendered. It never progressed beyond Layer 1, ignored the need for headless rendering (Layer 4), and fell for the trap by trusting unit tests asserting on invented data. Each turn regressed to the same structure, showing no memory of prior attempts or understanding of the root cause."
+        ],
+        "mean_lhcr": 0.0
+      }
+    },
+    "notable_failures": [
+      "ota_never_applies: The model repeatedly focused on native module-based bundle loading and app restarts (Layer 3: relaunch), never advancing to the core issue of bundle activation state (Layer 2: staged but not marked active). Despite the user confirming the downloaded bundle is unused at launch, the model reasserted the same fix across turns without switching layers. It correctly proposed checking the live bundle path (verification), but failed to interpret that evidence as proof the activation step was missing, instead insisting on flawed reload mechanisms. It did not articulate the known-correct outcome of promotion/activation state management.",
+      "iap_entitlement_phantom: The model correctly identified the root cause as a configuration issue in RevenueCat (Layer 2 and 3) and consistently advised attaching unattached products to the entitlement, which aligns with the known-correct outcome. It never regressed or proposed the trap (using the loose patch as a fix), and explicitly warned against it. However, it repeatedly gave the same instructions across turns without advancing the reasoning or diagnosing further (e.g., offering or App Store Connect setup), showing no layer switching and poor state holding. It mentioned verification but only generically, not requiring a real on-device sandbox purchase as specified.",
+      "silent_dead_engine: The model repeatedly suggested logging and debugging steps but never identified the core issue: a silent contract mismatch at an inter-module seam causing zero decisions despite clean runs. It failed to progress beyond surface-level diagnostics (Layer 1 and 2 guesses) and never reached the known-correct outcome involving untested seams, integration tests, or liveness assertions. Despite correct verification-seeking by asking to trace a tick, it did not interpret the user's repeated 'traced a tick' feedback as evidence of a broken seam, instead recycling the same suggestions.",
+      "launchd_exit126_phantom: The model repeatedly proposed chmod +x on the wrapper script and reworked the plist structure, ignoring the user's confirmation that the script is already executable and the error log points to an inner command. It never identified the real issue: the venv interpreter's missing execute bit or path resolution in launchd's environment. Instead, it regressed into increasingly incorrect fixes like using /bin/sh, rewriting the plist to use sh -c, and suggesting binary wrappers, all while ignoring the StandardErrorPath evidence of './venv/bin/python: Permission denied'. It fell for the trap by focusing on the wrapper's permissions and shebang, despite the known-correct root cause being the non-executable inner target shared across jobs."
+    ]
+  }
+}

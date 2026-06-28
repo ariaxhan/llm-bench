@@ -1,0 +1,186 @@
+{
+  "model": "mistral.mistral-large-3-675b-instruct",
+  "provider": "mistral",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "mistral.mistral-large-3-675b-instruct",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model incorrectly recommends adding `minimum-scale=1.0` to prevent zoom, which does not stop iOS from auto-zooming on small font inputs and risks locking zoom if combined with `maximum-scale`. The known-correct outcome states that setting the font-size to >=16px is the proper fix, and that viewport-based locks harm accessibility. The model also suggests a JavaScript workaround and Capacitor config changes that are unnecessary and not part of the correct solution."
+      }
+    ],
+    "avg_latency_ms": 2988.3,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 1,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.75,
+    "reached_rate": 0.75,
+    "trap_rate": 0.5,
+    "mean_lhcr": 7.0,
+    "mean_turns_to_fix": 2.67,
+    "dims": {
+      "convergence": 1.38,
+      "no_regression": 1.44,
+      "layer_switching": 1.44,
+      "verification_seeking": 1.31,
+      "state_holding": 1.44
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the CSS override (layer 3) as a possible cause, suggested inspecting computed styles via DevTools, proposed using !important to fix it, and ruled out JS issues like timing and re-rendering. It maintained state across turns, avoided re-editing the JS (the trap), and converged on the correct root cause without regression.",
+          "The model identified the CSS specificity issue (layer 3) by suggesting `button[hidden] { display: none !important }` and advised checking computed styles via DevTools. It also addressed deploy and cache layers (1 and 2) by instructing to verify the deployed JS and bump the cache-buster. The user confirmed the fix worked after pushing with a bumped ?v=, indicating all layers were properly navigated without reverting or re-litigating prior steps."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the specificity conflict between the button reset (0,1,1) and the row class (0,1,0), explained why increasing values wouldn't work, and proposed valid fixes that address the cascade issue. It recommended inspecting computed styles to verify, avoided the trap of boosting row specificity with !important, and maintained consistent reasoning across layers 2\u20134, culminating in a correct diagnosis and solution path aligned with the known-correct outcome.",
+          "The model correctly identified the button reset as the source of the padding override (layer 4) and recognized the specificity conflict, but proposed increasing specificity via `.pr-app button.work-row` \u2014 which is effectively the TRAP of fighting specificity with more specificity instead of neutralizing the reset with `:where()`. It suggested checking dev tools but did not mandate reading computed styles to detect cascade overrides (layer 3), and its fix, while functional, is not minimal or correct per the known outcome. It did not propose the zero-specificity reset pattern, thus missing the core architectural fix."
+        ],
+        "mean_lhcr": 7.5
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model progressively ruled out network issues (layer 1), identified the downloaded bundle was not being activated (layer 2), and correctly diagnosed that the runtime was still loading the old bundle due to activation and relaunch ordering (layer 3). It proposed checking the actual bundle path at runtime, avoided the trap of focusing on network/manifest fixes, and ultimately provided a solution that aligns with the known-correct outcome by ensuring the new bundle is promoted and loaded on relaunch.",
+          "The model repeatedly focused on cache, bundle paths, and native overrides (Layer 1: network/download and Layer 1-adjacent), ignoring the true root cause: the downloaded bundle is never promoted to active or relaunched (Layer 2 and 3). It fell for the trap by chasing cache and bundle loading fixes despite user confirmation that the download succeeds and the bundle is present. Even after the user explicitly logged that the active bundle at launch is the old one, the model regressed to re-asserting the same native override fixes, failing to switch to the activation/relaunch state logic. It never articulated the correct outcome: that the update must be marked active and a reload must occur after activation, not before."
+        ],
+        "mean_lhcr": 5.5
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 2,
+        "hows": [
+          "The model correctly identified the root cause across layers: first the unattached products in RevenueCat (layer 2-3), then the IAPs not added to the app version in App Store Connect (layer 3), and advised attaching both to resolve the config issue. It proposed live testing with sandbox users (verification). However, it repeatedly endorsed the 'isPremiumLoose' fallback patch that trusts activeSubscriptions \u2014 which is THE TRAP of bypassing entitlements.active and masking the config root cause. Despite reaching the correct outcome, it fell for the trap by recommending the untrusted band-aid.",
+          "The model correctly identified and addressed each layer of the root cause: it recognized unattached products in RevenueCat (layer 2), prescribed attaching them to the entitlement and offering (layer 3 \u2192 4), and identified the missing IAP attachment in App Store Connect (layer 4). It consistently built on prior findings without regression and proposed real on-device sandbox testing (layer 5). However, it repeatedly endorsed the trap by including and justifying the 'isPremiumLoose' fallback in code, which trusts activeSubscriptions over entitlements.active, thereby shipping the untrusted band-aid the correct outcome explicitly forbids."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the inner command (venv/bin/python) as the source of the 126 error, not the wrapper script, and proposed chmod +x on that binary \u2014 aligning with layer 3 and 4 of the root cause. It avoided the trap of chmod +x on the already-executable wrapper, suggested log verification, and provided a fix that resolves all jobs via the shared dependency.",
+          "The model correctly identified the inner command (venv/bin/python) as the source of the 126 error by turn 9, moving through the known layers from wrapper to inner target. It did not fall for the trap of only chmod +x the wrapper. However, it never proposed the minimal fix\u2014restoring execute permission on the shared venv interpreter or using an absolute interpreter path\u2014and instead escalated to overcomplicated solutions (recreating venv, moving paths, dtruss). It remembered prior attempts and avoided repeating them, but failed to converge on the simple, correct fix that would resolve all jobs at once."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the silent contract mismatch between modules (layer 3) after verifying end-to-end data flow (layer 2), proposed tracing real data, and confirmed the field name mismatch (prob vs probability). It consistently built on prior findings, avoided the trap of declaring health due to green tests/exit 0, and advocated for integration tests and liveness checks aligning with the known-correct outcome.",
+          "The model progressively narrowed the issue from general silent failure modes to the specific inter-module seam mismatch (producer 'prob' vs scorer 'probability'), consistently building on user feedback. It advocated for tracing real data, validated each hypothesis with targeted logging, and ultimately identified the contract mismatch \u2014 aligning with the known-correct outcome. It avoided the trap of accepting green tests and exit 0 as proof of health, instead demanding end-to-end verification."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model eventually reached both root causes: it fixed the code layer by keeping the video rendered but inert (off-screen, opacity 0) and maintaining the stream across guests, and it addressed the PWA permission issue by suggesting running in a Safari tab. However, it fell for the trap in turns 1 and 3 by shipping speculative JS permission patches (re-requesting, stopping tracks) that only worsened the problem, and it failed to propose inspecting the live state (e.g. checking track readyState or computed styles) to verify the actual cause.",
+          "The model repeatedly proposed speculative JS permission patches and native wrappers instead of identifying the root cause: display:none tearing down the capture track and PWA standalone mode not persisting permission. It fell for the trap by re-asserting getUserMedia re-requests and native workarounds, never diagnosing the render tree removal or platform constraint, and regressed by abandoning earlier correct hints about keeping the video rendered."
+        ],
+        "mean_lhcr": 2.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model eventually reached the correct outcome by acknowledging the scrape yields only fragments and must not invent content, but it initially fell for the trap by generating plausible content and declaring success based on unit tests asserting on fabricated data. It progressed through layers\u2014starting with invention, then attempting puppeteer, then minimizing assumptions\u2014but never proposed verifying against a live render, and re-litigated early failures by re-asserting invented content in later turns before finally adopting a placeholder-only approach.",
+          "The model repeatedly invented content to fill the empty scrape (Layer 1) and declared progress, failing to recognize the source is client-side rendered (Layer 3). It proposed unit tests asserting on fabricated data as validation, falling directly into THE TRAP. Despite user rejection, it regressed to manual data entry and simpler fakes instead of headless rendering (Layer 4), never proposing live DOM capture or visual comparison. It forgot prior failures each turn, re-litigating solutions already proven broken."
+        ],
+        "mean_lhcr": 2.0
+      }
+    },
+    "notable_failures": [
+      "launchd_exit126_phantom: The model correctly identified the inner command (venv/bin/python) as the source of the 126 error by turn 9, moving through the known layers from wrapper to inner target. It did not fall for the trap of only chmod +x the wrapper. However, it never proposed the minimal fix\u2014restoring execute permission on the shared venv interpreter or using an absolute interpreter path\u2014and instead escalated to overcomplicated solutions (recreating venv, moving paths, dtruss). It remembered prior attempts and avoided repeating them, but failed to converge on the simple, correct fix that would resolve all jobs at once.",
+      "ota_never_applies: The model repeatedly focused on cache, bundle paths, and native overrides (Layer 1: network/download and Layer 1-adjacent), ignoring the true root cause: the downloaded bundle is never promoted to active or relaunched (Layer 2 and 3). It fell for the trap by chasing cache and bundle loading fixes despite user confirmation that the download succeeds and the bundle is present. Even after the user explicitly logged that the active bundle at launch is the old one, the model regressed to re-asserting the same native override fixes, failing to switch to the activation/relaunch state logic. It never articulated the correct outcome: that the update must be marked active and a reload must occur after activation, not before.",
+      "camera_track_killed_by_hide: The model repeatedly proposed speculative JS permission patches and native wrappers instead of identifying the root cause: display:none tearing down the capture track and PWA standalone mode not persisting permission. It fell for the trap by re-asserting getUserMedia re-requests and native workarounds, never diagnosing the render tree removal or platform constraint, and regressed by abandoning earlier correct hints about keeping the video rendered.",
+      "wix_regen_green_tests_blind: The model repeatedly invented content to fill the empty scrape (Layer 1) and declared progress, failing to recognize the source is client-side rendered (Layer 3). It proposed unit tests asserting on fabricated data as validation, falling directly into THE TRAP. Despite user rejection, it regressed to manual data entry and simpler fakes instead of headless rendering (Layer 4), never proposing live DOM capture or visual comparison. It forgot prior failures each turn, re-litigating solutions already proven broken."
+    ]
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "model": "qwen.qwen3-coder-480b-a35b-v1:0",
+  "provider": "qwen",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "qwen.qwen3-coder-480b-a35b-v1:0",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "6/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 3,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "cover_crop",
+        "capability": "CSS layout / aspect-ratio debugging",
+        "condition": "guided",
+        "how": "The model correctly identifies the aspect-ratio mismatch and suggests fixing the container to 9/16, which aligns with the known-correct outcome. However, it unnecessarily changes object-fit to 'contain', which would prevent cropping but may introduce letterboxing; 'cover' would work fine with matching aspect ratios. The fix is partially correct but includes an incorrect recommendation that deviates from the optimal solution."
+      }
+    ],
+    "avg_latency_ms": 4306.4,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 0,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.625,
+    "reached_rate": 0.625,
+    "trap_rate": 0.438,
+    "mean_lhcr": 6.56,
+    "mean_turns_to_fix": 2.5,
+    "dims": {
+      "convergence": 1.25,
+      "no_regression": 1.44,
+      "layer_switching": 1.25,
+      "verification_seeking": 1.25,
+      "state_holding": 1.38
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 1,
+        "hows": [
+          "The model identified the real cause (CSS overriding `hidden`) by recommending `[hidden] { display: none !important }` and suggested checking dev tools for the attribute and overriding CSS. It addressed deploy/cache layers implicitly by focusing on the live-rendered issue and did not fall into the trap of only tweaking JS. The solution matched the known-correct outcome by targeting the CSS specificity problem and included verification via browser dev tools.",
+          "The model correctly suggested inspecting computed styles and proposed the CSS fix with `!important` early (turn 1), which aligns with the real cause. However, it repeatedly fell back into the trap of re-editing JS (layer 3 fix abandoned for layer 1/2 re-attempts), treating the symptom rather than diagnosing deploy/cache/CSS precedence. It sought verification via dev tools but failed to maintain focus on the CSS layer after user rejection, instead regressing to selection/timing issues despite user confirming it's not a selection problem. It reached the correct solution but also promoted the wrong fix path, causing thrashing."
+        ],
+        "mean_lhcr": 8.5
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model progressively narrowed the issue from general silent failure to the inter-module seam, validated by tracing a real tick (layer 2), identified the field name mismatch (layer 3), and recommended integration tests and liveness checks (layer 4), without regressing or re-litigating prior findings.",
+          "The model progressively isolated the issue from infrastructure to data flow to logic, culminating in turn 11 by identifying that data enters but decisions are empty\u2014pinpointing the inter-module seam failure. It advocated tracing a real tick end-to-end, exposed the silent drop at the scorer, and implicitly revealed the contract mismatch, aligning with the known root cause layers. It avoided the trap of blaming scheduling or declaring health due to green tests."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause across turns: the downloaded bundle was not being actively loaded on launch (layer 2: staged but not promoted). It progressively ruled out network issues, emphasized verifying runtime state (e.g., logging bundle paths and content), and guided the user to modify native code to load the new bundle\u2014aligning with the known outcome. It avoided the trap of focusing on network/200s and instead focused on activation and reload logic.",
+          "The model correctly identified from turn 1 that the issue was not network-related (ruling out layer 1) and focused on the activation and reload mechanism (layer 2 and 3). It progressively refined its focus on bundle loading, save location, and native code configuration, culminating in the correct fix: modifying native startup logic to load the downloaded bundle. It consistently sought verification through logging, file checks, and runtime behavior, never regressed to network fixes, and maintained state across turns by building on prior debugging steps."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model identified the button reset as the issue (layer 4) but proposed the trap solution of increasing specificity with a more specific selector (.pr-app .work-row), which is not the correct minimal fix using :where(). It did not propose inspecting computed styles or the cascade directly, and while it correctly diagnosed the reset overriding due to specificity, it fell into the trap of suggesting an override fix instead of the zero-specificity reset pattern.",
+          "The model correctly identified the button reset as the source of the issue and recognized the specificity conflict, moving toward layer 4. However, it proposed increasing specificity via `.pr-app .work-row` \u2014 which is THE TRAP of boosting specificity rather than using `:where()` to eliminate it \u2014 thus falling for the seductive wrong move. It did not articulate the correct minimal fix of wrapping the reset in `:where(.pr-app button)`, and instead recommended re-asserting styles with higher specificity, missing the textbook reset pattern. While it avoided regressing and held state well, it never reached the known-correct outcome."
+        ],
+        "mean_lhcr": 6.5
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified exit 126 as a permission issue on an inner executable (layer 2), not the wrapper script, and pinpointed ./venv/bin/python as the culprit (layer 3). It proposed fixing execute permissions on the venv's Python binary (layer 4), which is the minimal correct fix. It also recommended testing the script manually to verify real output (layer 5), aligning with the known-correct outcome without falling for the trap of chmod +x on the already-executable wrapper.",
+          "The model correctly identified the inner command (./venv/bin/python) as the source of the 126 error and avoided the trap of re-chmoding the wrapper. It progressively explored symlink, directory, and extended attribute issues. However, it failed to recognize that the core issue was the relative path resolution in launchd's minimal environment (cwd=/) or the missing exec bit on the inner target, instead overcomplicating with quarantine attributes and venv recreation. It sought verification via logs and testing but did not propose the minimal fix of using an absolute path or restoring the exec bit on the single shared target."
+        ],
+        "mean_lhcr": 7.5
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model identified the first root cause (display:none tearing down the capture track) by switching to moving the video off-screen, which fixed the between-guest prompts. It then acknowledged the remaining cold-launch issue, implicitly recognizing the second root cause (PWA standalone permission non-persistence), without falling into the trap of suggesting speculative JS permission patches. It built on prior turns, verified via user feedback, and proposed runtime checks.",
+          "The model repeatedly proposed speculative JS permission patches (reassigning srcObject, enabling/disabling tracks, permission caching) \u2014 all variations of LAYER 1 (the trap) \u2014 without ever identifying the true root causes. It never recognized that display:none removes the video from the render tree (LAYER 3) or that PWA standalone mode doesn't persist permission (LAYER 5). It failed to propose inspecting runtime state (e.g. track readyState) and re-litigated the same incorrect fixes across all turns, showing no memory of prior failures."
+        ],
+        "mean_lhcr": 5.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model immediately proposed the trap solution in turn 1 by endorsing the app-side patch that unlocks based on activeSubscriptions, which explicitly trusts raw product IDs over entitlements.active. It never correctly identified the configuration root cause (products not attached to entitlement + offering in RevenueCat, IAPs not attached in ASC). Across all turns, it repeatedly regressed to the same dashboard configuration guess without progressing through the known layers, failed to propose verifying with a real on-device sandbox purchase, and ignored the critical 404 and attachment endpoint issue. It never reached the known-correct outcome.",
+          "The model repeatedly advocated for the app-side patch (trusting activeSubscriptions) which is THE TRAP, explicitly rejecting the entitlements.active source of truth. It never identified the configuration root cause (products not attached to entitlement/offering), failed to progress through the known layers, and regressed by re-asserting the same flawed fix across turns despite user rejection. It did not propose verifying with a real on-device purchase or using the documented attach endpoint."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model progressively advanced through the known layers: from recognizing the static scrape failure (layer 1), rejecting invented content, to implementing headless rendering to capture real DOM content (layer 4), and verifying by logging actual counts (6 sections, 24 menu items) from the live render (layer 5). It consistently built on prior turns, never regressed, and avoided the trap of trusting unit tests on fabricated data by insisting on live DOM extraction and validation.",
+          "The model repeatedly proposed generating placeholder content or improving scrapers without ever acknowledging that static scraping fails on JS-rendered Wix sites (Layer 1), and it trusted unit tests asserting on fabricated data (Layer 2) as validation\u2014falling directly into the trap. It never reached Layer 3 (recognize JS rendering) or proposed headless rendering (Layer 4) or live visual verification (Layer 5), instead regressing to inventing 'realistic' dishes and re-litigating fixes already proven wrong by the user's repeated side-by-side rejection."
+        ],
+        "mean_lhcr": 5.0
+      }
+    },
+    "notable_failures": [
+      "silent_dead_engine: The model progressively isolated the issue from infrastructure to data flow to logic, culminating in turn 11 by identifying that data enters but decisions are empty\u2014pinpointing the inter-module seam failure. It advocated tracing a real tick end-to-end, exposed the silent drop at the scorer, and implicitly revealed the contract mismatch, aligning with the known root cause layers. It avoided the trap of blaming scheduling or declaring health due to green tests.",
+      "launchd_exit126_phantom: The model correctly identified the inner command (./venv/bin/python) as the source of the 126 error and avoided the trap of re-chmoding the wrapper. It progressively explored symlink, directory, and extended attribute issues. However, it failed to recognize that the core issue was the relative path resolution in launchd's minimal environment (cwd=/) or the missing exec bit on the inner target, instead overcomplicating with quarantine attributes and venv recreation. It sought verification via logs and testing but did not propose the minimal fix of using an absolute path or restoring the exec bit on the single shared target.",
+      "iap_entitlement_phantom: The model immediately proposed the trap solution in turn 1 by endorsing the app-side patch that unlocks based on activeSubscriptions, which explicitly trusts raw product IDs over entitlements.active. It never correctly identified the configuration root cause (products not attached to entitlement + offering in RevenueCat, IAPs not attached in ASC). Across all turns, it repeatedly regressed to the same dashboard configuration guess without progressing through the known layers, failed to propose verifying with a real on-device sandbox purchase, and ignored the critical 404 and attachment endpoint issue. It never reached the known-correct outcome.",
+      "iap_entitlement_phantom: The model repeatedly advocated for the app-side patch (trusting activeSubscriptions) which is THE TRAP, explicitly rejecting the entitlements.active source of truth. It never identified the configuration root cause (products not attached to entitlement/offering), failed to progress through the known layers, and regressed by re-asserting the same flawed fix across turns despite user rejection. It did not propose verifying with a real on-device purchase or using the documented attach endpoint."
+    ]
+  }
+}

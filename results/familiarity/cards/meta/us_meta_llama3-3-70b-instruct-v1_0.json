@@ -1,0 +1,199 @@
+{
+  "model": "us.meta.llama3-3-70b-instruct-v1:0",
+  "provider": "meta",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "us.meta.llama3-3-70b-instruct-v1:0",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "4/6",
+    "by_condition": {
+      "cold": {
+        "reached": 2,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "worse": 3,
+      "better": 1,
+      "equivalent": 2
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": false,
+        "divergences": [
+          "cold:worse",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:equivalent",
+          "guided:equivalent"
+        ]
+      }
+    },
+    "strengths": [
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [
+      "mobile-web debugging (iOS WKWebView)"
+    ],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "cold",
+        "how": "The model answer incorrectly promotes the viewport-lock fix (maximum-scale=1.0, user-scalable=no) as a valid solution, despite the known-correct outcome explicitly stating it is inferior and harms accessibility. While it does mention increasing font size to 16px, it presents the two solutions as equally viable options rather than identifying the font-size fix as the correct and preferred solution, thus failing to fully reach the known-correct outcome."
+      },
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model answer incorrectly presents the viewport-lock fix (maximum-scale=1.0, user-scalable=no) as a valid solution, which the known-correct outcome explicitly states is inferior and harms accessibility. While it does mention setting font-size to 16px, it fails to identify that as the root cause and primary correct fix, instead treating it as one of several options including the discouraged viewport change."
+      },
+      {
+        "task_id": "cover_crop",
+        "capability": "CSS layout / aspect-ratio debugging",
+        "condition": "guided",
+        "how": "The model answer identifies the aspect-ratio mismatch correctly and suggests matching the cover card's aspect ratio to 9:16 as a valid fix, which aligns with the known-correct outcome. However, it also suggests using `object-fit: contain` or a complex padding-based workaround as alternatives, which do not achieve the intended visual result of a fully covered, uncropped 9:16 image in a properly sized container\u2014making the response partially incorrect and potentially misleading."
+      }
+    ],
+    "avg_latency_ms": 3669.9,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 2,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.312,
+    "reached_rate": 0.5,
+    "trap_rate": 0.625,
+    "mean_lhcr": 4.19,
+    "mean_turns_to_fix": 2.0,
+    "dims": {
+      "convergence": 0.62,
+      "no_regression": 1.25,
+      "layer_switching": 0.75,
+      "verification_seeking": 0.81,
+      "state_holding": 0.75
+    },
+    "per_challenge": {
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified that the download succeeds but the update isn't applied, focusing on the activation and reload step (Layer 2: downloaded update not marked active). It proposed calling `Updates.reloadFromUpdate()` or `Updates.reload()`, which directly addresses the promote-and-relaunch logic, aligning with the known-correct outcome. It did not fall for the network trap and maintained focus on the runtime state after download.",
+          "The model eventually identified that the downloaded bundle is not being activated (layer 2) and suggested `activateUpdate()`, aligning with the known-correct outcome. It progressively incorporated user feedback, avoided network red herrings, and proposed runtime checks like logging the active bundle path. However, it took five turns to reach this point, repeatedly suggested ineffective reloads, and did not clearly distinguish between download, activation, and reload ordering until late, making it slower and less precise than ideal."
+        ],
+        "mean_lhcr": 8.0
+      },
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed JavaScript-based fixes (e.g., using display: none, CSS classes, !important) despite the real cause being CSS specificity overriding the [hidden] attribute, which requires inspecting computed styles. It fell for the trap by re-editing JS and asserting fixes that wouldn't work, never identifying the CSS layer as the root cause. It did not progress through the known layers (deploy, cache, CSS, cleanup) and re-litigated the same JS solutions across turns.",
+          "The model repeatedly proposed JavaScript-based fixes (setting display, visibility, !important, classes) which is THE TRAP, ignoring the real CSS specificity issue with the [hidden] attribute. It never identified the deploy gap, cache-buster, or the need for [hidden] { display: none !important } despite multiple failures, re-litigating the same layer each time and failing to progress through the known layers of root cause."
+        ],
+        "mean_lhcr": 2.5
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the specificity conflict between the button reset and the .work-row class, recognized that the reset was overriding padding/margin, and proposed a valid fix by increasing specificity with `.pr-app button.work-row`. It avoided the trap of adjusting values and acknowledged the cascade issue. The solution aligns with the known root cause, though it didn't suggest the optimal `:where()` fix, it did diagnose the core problem correctly and offered a working resolution without regressing.",
+          "The model repeatedly proposed increasing specificity or using !important to override the reset, which is the seductive trap of treating it as a values problem (Layer 1) instead of diagnosing the cascade override. It never identified the specificity conflict or suggested :where(), failed to use computed style inspection, and regressed by abandoning correct structural insights like the button reset's role. It ultimately recommended changing the HTML element, which works but misses the root cause and is not the minimal fix."
+        ],
+        "mean_lhcr": 5.0
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified that the issue was not with the wrapper script's permissions (layer 1 ruled out) but with the inner command './venv/bin/python' potentially lacking execute permissions (layer 2 and 3). It proposed checking and ensuring the executability of './venv/bin/python', which aligns with the known-correct outcome. The fix targets the shared inner dependency, and verification steps include manual testing and log checking, confirming runtime behavior (layer 4 and 5).",
+          "The model correctly identified the inner command (./venv/bin/python) as the source of the 126 error by turn 1, avoided the trap of chmod +x on the wrapper, and progressively focused on the venv interpreter's permissions. It reached the known-correct outcome by diagnosing the non-executable inner target and recommending chmod +x on /srv/jobs/venv/bin/python, which fixed the root cause shared across jobs."
+        ],
+        "mean_lhcr": 9.0
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model eventually identified the core issue \u2014 a silent failure at the seam between producer and scorer where data is lost despite clean execution \u2014 and consistently refined its focus on data flow, serialization, and configuration. It avoided the trap of accepting green tests and exit 0 as proof of health, and from turn 7 onward, correctly centered on the inter-module contract. It proposed tracing real data, added meaningful logging, and converged on the known-correct outcome by emphasizing end-to-end validation and silent drop detection, though it repeated some suggestions.",
+          "The model repeatedly suggested logging and environment checks without progressing through the known layers of root cause. It fell for the trap by focusing on whether the process runs and logs appear, implying the issue might be environmental or infrastructural, rather than identifying the silent failure at a module seam. It never proposed tracing a real tick end-to-end or testing the integration contract between modules, and failed to recognize that unit tests passing with zero output is the core verification gap."
+        ],
+        "mean_lhcr": 5.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model eventually identified the root cause in turn 11 by recognizing that products were unattached to the entitlement and offering, aligning with layer 3 and 4 of the known layers. However, it repeatedly proposed the trap\u2014patching the app to unlock based on activeSubscriptions\u2014across multiple turns (1, 7, 9, 11), which explicitly trusts product IDs over entitlements, undermining the correct configuration fix. While it progressed from code fixes to configuration checks and finally dashboard actions, it regressed by re-asserting the flawed patch even after identifying the config issue, and verification suggestions were generic (log, test) rather than mandating a real on-device purchase test.",
+          "The model repeatedly proposed app-side patches that check activeSubscriptions directly, which is the seductive trap of trusting raw product IDs instead of fixing the configuration root cause. It never identified the missing product-to-entitlement attachment in RevenueCat or the App Store Connect configuration, regressed by re-suggesting the same flawed approaches, and failed to advance beyond layer 1 (patching the app) despite user rejection. It offered no verification via real on-device purchase and ignored prior refutations, re-litigating the same incorrect fixes across turns."
+        ],
+        "mean_lhcr": 3.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed speculative JS fixes that re-acquire getUserMedia or manipulate the video element, culminating in turn 9 and 11 where it explicitly re-requests permission \u2014 shipping THE TRAP. It never identified the true root causes: (1) display:none tearing down the capture track on iOS WebKit, or (2) PWA standalone mode not persisting permission. It regressed by abandoning earlier correct partial steps, never sought runtime verification, and failed to hold state across turns, re-litigating the same layers without progression.",
+          "The model repeatedly proposed speculative JS permission patches (re-requesting getUserMedia, adding persistent flag, editing Info.plist), which is THE TRAP. It never identified the true root causes: (1) display:none tearing down the capture track on iOS WebKit, and (2) PWA standalone mode not persisting permission. It regressed by abandoning correct partial understanding of stream reuse and instead re-litigated basic permission requests across every turn, with no verification beyond vague 'test it' prompts."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly asserted fabricated scrape data and regenerated code based on it, never recognizing the Wix site is client-side rendered. It fell for the trap by declaring fixes complete based on green unit tests that assert on invented content, and never proposed headless rendering to observe the real DOM. It re-asserted the same incorrect fix across all turns, showing no progression through the known layers.",
+          "The model correctly identified the need for a headless browser to render client-side content (layer 4) and mentioned Puppeteer, but repeatedly failed to address the core issue of verifying against real content. It fell for the trap by continuing to propose unit tests asserting on expected content (like 'Section 1', 'Menu Item 1') rather than validating against the actual live site, and never progressed beyond regurgitating the same scraping code across turns without incorporating the user's repeated feedback that the real DOM was still not being captured. It did not hold state across turns, re-litigating the same points and never advancing to visual comparison or live verification (layer 5)."
+        ],
+        "mean_lhcr": 1.0
+      }
+    },
+    "notable_failures": [
+      "hidden_button_layers: The model repeatedly proposed JavaScript-based fixes (e.g., using display: none, CSS classes, !important) despite the real cause being CSS specificity overriding the [hidden] attribute, which requires inspecting computed styles. It fell for the trap by re-editing JS and asserting fixes that wouldn't work, never identifying the CSS layer as the root cause. It did not progress through the known layers (deploy, cache, CSS, cleanup) and re-litigated the same JS solutions across turns.",
+      "hidden_button_layers: The model repeatedly proposed JavaScript-based fixes (setting display, visibility, !important, classes) which is THE TRAP, ignoring the real CSS specificity issue with the [hidden] attribute. It never identified the deploy gap, cache-buster, or the need for [hidden] { display: none !important } despite multiple failures, re-litigating the same layer each time and failing to progress through the known layers of root cause.",
+      "ota_never_applies: The model eventually identified that the downloaded bundle is not being activated (layer 2) and suggested `activateUpdate()`, aligning with the known-correct outcome. It progressively incorporated user feedback, avoided network red herrings, and proposed runtime checks like logging the active bundle path. However, it took five turns to reach this point, repeatedly suggested ineffective reloads, and did not clearly distinguish between download, activation, and reload ordering until late, making it slower and less precise than ideal.",
+      "silent_dead_engine: The model eventually identified the core issue \u2014 a silent failure at the seam between producer and scorer where data is lost despite clean execution \u2014 and consistently refined its focus on data flow, serialization, and configuration. It avoided the trap of accepting green tests and exit 0 as proof of health, and from turn 7 onward, correctly centered on the inter-module contract. It proposed tracing real data, added meaningful logging, and converged on the known-correct outcome by emphasizing end-to-end validation and silent drop detection, though it repeated some suggestions."
+    ]
+  }
+}

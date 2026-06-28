@@ -28,10 +28,9 @@ import datetime
 import json
 import re
 import sys
-from pathlib import Path
 from statistics import median
 
-OUT_DIR = Path(__file__).resolve().parents[3] / "results" / "familiarity"
+from llm_bench.familiarity import layout
 
 _TASK_TITLE = {
     "ios_zoom": "iOS WKWebView auto-zoom (mobile-web)",
@@ -42,8 +41,8 @@ _TASK_TITLE = {
 
 # --------------------------------------------------------------------------- io
 def _load() -> tuple[list[dict], list[dict]]:
-    obs = json.loads((OUT_DIR / "observations.json").read_text())
-    reps = json.loads((OUT_DIR / "replays.json").read_text())
+    obs = json.loads((layout.ONE_SHOT / "observations.json").read_text())
+    reps = json.loads((layout.ONE_SHOT / "replays.json").read_text())
     return obs, reps
 
 
@@ -396,17 +395,12 @@ def main(argv: list[str] | None = None):
     obs, reps = _load()
     all_models = sorted({x["model"] for x in obs})
     selected = argv or all_models
-    toks_all = [x["output_tokens"] for x in reps if x.get("output_tokens")]
-    roster_med = median(toks_all) if toks_all else 0
     date = datetime.date.today().isoformat()
 
-    for m in selected:
-        md = render_detailed_card(m, obs, reps, roster_med, date)
-        (OUT_DIR / f"card-{_safe(m)}.md").write_text(md)
+    layout.ensure()
     report = render_report(selected, obs, reps, date)
-    (OUT_DIR / "detailed-report.md").write_text(report)
-    print(f"rendered {len(selected)} detailed cards + detailed-report.md to {OUT_DIR}")
-    print("selected:", ", ".join(selected))
+    (layout.LEADERBOARDS / "one-shot-detailed.md").write_text(report)
+    print(f"wrote one-shot-detailed.md to {layout.LEADERBOARDS}")
 
 
 if __name__ == "__main__":

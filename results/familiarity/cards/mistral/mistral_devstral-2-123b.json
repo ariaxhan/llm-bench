@@ -1,0 +1,186 @@
+{
+  "model": "mistral.devstral-2-123b",
+  "provider": "mistral",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "mistral.devstral-2-123b",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 3,
+        "total": 3
+      },
+      "guided": {
+        "reached": 2,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:worse"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "ios_zoom",
+        "capability": "mobile-web debugging (iOS WKWebView)",
+        "condition": "guided",
+        "how": "The model answer incorrectly recommends the viewport-lock fix (maximum-scale=1.0, user-scalable=no) as the 'recommended' solution, which contradicts the known-correct outcome that labels this approach as inferior due to accessibility harm. While it mentions setting font-size to 16px, it demotes it to an 'alternative' fix rather than the primary solution, thus failing to prioritize the correct fix and misleading the user with an accessibility-damaging recommendation."
+      }
+    ],
+    "avg_latency_ms": 5573.4,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 1,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.25,
+    "reached_rate": 0.5,
+    "trap_rate": 0.562,
+    "mean_lhcr": 4.12,
+    "mean_turns_to_fix": 2.25,
+    "dims": {
+      "convergence": 0.62,
+      "no_regression": 1.06,
+      "layer_switching": 0.56,
+      "verification_seeking": 1.06,
+      "state_holding": 0.81
+    },
+    "per_challenge": {
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model identified the real cause (CSS override of [hidden]) by proposing [hidden] { display: none !important } and suggested checking computed styles via DevTools. It addressed deploy/cache layers by recommending cache-buster checks and hard refresh, and did not fall into re-editing JS. It maintained state, avoided regression, and layered debugging from JS to CSS.",
+          "The model identified the CSS override (layer 3) as a likely cause and proposed adding `display: none !important` to override specificity, which aligns with the known-correct outcome. It also prompted verification via DevTools, covered deploy/cache layers, and avoided re-editing the JS (avoiding the trap). The solution path matches the root cause layers and outcome."
+        ],
+        "mean_lhcr": 10.0
+      },
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly chased network, cache, and bundle validity issues (Layer 1) despite 200s and successful download proving fetch works, falling into THE TRAP. It never correctly identified Layer 2 (staged but not promoted/activated) or Layer 3 (activation vs reload ordering). It re-litigated earlier ruled-out steps like cache clearing and manifest versions across turns, showing no progression through the known layers and failing to converge on the true root cause.",
+          "The model repeatedly focused on network, caching, bundle corruption, and reload mechanics without ever identifying the core issue: the downloaded bundle is staged but not promoted to active. It fell for the trap by emphasizing cache-busting, HTTP headers, and download verification\u2014despite 200s and successful fetches already proving network success. It never advanced beyond Layer 1 (network/download) to Layer 2 (activation/promotion), reasserting the same failed fixes across turns while ignoring the known outcome that the runtime must load the staged bundle on relaunch."
+        ],
+        "mean_lhcr": 1.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 1,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model identified that the button reset was interfering with the row styling (layer 4), but proposed increasing specificity via `.pr-app .work-row` or `:not(.work-row)`, which are heavier-handed fixes that miss the correct minimal solution of using `:where()` on the reset. It fell for the trap by recommending a specificity-increase workaround instead of zeroing the reset's specificity, and did not suggest inspecting computed styles or using dev tools to verify the cascade behavior, relying solely on source reasoning.",
+          "The model repeatedly proposed increasing padding with !important, falling directly into THE TRAP of treating it as a values problem rather than a specificity cascade issue. It never identified the root cause \u2014 that the button reset (0,1,1) out-specifies the row class (0,1,0) \u2014 and instead regressed to increasingly broad overrides. Although it eventually suggested checking computed styles (verification_seeking=2), it failed to interpret the key clue (fontSize applied but padding reset) as evidence of a specificity war, instead inventing new layers like CSS-in-JS, Shadow DOM, or containment. It abandoned its early correct observation about the reset being too aggressive and never proposed the correct fix: wrapping the reset in :where()."
+        ],
+        "mean_lhcr": 3.5
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model eventually identified that the scorer receives an empty list despite the producer emitting, aligning with the known-correct outcome's focus on a broken inter-module seam. It consistently built on prior findings (state_holding) and sought verification via tracing real data. However, it remained stuck on infrastructure/config layers (Kafka, DB, timing) rather than identifying the core contract mismatch (e.g., field shape/type) at the seam, thus not fully reaching the root cause layer. It avoided the trap of blaming scheduling or declaring health based on exit 0.",
+          "The model eventually identified the core issue \u2014 a silent data loss between producer and scorer due to a broken seam \u2014 by guiding end-to-end tracing on real data, which aligns with layer 2 and 3 of the known outcome. It consistently built on prior findings (e.g., ruling out store issues after forced write worked) and sought live verification, but repeated the same transport-layer checks across turns without escalating to contract mismatches or liveness alerts, showing partial layer progression and minor redundancy."
+        ],
+        "mean_lhcr": 8.0
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the configuration root cause (Layer 2) and consistently guided toward attaching products to entitlement and offering (Layer 4), never regressing to code patches after initial turn. It proposed live verification via syncPurchases and logging runtime state, built on prior turns by deepening the fix steps, and ultimately articulated the known-correct outcome without falling for the trap of trusting activeSubscriptions.",
+          "The model correctly identified the need to attach products to entitlements and offerings (layer 3), but repeatedly proposed the same fix without advancing or adapting after user rejections. It fell for the trap by consistently recommending the app-side fallback check (info.activeSubscriptions) as part of the solution, which is the untrusted band-aid the known-correct outcome explicitly rejects. It failed to progress beyond layer 3, never addressing the App Store Connect attachment or the documented attach endpoint (layer 4), and did not propose verification via real on-device purchase (layer 5)."
+        ],
+        "mean_lhcr": 6.5
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 1,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model eventually identified the inner Python binary as the source of the 126 error (layer 3) and suggested chmod +x on it, which aligns with the known-correct outcome. However, it repeatedly fell back on broad, generic fixes (recreating venv, wrapper scripts) after rejections, rather than focusing on the single shared dependency. It never fully articulated the minimal fix\u2014restoring exec on the one shared interpreter\u2014and verification steps were often indirect. While it avoided the trap of chmod +x on the already-executable wrapper, it did not consistently build on ruled-out causes, leading to thrashing.",
+          "The model repeatedly proposed chmod +x on ./venv/bin/python, which is the seductive trap, ignoring that the user explicitly stated it did nothing. It failed to progress through the known layers, never identifying that the inner command (relative path to venv python) was the failing exec, and instead regressed to recreating the venv or using system Python. It did not hold state across turns, re-asking for debug output the user had already ruled out, and never proposed verifying the fix by running a single job to confirm exit 0 with real output."
+        ],
+        "mean_lhcr": 2.5
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 0,
+        "reached": 0,
+        "trap": 2,
+        "hows": [
+          "The model repeatedly proposed speculative JavaScript permission patches and stream management fixes (e.g., re-checking permission state, using iframes, service workers) without ever identifying the true root causes: (1) display:none on the video element causing WebKit to end the capture track, and (2) PWA standalone mode not persisting getUserMedia permission. It stayed at LAYER 1 (speculative JS fixes) across all turns, reasserting variations of the same wrong solution, thus falling for the trap. It never referenced runtime behavior like track readyState or render tree presence, failed to build on prior attempts, and never reached the known-correct outcome.",
+          "The model repeatedly proposed speculative JavaScript permission patches and stream-reuse workarounds (Layer 1), including iframe hacks and permission locking, without ever identifying the true root causes: display:none tearing down the capture track (Layer 3) or PWA standalone mode not persisting permission (Layer 5). It fell for the trap by persisting with JS-level fixes despite user feedback, never suggesting inspection of the runtime state (e.g., console logs, track readyState), and regressing by re-proposing variations of the same failed solutions across turns."
+        ],
+        "mean_lhcr": 0.0
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model repeatedly proposed static scraping or API-based solutions without recognizing the core issue: the Wix site is client-side rendered and requires headless browser rendering to capture the actual DOM after JavaScript execution. It consistently fell back to generating fallback content and asserting correctness based on unit tests that verify invented data, directly falling for the trap. The model never progressed beyond layer 1, repeatedly re-asserting the same flawed fixes without advancing through the known layers or verifying against the live rendered state.",
+          "The model correctly identified early that the Wix site is JavaScript-rendered and required a headless browser to extract content, which aligns with layer 3 and 4 of the root cause. It consistently proposed Puppeteer-based scraping across turns and never fell back to static scraping or trusted the fabricated unit tests. However, it failed to progress beyond proposing the scraper fix, repeating nearly identical code in every response without incorporating feedback that the real DOM had already been rendered and observed. It did not advance to verifying fidelity through visual comparison (layer 5) or rejecting the false signal of unit tests (layer 2), nor did it acknowledge that the test suite asserting on invented data was meaningless. Thus, while it reached part of the correct outcome, it did not fully articulate or act on the deeper layers of the problem, especially the invalidity of trusting green tests on fabricated content."
+        ],
+        "mean_lhcr": 1.5
+      }
+    },
+    "notable_failures": [
+      "ota_never_applies: The model repeatedly chased network, cache, and bundle validity issues (Layer 1) despite 200s and successful download proving fetch works, falling into THE TRAP. It never correctly identified Layer 2 (staged but not promoted/activated) or Layer 3 (activation vs reload ordering). It re-litigated earlier ruled-out steps like cache clearing and manifest versions across turns, showing no progression through the known layers and failing to converge on the true root cause.",
+      "ota_never_applies: The model repeatedly focused on network, caching, bundle corruption, and reload mechanics without ever identifying the core issue: the downloaded bundle is staged but not promoted to active. It fell for the trap by emphasizing cache-busting, HTTP headers, and download verification\u2014despite 200s and successful fetches already proving network success. It never advanced beyond Layer 1 (network/download) to Layer 2 (activation/promotion), reasserting the same failed fixes across turns while ignoring the known outcome that the runtime must load the staged bundle on relaunch.",
+      "silent_dead_engine: The model eventually identified that the scorer receives an empty list despite the producer emitting, aligning with the known-correct outcome's focus on a broken inter-module seam. It consistently built on prior findings (state_holding) and sought verification via tracing real data. However, it remained stuck on infrastructure/config layers (Kafka, DB, timing) rather than identifying the core contract mismatch (e.g., field shape/type) at the seam, thus not fully reaching the root cause layer. It avoided the trap of blaming scheduling or declaring health based on exit 0.",
+      "reset_specificity_override: The model repeatedly proposed increasing padding with !important, falling directly into THE TRAP of treating it as a values problem rather than a specificity cascade issue. It never identified the root cause \u2014 that the button reset (0,1,1) out-specifies the row class (0,1,0) \u2014 and instead regressed to increasingly broad overrides. Although it eventually suggested checking computed styles (verification_seeking=2), it failed to interpret the key clue (fontSize applied but padding reset) as evidence of a specificity war, instead inventing new layers like CSS-in-JS, Shadow DOM, or containment. It abandoned its early correct observation about the reset being too aggressive and never proposed the correct fix: wrapping the reset in :where()."
+    ]
+  }
+}

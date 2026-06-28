@@ -1,0 +1,186 @@
+{
+  "model": "openai.gpt-oss-20b-1:0",
+  "provider": "openai",
+  "generated": "2026-06-28",
+  "one_shot": {
+    "model": "openai.gpt-oss-20b-1:0",
+    "n": 6,
+    "date": "2026-06-28",
+    "reached_rate": "5/6",
+    "by_condition": {
+      "cold": {
+        "reached": 2,
+        "total": 3
+      },
+      "guided": {
+        "reached": 3,
+        "total": 3
+      }
+    },
+    "divergence_counts": {
+      "better": 5,
+      "worse": 1
+    },
+    "capabilities": {
+      "mobile-web debugging (iOS WKWebView)": {
+        "task_id": "ios_zoom",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "CSS layout / aspect-ratio debugging": {
+        "task_id": "cover_crop",
+        "reached_any": true,
+        "divergences": [
+          "cold:better",
+          "guided:better"
+        ]
+      },
+      "payments-logic / API-semantics debugging": {
+        "task_id": "revenuecat_permonth",
+        "reached_any": true,
+        "divergences": [
+          "cold:worse",
+          "guided:better"
+        ]
+      }
+    },
+    "strengths": [
+      "mobile-web debugging (iOS WKWebView)",
+      "CSS layout / aspect-ratio debugging",
+      "payments-logic / API-semantics debugging"
+    ],
+    "weaknesses": [],
+    "roles_signal": [
+      "debugger / implementer (CSS layout)",
+      "debugger / implementer (mobile front-end)",
+      "debugger / reviewer (API + business logic)"
+    ],
+    "failure_modes": [
+      {
+        "task_id": "revenuecat_permonth",
+        "capability": "payments-logic / API-semantics debugging",
+        "condition": "cold",
+        "how": "The model answer incorrectly assumes RevenueCat's product object has a pricePerMonth field that can be used directly, but the known-correct outcome states that the comment in the code is wrong \u2014 pkg.product.priceString is the full-period price and there is no indication that pricePerMonth exists in the SDK. The correct fix is to compute the monthly price by dividing the annual price by 12, not to use a non-existent or assumed field."
+      }
+    ],
+    "avg_latency_ms": 5430.7,
+    "avg_cost_usd": null,
+    "cost_known": false,
+    "spine_disagreements": 1,
+    "confidence": "Low (pilot, n=6 observations across 3 task types)"
+  },
+  "long_horizon": {
+    "n": 16,
+    "solved_rate": 0.375,
+    "reached_rate": 0.875,
+    "trap_rate": 0.188,
+    "mean_lhcr": 7.31,
+    "mean_turns_to_fix": 1.5,
+    "dims": {
+      "convergence": 1.25,
+      "no_regression": 1.81,
+      "layer_switching": 1.25,
+      "verification_seeking": 1.75,
+      "state_holding": 1.25
+    },
+    "per_challenge": {
+      "ota_never_applies": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause in turn 1: the downloaded bundle is not being loaded because it's not written to the expected path or the runtime isn't reloaded. It addressed layer 2 (staged but not promoted) by emphasizing overwriting the correct bundle file and layer 3 (relaunch ordering) by prescribing explicit reloads. It avoided the trap of chasing network issues, focused on activation and reload, and proposed runtime checks (e.g. verifying which file RN loads), satisfying verification-seeking and state-holding across turns.",
+          "The model eventually identified that the app continues to load the embedded bundle because the runtime does not switch to the downloaded bundle, and correctly emphasized overriding the bundle URL via AppRegistry and restarting. It proposed checking the active bundle path at runtime, which aligns with verification against live state. However, it remained stuck on file path and overwrite mechanics (Layer 1 and 2) for multiple turns, only reaching the activation-and-reload ordering (Layer 3) late, and did not clearly distinguish staging vs. activation as the core failure. While it reached the correct outcome by turn 9, it did so after repetitive troubleshooting of lower layers, showing partial but delayed convergence."
+        ],
+        "mean_lhcr": 8.0
+      },
+      "reset_specificity_override": {
+        "n": 2,
+        "solved": 2,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the specificity conflict between the button reset (0,1,1) and the row class (0,1,0), explaining that the reset wins the cascade and nullifies padding/margin despite source values being present. It proposed valid fixes including increasing specificity, excluding the element from reset, or changing the element type \u2014 all aligned with the known root cause. It did not propose the trap (!important on every row) as a primary solution, though it mentioned it as a last resort without endorsing it. The model held state across the explanation, built on correct layer identification (layer 4), and did not regress, but it did not explicitly recommend inspecting computed styles or dumped rules to verify \u2014 missing the verification-seeking criterion.",
+          "The model correctly identified the button reset as the culprit and suggested inspecting DevTools (verification_seeking), but proposed increasing specificity or using !important\u2014both of which are the seductive trap. It never mentioned the :where() fix or zero-specificity resets, instead reinforcing value/specifier-level fixes (layer 1), and thus failed to reach the known-correct outcome."
+        ],
+        "mean_lhcr": 8.0
+      },
+      "hidden_button_layers": {
+        "n": 2,
+        "solved": 0,
+        "reached": 1,
+        "trap": 1,
+        "hows": [
+          "The model correctly identified the CSS override of the `hidden` attribute by `display: inline-flex` in every response after the user provided computed style evidence, consistently guiding toward inspecting DevTools, identifying specificity issues, and applying `!important` overrides or attribute-based guards. It avoided the trap of re-editing JS, maintained prior findings, and progressively refined the solution across layers (CSS, CDN, DOM readiness), aligning fully with the known-correct outcome.",
+          "The model repeatedly re-asserted the same CSS override fix without progressing through the known layers, ignoring deploy and cache gaps. It fell for the trap by pushing JavaScript fixes and redundant CSS rules instead of identifying the real cause: CSS specificity overriding the `hidden` attribute. While it consistently urged DevTools inspection (verification_seeking=2), it failed to recognize or integrate user feedback that each attempt failed, regressing to earlier suggestions and never converging on the correct solution."
+        ],
+        "mean_lhcr": 6.5
+      },
+      "silent_dead_engine": {
+        "n": 2,
+        "solved": 1,
+        "reached": 2,
+        "trap": 1,
+        "hows": [
+          "The model progressively narrowed the issue from general checks to the specific inter-module seam (producer 'prob' vs scorer 'probability'), consistently using live tracing and logging to verify each layer. It avoided the trap of blaming infrastructure or mocks, instead focusing on contract mismatches, and ultimately identified the silent filtering due to field name mismatch \u2014 aligning with layer 3 of the known cause. It proposed end-to-end tracing and later suggested adding liveness checks, matching the full known-correct outcome.",
+          "The model eventually reached the correct outcome by identifying a silent drop at a seam (producer emits, scorer receives empty), but only after repeatedly focusing on lower layers like DB config and transaction handling \u2014 falling for the trap of trusting exit 0 and green tests as health indicators. It proposed live tracing (verification_seeking), but failed to switch layers efficiently or fully build on prior exclusions, re-litigating early possibilities instead of ascending the known layers."
+        ],
+        "mean_lhcr": 8.5
+      },
+      "iap_entitlement_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model consistently identified the root cause as unattached products in RevenueCat and correctly prescribed attaching them to both an offering and the 'premium_access' entitlement. It maintained focus on the configuration issue (layer 3 and 4), never regressed, rejected the app-side patch as a long-term solution, and repeatedly urged verification via live customer info checks. The solution matched the known-correct outcome in substance across all turns.",
+          "The model correctly identified the root cause (unattached products in RevenueCat) and avoided the trap of endorsing the app-side patch. It consistently reiterated steps to attach products to an offering and link to the entitlement across turns. However, it failed to progress beyond layer 3, never addressing the App Store Connect configuration (IAPs attached to app version) or the 404 resolution via the documented attach endpoint (layer 4), nor did it propose real on-device sandbox verification (layer 5). It repeated the same advice without advancing the diagnosis or adapting to the user's repeated signal that the fix was not working, showing no layer switching or state holding."
+        ],
+        "mean_lhcr": 7.0
+      },
+      "camera_track_killed_by_hide": {
+        "n": 2,
+        "solved": 2,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified the root cause in layer 3 (display:none removes video from render tree, ending the MediaStreamTrack) and provided fixes aligned with layer 4 (keep video rendered but inert via visibility:hidden or off-screen). It did not propose the trap (speculative JS permission patch) and maintained consistency across the response. However, it did not mention the platform constraint in layer 5 (PWA standalone mode not persisting permission across cold launches), so while it solved the between-guest prompt, it didn't address the launch prompt fully per the known-correct outcome.",
+          "The model correctly identified the root cause in layer 3 (display:none removes video from render tree, ending the capture track) and provided a fix aligned with layer 4 (keep video rendered but inert via visibility/opacity/off-screen). It avoided the trap of proposing speculative JS permission patches. The solution correctly preserves the stream across guests and does not re-request permission. It also implicitly recognized the operational constraint of PWA standalone mode by focusing on keeping the track alive, though not explicitly stated until late, the core code fix addresses the primary failure."
+        ],
+        "mean_lhcr": 9.5
+      },
+      "launchd_exit126_phantom": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model eventually identified the correct root cause (inner target ./venv/bin/python lacking execute permission) in turn 9 and onward, after user provided the stderr log. It correctly shifted from shebang/interpreter issues (layer 1-2) to permission on the inner executable (layer 3-4), proposed chmod +x on the venv's python binary (correct fix), and suggested verification via manual run and log inspection. However, it initially misdiagnosed the issue as a missing interpreter (layer 1), backtracking slightly in reasoning before converging, and did not fully maintain state about the wrapper script's known executability from the start.",
+          "The model correctly identified the root cause as the inner venv interpreter being non-executable (Layer 3) and consistently focused on fixing ./venv/bin/python's permissions or environment, not the wrapper. It proposed live checks (file, ls, mount) and defensive scripting, progressing through layers (architecture, symlink, noexec) when fixes failed. However, it repeatedly re-litigated basic permissions despite user's repeated logs confirming the same error, showing poor state holding across turns."
+        ],
+        "mean_lhcr": 7.5
+      },
+      "wix_regen_green_tests_blind": {
+        "n": 2,
+        "solved": 0,
+        "reached": 2,
+        "trap": 0,
+        "hows": [
+          "The model correctly identified early that a headless browser (Playwright) is needed to capture the client-side rendered content (layer 4) and proposed a live scrape with proper waiting and extraction logic. It consistently avoided the trap of trusting unit tests on fabricated data. However, it failed to progress across turns, repeating the same solution verbatim despite user feedback indicating the issue persisted, showing no adaptation or deeper diagnosis. It did not address why the headless scrape might still fail (e.g., dynamic content, shadow DOM, timing) or propose visual comparison for verification (layer 5), settling for outputting the same code repeatedly without confirming it actually captured the 6 sections and 24 menu items as required.",
+          "The model correctly identified the root cause (client-side rendering requiring headless browser) and proposed Playwright to extract real content, thus reaching layer 4 and the known-correct outcome. However, it repeatedly reasserted the same fix across turns without adapting or advancing its explanation, failed to incorporate live visual comparison for verification (sticking to unit tests on data), and did not build on user feedback that the static scrape was empty\u2014indicating no state holding or layer progression, and thrashing in place."
+        ],
+        "mean_lhcr": 3.5
+      }
+    },
+    "notable_failures": [
+      "hidden_button_layers: The model correctly identified the CSS override of the `hidden` attribute by `display: inline-flex` in every response after the user provided computed style evidence, consistently guiding toward inspecting DevTools, identifying specificity issues, and applying `!important` overrides or attribute-based guards. It avoided the trap of re-editing JS, maintained prior findings, and progressively refined the solution across layers (CSS, CDN, DOM readiness), aligning fully with the known-correct outcome.",
+      "silent_dead_engine: The model progressively narrowed the issue from general checks to the specific inter-module seam (producer 'prob' vs scorer 'probability'), consistently using live tracing and logging to verify each layer. It avoided the trap of blaming infrastructure or mocks, instead focusing on contract mismatches, and ultimately identified the silent filtering due to field name mismatch \u2014 aligning with layer 3 of the known cause. It proposed end-to-end tracing and later suggested adding liveness checks, matching the full known-correct outcome.",
+      "hidden_button_layers: The model repeatedly re-asserted the same CSS override fix without progressing through the known layers, ignoring deploy and cache gaps. It fell for the trap by pushing JavaScript fixes and redundant CSS rules instead of identifying the real cause: CSS specificity overriding the `hidden` attribute. While it consistently urged DevTools inspection (verification_seeking=2), it failed to recognize or integrate user feedback that each attempt failed, regressing to earlier suggestions and never converging on the correct solution.",
+      "iap_entitlement_phantom: The model consistently identified the root cause as unattached products in RevenueCat and correctly prescribed attaching them to both an offering and the 'premium_access' entitlement. It maintained focus on the configuration issue (layer 3 and 4), never regressed, rejected the app-side patch as a long-term solution, and repeatedly urged verification via live customer info checks. The solution matched the known-correct outcome in substance across all turns."
+    ]
+  }
+}
