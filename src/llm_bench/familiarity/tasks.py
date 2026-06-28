@@ -14,9 +14,11 @@ For each, this module pairs the reconstructed+redacted prompt/reference (from
 truth, not guessed:
 
 - ``known_outcome`` — the objective answer the judge anchors to (NOT Claude's wording).
-- ``guidance``      — a *method hint* for the guided-replay condition. Deliberately a
-  nudge toward the approach, never Claude's answer, so the guided condition can't
-  smuggle the similarity trap back in.
+- ``followup``      — a *realistic* second message in Aria's actual voice (frustrated,
+  lowercase, vague: "its still not working, just fix it") carrying the kind of
+  observational clue she'd really drop — never the root cause, never Claude's answer.
+  The guided condition replays this follow-up, testing whether a model can make progress
+  from the low-information, annoyed nudge a real user actually sends (not a clean hint).
 - ``spine``         — a cheap deterministic check (D10). It does NOT judge; it
   *calibrates* the LLM judge: where the spine has a verdict, the judge must agree
   (commission O3), and disagreement is surfaced.
@@ -40,7 +42,7 @@ class TaskSpec:
     capability: str
     prompt: str
     known_outcome: str
-    guidance: str
+    followup: str
     claude_reference: str
     repo_ref: dict
     spine: Callable[[str], tuple[bool, str]]
@@ -107,9 +109,10 @@ _META = {
             "(maximum-scale=1 / user-scalable=no) is inferior — it kills pinch-zoom app-wide "
             "and harms accessibility."
         ),
-        "guidance": (
-            "Think about how iOS WKWebView/Safari treats focused form inputs at small "
-            "font sizes."
+        "followup": (
+            "its still doing that thing where it zooms in when i tap the note box on my "
+            "phone and i cant pinch back out. doesnt happen on my laptop at all. just fix "
+            "it pls"
         ),
     },
     "cover_crop": {
@@ -120,9 +123,10 @@ _META = {
             "the excess height off the top and bottom. The fix is to make the cover card's "
             "aspect-ratio match the strip's 9:16 so the whole image shows."
         ),
-        "guidance": (
-            "Compare the aspect ratio of the image to its container, and recall what "
-            "object-fit: cover does when they differ."
+        "followup": (
+            "the cover image is STILL cut off — top and bottom are chopped, only the middle "
+            "band shows. the actual strips look totally fine, its just the cover thats wrong. "
+            "why is this happening"
         ),
     },
     "revenuecat_permonth": {
@@ -134,9 +138,9 @@ _META = {
             "compute per-month from the annual price (price / 12, same currency) rather than "
             "reusing priceString — $79.99/yr -> $6.67/mo."
         ),
-        "guidance": (
-            "Check what priceString actually represents for an annual package versus what "
-            "pricePerMonth is supposed to display."
+        "followup": (
+            "its still showing $79.99/mo on the paywall and its a YEARLY plan?? the fallback "
+            "data shows it right ($6.67/mo) but the live one is wrong. why. fix it please"
         ),
     },
 }
@@ -153,7 +157,7 @@ def load_tasks() -> list[TaskSpec]:
                 capability=meta["capability"],
                 prompt=c["prompt"],
                 known_outcome=meta["known_outcome"],
-                guidance=meta["guidance"],
+                followup=meta["followup"],
                 claude_reference=c["claude_reference"],
                 repo_ref=c.get("repo_ref", {}),
                 spine=_SPINES[tid],

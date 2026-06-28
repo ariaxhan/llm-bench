@@ -3,10 +3,12 @@
 For each task the harness runs:
 
 - ``cold``   : the prompt alone (tests how little hand-holding the model needs).
-- ``guided`` : the prompt plus a *method hint* (tasks.py ``guidance``) — a nudge toward
-  the approach, never Claude's answer. The gap between the two is itself a model trait
-  (D5b). For these one-shot tasks the gap is thin by construction; rich
-  trajectory-replay needs multi-step tasks (phase 2).
+- ``guided`` : the prompt plus Aria's *realistic follow-up* (tasks.py ``followup``) — a
+  frustrated, low-information second message in her actual voice ("its still not working,
+  just fix it") carrying the kind of observational clue she'd really drop, never the root
+  cause. This tests whether a model makes progress from the annoyed nudge a real user
+  actually sends — not a sanitized hint. The gap between cold and guided is itself a model
+  trait (D5b).
 
 The redaction gate is enforced at the send boundary: ``assert_clean`` runs on the exact
 outgoing prompt before any Bedrock call. Even though tasks are pre-redacted, this is the
@@ -54,7 +56,8 @@ def _build_user_prompt(task: TaskSpec, condition: str) -> str:
     if condition == "cold":
         return task.prompt
     if condition == "guided":
-        return f"{task.prompt}\n\nHint: {task.guidance}"
+        # a realistic frustrated follow-up in Aria's voice, framed as a second user turn
+        return f"{task.prompt}\n\n(follow-up message from the user) {task.followup}"
     raise ValueError(f"unknown condition: {condition}")
 
 

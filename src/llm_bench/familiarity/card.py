@@ -155,3 +155,75 @@ def render_card_md(card: dict) -> str:
         "- Pilot != powered. Trust resets on model version change.",
     ]
     return "\n".join(lines)
+
+
+def render_comparison(obs: list[Observation], date: str) -> str:
+    """Cross-model leaderboard from observations. Ranked by outcomes reached, then cost.
+
+    Honest: every cell is an n=1 observation; the cold/guided split and per-task columns
+    show *where* a model reached, not a powered score. Spine disagreements are shown
+    (they were judge-corrected spine errors in this pilot).
+    """
+    models = sorted({o.model for o in obs})
+    tasks = sorted({o.task_id for o in obs})
+    rows = []
+    for model in models:
+        mine = [o for o in obs if o.model == model]
+        reached = sum(1 for o in mine if o.reached)
+        cold = sum(1 for o in mine if o.condition == "cold" and o.reached)
+        guided = sum(1 for o in mine if o.condition == "guided" and o.reached)
+        per_task = {}
+        for t in tasks:
+            cell = [o for o in mine if o.task_id == t]
+            r = sum(1 for o in cell if o.reached)
+            per_task[t] = f"{r}/{len(cell)}"
+        costs = [o.cost_usd for o in mine if o.cost_usd is not None]
+        lats = [o.latency_ms for o in mine if o.latency_ms]
+        disagree = sum(1 for o in mine if not o.agrees_with_spine)
+        rows.append(
+            {
+                "model": model,
+                "reached": reached,
+                "total": len(mine),
+                "cold": cold,
+                "guided": guided,
+                "per_task": per_task,
+                "cost": (sum(costs) / len(costs)) if costs else None,
+                "lat": (sum(lats) / len(lats)) if lats else None,
+                "disagree": disagree,
+            }
+        )
+    rows.sort(key=lambda r: (-r["reached"], r["cost"] if r["cost"] is not None else 9e9))
+
+    short = {t: t[:10] for t in tasks}
+    head = ["model", "reached", "cold", "guided", *[short[t] for t in tasks], "cost/task", "lat ms"]
+    lines = [
+        "# Model Familiarity — cross-model comparison",
+        "",
+        f"> {len(models)} models · 3 real bugs · cold + guided · generated {date}",
+        "> Ranked by outcomes reached, then cost. Every cell is n=1 — pilot, not powered.",
+        "",
+        "| " + " | ".join(head) + " |",
+        "|" + "|".join(["---"] * len(head)) + "|",
+    ]
+    for r in rows:
+        cost = f"${r['cost']:.5f}" if r["cost"] is not None else "n/a"
+        lat = f"{r['lat']:.0f}" if r["lat"] is not None else "n/a"
+        cells = [
+            f"`{r['model']}`",
+            f"**{r['reached']}/{r['total']}**",
+            str(r["cold"]),
+            str(r["guided"]),
+            *[r["per_task"][t] for t in tasks],
+            cost,
+            lat,
+        ]
+        lines.append("| " + " | ".join(cells) + " |")
+
+    lines += [
+        "",
+        f"_Tasks: {', '.join(f'{short[t]} = {t}' for t in tasks)}._",
+        "_cold = outcomes reached with no help; guided = reached after Aria's realistic "
+        "frustrated follow-up. cost/task n/a = no public pricing recorded (not fabricated)._",
+    ]
+    return "\n".join(lines)

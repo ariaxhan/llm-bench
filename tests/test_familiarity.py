@@ -92,7 +92,7 @@ def test_three_real_tasks_load_with_required_fields():
     tasks = load_tasks()
     assert {t.task_id for t in tasks} == {"ios_zoom", "cover_crop", "revenuecat_permonth"}
     for t in tasks:
-        assert t.prompt and t.known_outcome and t.guidance
+        assert t.prompt and t.known_outcome and t.followup
         assert callable(t.spine)
         # real-bug provenance, not an eval fixture
         assert t.repo_ref.get("repo") in {"paper-rooms", "our4cuts", "modelmind"}

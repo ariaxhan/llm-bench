@@ -62,9 +62,18 @@ class BedrockProvider(BaseProvider):
     def _runtime_client(self):
         if self._runtime is None:
             import boto3
+            from botocore.config import Config
 
+            # Reasoning models (R1, Kimi, MiniMax) can think for minutes at a large token
+            # budget; the boto default 60s read timeout kills them mid-thought. 300s + a
+            # few adaptive retries keeps the sweep alive across slow models.
+            cfg = Config(
+                read_timeout=300,
+                connect_timeout=15,
+                retries={"max_attempts": 3, "mode": "adaptive"},
+            )
             self._runtime = boto3.Session(profile_name=self.profile).client(
-                "bedrock-runtime", region_name=self.region
+                "bedrock-runtime", region_name=self.region, config=cfg
             )
         return self._runtime
 
