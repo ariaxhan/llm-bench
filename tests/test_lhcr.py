@@ -174,7 +174,9 @@ def test_clamp_dim(raw, expected):
 def test_all_challenge_content_is_clean():
     leaks = []
     for c in load_challenges():
-        for msg in [c.initial_prompt, *c.followups, c.known_outcome, c.trap, *c.layer_sequence]:
+        parts = [c.initial_prompt, *c.followups, c.known_outcome, c.trap, *c.layer_sequence]
+        parts += list(c.code_context.values())  # code/observation blocks ship too
+        for msg in parts:
             leaks += verify_clean(msg)
     assert leaks == [], f"unredacted content in shipped challenges: {leaks}"
 
@@ -182,10 +184,42 @@ def test_all_challenge_content_is_clean():
 def test_challenges_have_required_shape():
     chs = load_challenges()
     assert {c.challenge_id for c in chs} == {
-        "hidden_button_layers", "ota_never_applies", "silent_dead_engine"
+        "hidden_button_layers", "ota_never_applies", "silent_dead_engine",
+        "reset_specificity_override", "iap_entitlement_phantom", "launchd_exit126_phantom",
+        "wix_regen_green_tests_blind", "camera_track_killed_by_hide",
     }
     for c in chs:
         assert c.initial_prompt and c.known_outcome and c.followups
         assert c.layer_sequence and callable(c.spine)
         assert c.source_episode  # real-episode provenance
         assert c.n_turns >= 4  # genuinely long-horizon
+
+
+def test_code_context_renders_into_first_turn():
+    from llm_bench.familiarity.conversation import _compose_initial
+
+    c = get_challenge("reset_specificity_override")
+    first = _compose_initial(c)
+    # every code_context filename + its body must be present in the first user message
+    for name, body in c.code_context.items():
+        assert name in first
+        assert body.split("\n")[0] in first
+    # a challenge with no code_context returns the bare prompt
+    plain = get_challenge("silent_dead_engine")
+    assert _compose_initial(plain) == plain.initial_prompt
+
+
+def test_tier2_challenges_have_code_context():
+    for cid in ["reset_specificity_override", "iap_entitlement_phantom",
+                "launchd_exit126_phantom", "wix_regen_green_tests_blind",
+                "camera_track_killed_by_hide"]:
+        c = get_challenge(cid)
+        assert c.code_context, f"{cid} should ship code context"
+
+
+def test_signal_spine_factory():
+    c = get_challenge("camera_track_killed_by_hide")
+    good = ("the display:none removes the video from the render tree, the capture track ends, "
+            "and PWA standalone mode can't persist the permission")
+    assert c.spine(good)[0] is True
+    assert c.spine("just request camera permission again on startup")[0] is False

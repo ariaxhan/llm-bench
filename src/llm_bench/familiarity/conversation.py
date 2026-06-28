@@ -87,6 +87,18 @@ class Conversation:
         }
 
 
+def _compose_initial(challenge: ConversationSpec) -> str:
+    """First user message = the ask plus any code/observation context, as fenced blocks.
+    This is how the harder challenges 'show the model the code': real (genericized) source
+    and a runtime/observation block, so the bug is found by reading the cascade/seam."""
+    if not challenge.code_context:
+        return challenge.initial_prompt
+    blocks = [challenge.initial_prompt, "\n--- relevant code / observations ---"]
+    for name, body in challenge.code_context.items():
+        blocks.append(f"\n`{name}`:\n```\n{body}\n```")
+    return "\n".join(blocks)
+
+
 async def run_conversation(
     challenge: ConversationSpec,
     provider: BaseProvider,
@@ -101,8 +113,8 @@ async def run_conversation(
     """
     convo = Conversation(challenge_id=challenge.challenge_id, model=model)
 
-    # ordered user messages: initial prompt, then each follow-up
-    user_messages = [challenge.initial_prompt, *challenge.followups]
+    # ordered user messages: initial prompt (+ code context), then each follow-up
+    user_messages = [_compose_initial(challenge), *challenge.followups]
     history: list[dict] = []  # simple {"role","text"} list fed to provider.converse
 
     idx = 0

@@ -48,6 +48,55 @@ TOP10_MODELS = [
 OUT_DIR = Path(__file__).resolve().parents[3] / "results" / "familiarity"
 
 
+def _all_pilot_models() -> list[str]:
+    """Every subject from the one-shot pilot, top-10 first then the rest, deduped.
+    The judge model is never a subject (it can't grade itself)."""
+    from llm_bench.familiarity.pilot import SUBJECT_MODELS
+
+    ordered = list(TOP10_MODELS) + [m for m in SUBJECT_MODELS if m not in TOP10_MODELS]
+    return [m for m in ordered if m != DEFAULT_JUDGE_MODEL]
+
+
+def merge_shards(today: str) -> None:
+    """Combine every ``lhcr_verdicts*.json`` / ``lhcr_transcripts*.json`` shard into one
+    canonical set covering all models. Deduped by (model, challenge_id) — re-running a model
+    overwrites its prior cell, so this is idempotent. Renders the full comparison."""
+    import glob
+
+    def _load(pattern: str) -> list[dict]:
+        rows: list[dict] = []
+        for p in sorted(glob.glob(str(OUT_DIR / pattern))):
+            if p.endswith("_all.json"):
+                continue
+            rows.extend(json.loads(Path(p).read_text()))
+        return rows
+
+    verdicts = _load("lhcr_verdicts*.json")
+    transcripts = _load("lhcr_transcripts*.json")
+
+    def _dedupe(rows: list[dict]) -> list[dict]:
+        seen: dict[tuple, dict] = {}
+        for r in rows:
+            seen[(r["model"], r["challenge_id"])] = r  # later shard wins
+        return list(seen.values())
+
+    verdicts = _dedupe(verdicts)
+    transcripts = _dedupe(transcripts)
+
+    (OUT_DIR / "lhcr_verdicts_all.json").write_text(json.dumps(verdicts, indent=2))
+    (OUT_DIR / "lhcr_transcripts_all.json").write_text(json.dumps(transcripts, indent=2))
+
+    # order rows by the full pilot ranking, with any extras appended
+    order = _all_pilot_models()
+    present = {v["model"] for v in verdicts}
+    ordered = [m for m in order if m in present] + [m for m in present if m not in order]
+    comparison = render_comparison(verdicts, ordered, load_challenges(), today)
+    (OUT_DIR / "lhcr_comparison_all.md").write_text(comparison)
+    print("\n" + comparison)
+    print(f"\nmerged {len(verdicts)} verdicts across {len(present)} models -> "
+          f"lhcr_comparison_all.md")
+
+
 # --- LHCR judge floor: synthetic transcripts the judge MUST classify correctly ---
 
 def _floor_conversations() -> list[tuple[str, str, Conversation]]:
@@ -111,6 +160,8 @@ async def run_sweep(
     subjects: list[str] | None = None,
     judge_model: str = DEFAULT_JUDGE_MODEL,
     concurrency: int = 5,
+    out_tag: str = "",
+    challenge_ids: list[str] | None = None,
 ):
     subjects = subjects or TOP10_MODELS
     provider = get_provider("bedrock")
@@ -127,6 +178,9 @@ async def run_sweep(
     print("floor: PASS\n")
 
     challenges = load_challenges()
+    if challenge_ids:
+        wanted = set(challenge_ids)
+        challenges = [c for c in challenges if c.challenge_id in wanted]
     print(f"challenges: {[c.challenge_id for c in challenges]}")
     print(f"subjects:   {len(subjects)} models, {sum(c.n_turns for c in challenges)} "
           f"turns/model\n")
@@ -167,14 +221,14 @@ async def run_sweep(
         verdicts_dump.append(v.to_dict())
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    (OUT_DIR / "lhcr_transcripts.json").write_text(json.dumps(convos_dump, indent=2))
-    (OUT_DIR / "lhcr_verdicts.json").write_text(json.dumps(verdicts_dump, indent=2))
+    (OUT_DIR / f"lhcr_transcripts{out_tag}.json").write_text(json.dumps(convos_dump, indent=2))
+    (OUT_DIR / f"lhcr_verdicts{out_tag}.json").write_text(json.dumps(verdicts_dump, indent=2))
     if errors:
-        (OUT_DIR / "lhcr_errors.json").write_text(json.dumps(errors, indent=2))
-        print(f"\n{len(errors)} cell(s) errored (recorded in lhcr_errors.json)")
+        (OUT_DIR / f"lhcr_errors{out_tag}.json").write_text(json.dumps(errors, indent=2))
+        print(f"\n{len(errors)} cell(s) errored (recorded in lhcr_errors{out_tag}.json)")
 
     comparison = render_comparison(verdicts_dump, subjects, challenges, today)
-    (OUT_DIR / "lhcr_comparison.md").write_text(comparison)
+    (OUT_DIR / f"lhcr_comparison{out_tag}.md").write_text(comparison)
     print("\n" + comparison)
     print(f"\nwrote {len(verdicts_dump)} verdicts + comparison to {OUT_DIR}")
 
@@ -222,14 +276,58 @@ def render_comparison(verdicts: list[dict], subjects, challenges, today: str) ->
                "**layer**=layer-switching when a fix is rejected, **verify**=verification-seeking "
                "(propose checking live/rendered/runtime state), **state**=state-holding across turns._")
     out.append("")
-    out.append("_Challenges: `hidden_button_layers` (deploy/cache/CSS 4-layer whack-a-mole), "
-               "`ota_never_applies` (downloaded-but-not-activated), `silent_dead_engine` "
-               "(healthy process, zero output via an untested seam)._")
+    out.append("_Challenges (real, genericized, multi-session episodes):_")
+    for c in challenges:
+        out.append(f"_- `{c.challenge_id}` — {c.capability}_")
     return "\n".join(out)
 
 
-def main():
-    asyncio.run(run_sweep())
+def main(argv: list[str] | None = None):
+    import sys
+
+    args = argv if argv is not None else sys.argv[1:]
+    mode = args[0] if args else "top10"
+    today = datetime.date.today().isoformat()
+
+    if mode == "merge":
+        merge_shards(today)
+        return
+
+    all_models = _all_pilot_models()
+    if mode == "rest":
+        # every pilot model NOT in the top 10 (the top 10 already ran -> canonical shard)
+        subjects = [m for m in all_models if m not in TOP10_MODELS]
+        asyncio.run(run_sweep(subjects=subjects, out_tag="_rest"))
+        merge_shards(today)
+    elif mode == "all":
+        asyncio.run(run_sweep(subjects=all_models, out_tag="_all_run"))
+        merge_shards(today)
+    elif mode == "new":
+        # run ONLY challenges not yet present in any verdict shard, across all 32 models,
+        # then merge into the full matrix. Used after adding new challenges so the already-
+        # swept ones aren't re-run.
+        import glob
+
+        done_ids: set[str] = set()
+        for p in glob.glob(str(OUT_DIR / "lhcr_verdicts*.json")):
+            if p.endswith("_all.json"):
+                continue
+            for v in json.loads(Path(p).read_text()):
+                done_ids.add(v["challenge_id"])
+        new_ids = [c.challenge_id for c in load_challenges() if c.challenge_id not in done_ids]
+        if not new_ids:
+            print("no new challenges to run; merging existing shards.")
+        else:
+            print(f"running NEW challenges {new_ids} across {len(all_models)} models")
+            asyncio.run(run_sweep(subjects=all_models, out_tag="_new", challenge_ids=new_ids))
+        merge_shards(today)
+    elif mode == "top10":
+        asyncio.run(run_sweep(subjects=TOP10_MODELS))
+    else:
+        # explicit comma-separated model ids
+        subjects = [m.strip() for m in mode.split(",") if m.strip()]
+        asyncio.run(run_sweep(subjects=subjects, out_tag="_custom"))
+        merge_shards(today)
 
 
 if __name__ == "__main__":
