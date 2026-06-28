@@ -180,12 +180,18 @@ async def run_sweep(
     subjects: list[str] | None = None,
     judge_model: str = DEFAULT_JUDGE_MODEL,
     env_model: str = DEFAULT_ENV_MODEL,
-    concurrency: int = 6,
+    concurrency: int | None = None,
     out_tag: str = "",
     challenge_ids: list[str] | None = None,
     k: int = 2,
     max_turns: int = 6,
 ):
+    # I/O-bound: every cell is remote inference, so high concurrency is the real speed lever.
+    # The three providers have INDEPENDENT rate-limit pools, so mixed Bedrock/OpenAI/Gemini
+    # runs parallelize well; adaptive retry/backoff in each provider absorbs throttling.
+    # Override with LHCR_CONCURRENCY (default 12).
+    if concurrency is None:
+        concurrency = int(os.environ.get("LHCR_CONCURRENCY", "12"))
     subjects = subjects or TOP10_MODELS
     provider = get_provider("bedrock")
     today = datetime.date.today().isoformat()
