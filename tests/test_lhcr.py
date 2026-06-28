@@ -18,7 +18,7 @@ from llm_bench.familiarity.conversation import (
     run_conversation_env,
 )
 from llm_bench.familiarity.lhcr import _synth_convo
-from llm_bench.familiarity.lhcr_judge import _clamp_dim, judge_conversation
+from llm_bench.familiarity.lhcr_judge import _DIMS, _clamp_dim, judge_conversation
 from llm_bench.familiarity.redact import verify_clean
 
 # --- a scripted fake provider: replays canned answers turn by turn ---
@@ -301,6 +301,25 @@ async def test_env_conversation_hits_turn_cap_unsolved():
     assert convo.turns_to_fix is None
     assert len(convo.assistant_turns) == 4  # ran exactly the cap
     assert "read the stderr log" in convo.probes_revealed  # probe reveal recorded
+
+
+def test_render_rates_are_means_not_filtered():
+    # regression: rates must average over ALL verdicts (0/1), not filter to the True ones
+    # (filtering made any model with >=1 hit read 100%).
+    from llm_bench.familiarity.lhcr import render_comparison
+
+    verdicts = []
+    for s, r, t in [(True, True, True), (False, False, False), (False, True, False),
+                    (False, False, False)]:
+        verdicts.append({
+            "model": "m", "challenge_id": "c", "sample": len(verdicts),
+            "solved": s, "reached": r, "fell_for_trap": t, "turns_to_fix": 1 if s else None,
+            "lhcr_score": 5, "dims": {d: 1 for d in _DIMS},
+        })
+    md = render_comparison(verdicts, ["m"], [get_challenge("hidden_button_layers")], "2026-01-01")
+    # 1/4 solved = 25%, 2/4 reached = 50%, 1/4 trap = 25% — NOT 100%
+    assert "25%" in md and "50%" in md
+    assert "100%" not in md
 
 
 async def test_env_respond_parses_and_failsafe():

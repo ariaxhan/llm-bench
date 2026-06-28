@@ -243,9 +243,11 @@ def render_comparison(verdicts: list[dict], subjects, challenges, today: str) ->
     rows = []
     for model, vs in by_model.items():
         n = len(vs)
-        solved_rate = _mean(1 for v in vs if v.get("solved"))
-        reached_rate = _mean(1 for v in vs if v.get("reached"))
-        trap_rate = _mean(1 for v in vs if v.get("fell_for_trap"))
+        # map every verdict to 0/1 (do NOT filter — filtering drops the False cases and makes
+        # any model with >=1 hit read 100%).
+        solved_rate = _mean(1 if v.get("solved") else 0 for v in vs)
+        reached_rate = _mean(1 if v.get("reached") else 0 for v in vs)
+        trap_rate = _mean(1 if v.get("fell_for_trap") else 0 for v in vs)
         lhcr_mean = _mean(v["lhcr_score"] for v in vs)
         ttfs = [v["turns_to_fix"] for v in vs if v.get("solved") and v.get("turns_to_fix")]
         ttf = f"{_mean(ttfs):.1f}" if ttfs else "—"
@@ -271,18 +273,22 @@ def render_comparison(verdicts: list[dict], subjects, challenges, today: str) ->
                "**trap** = shipped the seductive wrong fix (lower is better) · **→fix** = mean "
                "turns to solve · **lhcr** = mean of 5 behaviour dims (0–10).")
     out.append("")
-    out.append("| model | solved | reached | trap↓ | →fix | lhcr | conv | no-reg | layer | "
+    out.append("| model | n | solved | reached | trap↓ | →fix | lhcr | conv | no-reg | layer | "
                "verify | state |")
-    out.append("|---|---|---|---|---|---|---|---|---|---|---|")
+    out.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
+    full_n = len(challenges) * samples
     for model, sr, rr, tr, lh, ttf, da, n in rows:
+        nflag = f"{n}" if n >= full_n else f"{n}⚠"  # ⚠ = partial (errored cells)
         out.append(
-            f"| `{model}` | **{sr*100:.0f}%** | {rr*100:.0f}% | {tr*100:.0f}% | {ttf} | "
+            f"| `{model}` | {nflag} | **{sr*100:.0f}%** | {rr*100:.0f}% | {tr*100:.0f}% | {ttf} | "
             f"{lh:.1f} | {da['convergence']:.1f} | {da['no_regression']:.1f} | "
             f"{da['layer_switching']:.1f} | {da['verification_seeking']:.1f} | "
             f"{da['state_holding']:.1f} |"
         )
     out.append("")
-    out.append("_**solved**=env accepted the correct fix · **reached**=judge confirmed the root "
+    out.append(f"_**n**=verdicts (full = {full_n}: {len(challenges)} challenges × {samples} "
+               "samples); ⚠ = partial (some cells errored, treat with caution). "
+               "**solved**=env accepted the correct fix · **reached**=judge confirmed the root "
                "cause was stated · **trap↓**=rate of shipping the seductive wrong fix (lower "
                "better) · **→fix**=mean turns to solve (fewer better) · **lhcr**=mean 0–10 over "
                "convergence/no-regression/layer-switching/verification-seeking/state-holding._")
