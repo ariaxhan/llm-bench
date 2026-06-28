@@ -1,0 +1,38 @@
+[
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "ios_zoom",
+    "condition": "cold",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  },
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "ios_zoom",
+    "condition": "guided",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  },
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "cover_crop",
+    "condition": "cold",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  },
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "cover_crop",
+    "condition": "guided",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  },
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "revenuecat_permonth",
+    "condition": "cold",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  },
+  {
+    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "task": "revenuecat_permonth",
+    "condition": "guided",
+    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+  }
+]

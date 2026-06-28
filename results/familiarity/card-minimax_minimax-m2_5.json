@@ -1,21 +1,22 @@
 {
-  "model": "minimax.minimax-m2",
+  "model": "minimax.minimax-m2.5",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "1/6",
+  "reached_rate": "4/6",
   "by_condition": {
     "cold": {
-      "reached": 0,
+      "reached": 1,
       "total": 3
     },
     "guided": {
-      "reached": 1,
+      "reached": 3,
       "total": 3
     }
   },
   "divergence_counts": {
-    "worse": 5,
-    "better": 1
+    "worse": 2,
+    "equivalent": 1,
+    "better": 3
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -23,35 +24,36 @@
       "reached_any": true,
       "divergences": [
         "cold:worse",
-        "guided:better"
+        "guided:equivalent"
       ]
     },
     "CSS layout / aspect-ratio debugging": {
       "task_id": "cover_crop",
-      "reached_any": false,
+      "reached_any": true,
       "divergences": [
         "cold:worse",
-        "guided:worse"
+        "guided:better"
       ]
     },
     "payments-logic / API-semantics debugging": {
       "task_id": "revenuecat_permonth",
-      "reached_any": false,
+      "reached_any": true,
       "divergences": [
-        "cold:worse",
-        "guided:worse"
+        "cold:better",
+        "guided:better"
       ]
     }
   },
   "strengths": [
-    "mobile-web debugging (iOS WKWebView)"
-  ],
-  "weaknesses": [
+    "mobile-web debugging (iOS WKWebView)",
     "CSS layout / aspect-ratio debugging",
     "payments-logic / API-semantics debugging"
   ],
+  "weaknesses": [],
   "roles_signal": [
-    "debugger / implementer (mobile front-end)"
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [
     {
@@ -65,27 +67,9 @@
       "capability": "CSS layout / aspect-ratio debugging",
       "condition": "cold",
       "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "cover_crop",
-      "capability": "CSS layout / aspect-ratio debugging",
-      "condition": "guided",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
-      "condition": "guided",
-      "how": "model produced no answer text (empty output)"
     }
   ],
-  "avg_latency_ms": 78653.4,
+  "avg_latency_ms": 51709.3,
   "avg_cost_usd": null,
   "cost_known": false,
   "spine_disagreements": 0,

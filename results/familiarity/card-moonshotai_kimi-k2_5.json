@@ -1,11 +1,11 @@
 {
-  "model": "deepseek.v3.2",
+  "model": "moonshotai.kimi-k2.5",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "5/6",
+  "reached_rate": "6/6",
   "by_condition": {
     "cold": {
-      "reached": 2,
+      "reached": 3,
       "total": 3
     },
     "guided": {
@@ -14,8 +14,7 @@
     }
   },
   "divergence_counts": {
-    "better": 5,
-    "worse": 1
+    "better": 6
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -38,7 +37,7 @@
       "task_id": "revenuecat_permonth",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     }
@@ -54,17 +53,10 @@
     "debugger / implementer (mobile front-end)",
     "debugger / reviewer (API + business logic)"
   ],
-  "failure_modes": [
-    {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
-      "condition": "cold",
-      "how": "The model incorrectly assumes RevenueCat's priceString already includes period information like '/yr' or '/mo', but the known-correct outcome states that priceString is just the full-period price (e.g., '$79.99') without any period suffix. The model's fix unnecessarily removes the manual suffix logic and misattributes the bug to UI rendering, while the actual bug is in incorrectly assigning the full annual priceString to pricePerMonth without dividing by 12. The correct fix requires computing price/12 for annual plans, which the model only partially and conditionally includes."
-    }
-  ],
-  "avg_latency_ms": 6202.2,
-  "avg_cost_usd": 0.001032375,
-  "cost_known": true,
-  "spine_disagreements": 1,
+  "failure_modes": [],
+  "avg_latency_ms": 5515.8,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 0,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

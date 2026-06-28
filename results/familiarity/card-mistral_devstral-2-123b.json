@@ -1,5 +1,5 @@
 {
-  "model": "deepseek.v3.2",
+  "model": "mistral.devstral-2-123b",
   "n": 6,
   "date": "2026-06-27",
   "reached_rate": "5/6",
@@ -14,15 +14,15 @@
     }
   },
   "divergence_counts": {
-    "better": 5,
-    "worse": 1
+    "worse": 1,
+    "better": 5
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
       "task_id": "ios_zoom",
       "reached_any": true,
       "divergences": [
-        "cold:better",
+        "cold:worse",
         "guided:better"
       ]
     },
@@ -38,7 +38,7 @@
       "task_id": "revenuecat_permonth",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     }
@@ -56,15 +56,15 @@
   ],
   "failure_modes": [
     {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
       "condition": "cold",
-      "how": "The model incorrectly assumes RevenueCat's priceString already includes period information like '/yr' or '/mo', but the known-correct outcome states that priceString is just the full-period price (e.g., '$79.99') without any period suffix. The model's fix unnecessarily removes the manual suffix logic and misattributes the bug to UI rendering, while the actual bug is in incorrectly assigning the full annual priceString to pricePerMonth without dividing by 12. The correct fix requires computing price/12 for annual plans, which the model only partially and conditionally includes."
+      "how": "The model incorrectly identifies multiple 'solutions' and recommends combining maximum-scale with font size increase, while the known-correct outcome states that viewport locks (like maximum-scale) are inferior and harm accessibility. The model fails to recognize that setting font-size >=16px alone is the correct fix, and instead presents disabling zoom as an acceptable practice, which contradicts the accessibility guidance in the known outcome."
     }
   ],
-  "avg_latency_ms": 6202.2,
-  "avg_cost_usd": 0.001032375,
-  "cost_known": true,
+  "avg_latency_ms": 5997.0,
+  "avg_cost_usd": null,
+  "cost_known": false,
   "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

@@ -91,6 +91,7 @@ async def run_pilot(subjects: list[str] | None = None, judge_model: str = DEFAUL
                         latency_ms=rep.latency_ms,
                         cost_usd=rep.cost_usd,
                         agrees_with_spine=v.agrees_with_spine,
+                        answered=bool(rep.output and rep.output.strip()),
                     )
                 )
                 replays_dump.append(rep.to_dict())

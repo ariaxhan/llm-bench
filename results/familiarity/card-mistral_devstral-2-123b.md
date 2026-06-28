@@ -1,4 +1,4 @@
-# Model Card — deepseek.v3.2
+# Model Card — mistral.devstral-2-123b
 
 > Confidence: **Low (pilot, n=6 observations across 3 task types)** · generated 2026-06-27
 > Replay bootstrap (cold + guided). Every line traces to an observation below.
@@ -6,9 +6,9 @@
 ## At a glance
 - **Outcome reached:** 5/6 observations
   - cold: 2/3 · guided: 3/3
-- **Divergence mix:** {'better': 5, 'worse': 1}
-- **Avg latency:** 6202.2 ms
-- **Avg cost/task:** $0.001032
+- **Divergence mix:** {'worse': 1, 'better': 5}
+- **Avg latency:** 5997.0 ms
+- **Avg cost/task:** unknown (no public pricing recorded — not fabricated)
 - ⚠️ **Judge/spine disagreements:** 1 (surfaced, not hidden — see observations)
 
 ## Role signal (tentative — pilot n)
@@ -17,12 +17,12 @@
 - debugger / reviewer (API + business logic)
 
 ## Strengths (reached the outcome)
-- **mobile-web debugging (iOS WKWebView)** (ios_zoom) — cold:better, guided:better
+- **mobile-web debugging (iOS WKWebView)** (ios_zoom) — cold:worse, guided:better
 - **CSS layout / aspect-ratio debugging** (cover_crop) — cold:better, guided:better
-- **payments-logic / API-semantics debugging** (revenuecat_permonth) — cold:worse, guided:better
+- **payments-logic / API-semantics debugging** (revenuecat_permonth) — cold:better, guided:better
 
 ## Failure modes
-- **payments-logic / API-semantics debugging** (revenuecat_permonth, cold): The model incorrectly assumes RevenueCat's priceString already includes period information like '/yr' or '/mo', but the known-correct outcome states that priceString is just the full-period price (e.g., '$79.99') without any period suffix. The model's fix unnecessarily removes the manual suffix logic and misattributes the bug to UI rendering, while the actual bug is in incorrectly assigning the full annual priceString to pricePerMonth without dividing by 12. The correct fix requires computing price/12 for annual plans, which the model only partially and conditionally includes.
+- **mobile-web debugging (iOS WKWebView)** (ios_zoom, cold): The model incorrectly identifies multiple 'solutions' and recommends combining maximum-scale with font size increase, while the known-correct outcome states that viewport locks (like maximum-scale) are inferior and harm accessibility. The model fails to recognize that setting font-size >=16px alone is the correct fix, and instead presents disabling zoom as an acceptable practice, which contradicts the accessibility guidance in the known outcome.
 
 ## Best pairings
 - Insufficient data — pairings need multi-model co-runs (phase 2). Not inferred.
