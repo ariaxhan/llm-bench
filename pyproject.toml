@@ -53,6 +53,11 @@ select = ["E", "F", "I", "N", "W"]
 [tool.ruff.lint.per-file-ignores]
 "src/llm_bench/tests/*.py" = ["E501"]
 "experiments/*.py" = ["E501"]
+# Prompt/transcript-bearing modules: long strings are challenge prompts, known-correct
+# outcomes, and synthetic floor transcripts — exempt from line length like test prompts.
+"src/llm_bench/familiarity/challenges.py" = ["E501"]
+"src/llm_bench/familiarity/lhcr_judge.py" = ["E501"]
+"src/llm_bench/familiarity/lhcr.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

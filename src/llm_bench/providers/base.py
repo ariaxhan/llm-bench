@@ -37,6 +37,20 @@ class BaseProvider(ABC):
     ) -> LLMResponse:
         ...
 
+    async def converse(
+        self,
+        model: str,
+        system_prompt: str,
+        messages: list[dict],
+        max_tokens: int = 1024,
+        temperature: float = 0.0,
+    ) -> LLMResponse:
+        """Multi-turn completion. ``messages`` is an ordered list of
+        ``{"role": "user"|"assistant", "text": str}`` turns. Providers that only
+        support single-turn may leave this unimplemented; the multi-turn (LHCR)
+        harness requires it. Default raises so a missing impl fails loudly."""
+        raise NotImplementedError(f"{self.name} provider does not support multi-turn converse")
+
     @abstractmethod
     async def list_models(self) -> list[str]:
         ...

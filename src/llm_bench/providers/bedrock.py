@@ -91,16 +91,17 @@ class BedrockProvider(BaseProvider):
         self,
         model: str,
         system_prompt: str,
-        user_prompt: str,
+        messages: list[dict],
         max_tokens: int,
         temperature: float,
     ) -> dict:
+        """``messages`` is in Converse wire format:
+        ``[{"role": ..., "content": [{"text": ...}]}, ...]``."""
         import re
 
         from botocore.exceptions import ClientError
 
         client = self._runtime_client()
-        messages = [{"role": "user", "content": [{"text": user_prompt}]}]
         # Mutable so a per-model cap discovered mid-call (8192 on Llama 4, etc.) sticks
         # for the retry instead of re-tripping the same ValidationException.
         cap = max_tokens
@@ -157,26 +158,19 @@ class BedrockProvider(BaseProvider):
                     reasoning_parts.append(rt["text"])
         return "\n".join(text_parts).strip(), "\n".join(reasoning_parts).strip()
 
-    async def complete(
-        self,
-        model: str,
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = 1024,
-        temperature: float = 0.0,
-    ) -> LLMResponse:
-        t0 = time.perf_counter()
-        resp = await asyncio.to_thread(
-            self._converse_sync, model, system_prompt, user_prompt, max_tokens, temperature
-        )
-        latency_ms = (time.perf_counter() - t0) * 1000.0
+    @staticmethod
+    def _to_wire(messages: list[dict]) -> list[dict]:
+        """Convert simple ``{"role","text"}`` turns to Converse content blocks."""
+        return [
+            {"role": m["role"], "content": [{"text": m["text"]}]} for m in messages
+        ]
 
+    def _response_from(self, resp: dict, model: str, latency_ms: float) -> LLMResponse:
         content, reasoning = self._parse(resp)
         usage = resp.get("usage", {}) or {}
         in_tok = int(usage.get("inputTokens", 0))
         out_tok = int(usage.get("outputTokens", 0))
         total = int(usage.get("totalTokens", in_tok + out_tok))
-
         return LLMResponse(
             content=content,
             latency_ms=latency_ms,
@@ -188,6 +182,38 @@ class BedrockProvider(BaseProvider):
             cost_usd=_estimate_cost(model, in_tok, out_tok),
             reasoning=reasoning or None,
         )
+
+    async def complete(
+        self,
+        model: str,
+        system_prompt: str,
+        user_prompt: str,
+        max_tokens: int = 1024,
+        temperature: float = 0.0,
+    ) -> LLMResponse:
+        t0 = time.perf_counter()
+        wire = [{"role": "user", "content": [{"text": user_prompt}]}]
+        resp = await asyncio.to_thread(
+            self._converse_sync, model, system_prompt, wire, max_tokens, temperature
+        )
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+        return self._response_from(resp, model, latency_ms)
+
+    async def converse(
+        self,
+        model: str,
+        system_prompt: str,
+        messages: list[dict],
+        max_tokens: int = 1024,
+        temperature: float = 0.0,
+    ) -> LLMResponse:
+        t0 = time.perf_counter()
+        wire = self._to_wire(messages)
+        resp = await asyncio.to_thread(
+            self._converse_sync, model, system_prompt, wire, max_tokens, temperature
+        )
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+        return self._response_from(resp, model, latency_ms)
 
     async def list_models(self) -> list[str]:
         """ACTIVE inference-profile ids (a stable invocable subset of the catalog)."""

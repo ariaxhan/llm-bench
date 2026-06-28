@@ -26,3 +26,8 @@ results/*.json
 # Local editor / cache cruft
 _meta/.obsidian/
 _meta/.test-status
+
+# Frustration-mining corpus — verbatim user quotes + product internals; keep LOCAL.
+# Redact before publishing (see _meta/research/frustration-mining-2026-06-27.md §7), then git add -f.
+results/familiarity/frustration_episodes.json
+_meta/research/frustration-mining-2026-06-27.md
