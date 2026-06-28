@@ -26,3 +26,12 @@ results/*.json
 # Local editor / cache cruft
 _meta/.obsidian/
 _meta/.test-status
+
+# Frustration-mining corpus — verbatim user quotes + product internals; keep LOCAL.
+# Redact before publishing (see _meta/research/frustration-mining-2026-06-27.md §7), then git add -f.
+results/familiarity/frustration_episodes.json
+_meta/research/frustration-mining-2026-06-27.md
+
+# LHCR raw transcripts: 13MB+ of full conversations per run — regenerable blob, keep local.
+# The reviewable scores + judge rationale live in lhcr_env_verdicts.json (committed).
+results/familiarity/lhcr_env_transcripts.json

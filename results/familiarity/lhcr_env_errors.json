@@ -1,0 +1,98 @@
+[
+  {
+    "model": "us.amazon.nova-pro-v1:0",
+    "challenge": "camera_track_killed_by_hide",
+    "sample": 1,
+    "error": "subject: ValidationException: An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: Invalid Input: The input does not adhere to the expected standards. Please refer to the model user guide and adjust the input before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "hidden_button_layers",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "hidden_button_layers",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "ota_never_applies",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "silent_dead_engine",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "silent_dead_engine",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "ota_never_applies",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "reset_specificity_override",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "iap_entitlement_phantom",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "iap_entitlement_phantom",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "camera_track_killed_by_hide",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "launchd_exit126_phantom",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "launchd_exit126_phantom",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "wix_regen_green_tests_blind",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "camera_track_killed_by_hide",
+    "sample": 1,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "challenge": "wix_regen_green_tests_blind",
+    "sample": 0,
+    "error": "subject: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  }
+]
