@@ -1,0 +1,89 @@
+{
+  "model": "qwen.qwen3-coder-30b-a3b-v1:0",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "3/6",
+  "by_condition": {
+    "cold": {
+      "reached": 1,
+      "total": 3
+    },
+    "guided": {
+      "reached": 2,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 4,
+    "better": 1,
+    "equivalent": 1
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:better"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:equivalent"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "weaknesses": [
+    "payments-logic / API-semantics debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the root cause as iOS failing to restore zoom after keyboard dismissal, rather than correctly identifying that iOS auto-zooms on focus for inputs with font-size below 16px. It recommends the inferior viewport-lock fix (maximum-scale=1.0, user-scalable=no), which the known-correct outcome explicitly warns against due to accessibility harm. While it suggests setting font-size to 16px, it buries this within incorrect advice and promotes a harmful workaround, failing to prioritize the correct, accessibility-preserving solution."
+    },
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "cold",
+      "how": "The model initially misanalyzed the cropping direction, stating the card is wider and would crop sides, but then corrected to top/bottom. Despite arriving at the correct fix (matching aspect ratios), the confusion in reasoning and incorrect intermediate logic makes the explanation less reliable than the known-correct outcome."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model answer incorrectly assumes that pkg.product.priceString includes the period (like '/yr') and focuses on parsing or replacing it, but the known-correct outcome states that priceString is just the full-period price amount (e.g., $79.99) without any '/yr' suffix. The model overcomplicates the fix with string parsing and multiple options, while the correct fix is simply to divide the annual price by 12 to compute pricePerMonth, not reuse priceString directly."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model incorrectly assumes RevenueCat provides a pricePerMonth field. The known-correct outcome states that pkg.product.priceString is the full-period price and must be divided by 12 for annual plans to get the monthly equivalent. The model's proposed fix relies on a non-existent or unverified pricePerMonth field, which does not align with the actual solution of computing price / 12."
+    }
+  ],
+  "avg_latency_ms": 10971.7,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 3,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

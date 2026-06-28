@@ -2,19 +2,20 @@
   "model": "mistral.mistral-large-3-675b-instruct",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "6/6",
+  "reached_rate": "5/6",
   "by_condition": {
     "cold": {
       "reached": 3,
       "total": 3
     },
     "guided": {
-      "reached": 3,
+      "reached": 2,
       "total": 3
     }
   },
   "divergence_counts": {
-    "better": 6
+    "better": 5,
+    "worse": 1
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -22,7 +23,7 @@
       "reached_any": true,
       "divergences": [
         "cold:better",
-        "guided:better"
+        "guided:worse"
       ]
     },
     "CSS layout / aspect-ratio debugging": {
@@ -53,10 +54,17 @@
     "debugger / implementer (mobile front-end)",
     "debugger / reviewer (API + business logic)"
   ],
-  "failure_modes": [],
-  "avg_latency_ms": 2998.7,
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model incorrectly recommends adding `minimum-scale=1.0` to prevent zoom, which does not stop iOS from auto-zooming on small font inputs and risks locking zoom if combined with `maximum-scale`. The known-correct outcome states that setting the font-size to >=16px is the proper fix, and that viewport-based locks harm accessibility. The model also suggests a JavaScript workaround and Capacitor config changes that are unnecessary and not part of the correct solution."
+    }
+  ],
+  "avg_latency_ms": 2988.3,
   "avg_cost_usd": null,
   "cost_known": false,
-  "spine_disagreements": 0,
+  "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

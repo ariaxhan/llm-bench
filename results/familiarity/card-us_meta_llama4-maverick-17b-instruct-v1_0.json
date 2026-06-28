@@ -1,0 +1,83 @@
+{
+  "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "4/6",
+  "by_condition": {
+    "cold": {
+      "reached": 2,
+      "total": 3
+    },
+    "guided": {
+      "reached": 2,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "equivalent": 1,
+    "worse": 3,
+    "better": 2
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:equivalent",
+        "guided:worse"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "payments-logic / API-semantics debugging"
+  ],
+  "weaknesses": [
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model identifies the root cause correctly and proposes the correct fix of setting font-size to >=16px, but it also recommends the inferior viewport-lock solution (maximum-scale=1, user-scalable=no) as a valid alternative without sufficiently condemning it as accessibility-harming, which contradicts the known-correct outcome that explicitly states this fix is inferior and harms accessibility."
+    },
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "cold",
+      "how": "The model misidentifies the aspect ratio relationship, claiming the 9:16 strip is 'taller and narrower' than 3:4 (correct) but then incorrectly states the cover card is 'wider'\u2014it is actually shorter in height relative to width. The proposed fix using `object-position: top` only changes what part is cropped, not the root cause. The correct fix, matching the cover card's aspect ratio to 9:16, is mentioned as an alternative but dismissed, failing to reach the known-correct outcome as the primary solution."
+    },
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "guided",
+      "how": "The model answer incorrectly suggests using `object-position: top` to control cropping as the fix, rather than aligning the container's aspect ratio with the image's 9:16 ratio. The known-correct outcome requires changing the `.cover-card` aspect ratio to 9:16 to prevent unwanted cropping, but the model misses this fundamental fix and instead proposes a partial workaround that does not fully resolve the aspect-ratio mismatch."
+    }
+  ],
+  "avg_latency_ms": 2884.6,
+  "avg_cost_usd": 0.00054772,
+  "cost_known": true,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

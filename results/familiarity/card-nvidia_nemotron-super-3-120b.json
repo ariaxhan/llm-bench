@@ -1,0 +1,76 @@
+{
+  "model": "nvidia.nemotron-super-3-120b",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "4/6",
+  "by_condition": {
+    "cold": {
+      "reached": 3,
+      "total": 3
+    },
+    "guided": {
+      "reached": 1,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "better": 4,
+    "worse": 2
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:worse"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging",
+    "payments-logic / API-semantics debugging"
+  ],
+  "weaknesses": [],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "guided",
+      "how": "The model incorrectly identifies 'object-fit: contain' as the fix, but the known-correct outcome states the root issue is the aspect-ratio mismatch and the correct fix is to change the container's aspect-ratio to 9/16 to match the image. Using 'contain' would preserve the entire image but within the wrong container shape, potentially introducing unwanted letterboxing, rather than aligning the container with the image's natural aspect ratio as intended."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model incorrectly concludes the bug is in the UI, not the mapping code, and recommends keeping the flawed `pricePerMonth: pkg.product.priceString` assignment. The known-correct outcome states the bug is exactly there \u2014 `priceString` is the full-period price, so assigning it directly to `pricePerMonth` is wrong. The fix must compute `pricePerMonth` as `price / 12` for annual plans, not rely on the UI to correct a semantically broken field."
+    }
+  ],
+  "avg_latency_ms": 25032.7,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

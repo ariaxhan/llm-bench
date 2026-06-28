@@ -1,38 +1,32 @@
 [
   {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
-    "task": "ios_zoom",
-    "condition": "cold",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
-  },
-  {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "model": "us.writer.palmyra-x5-v1:0",
     "task": "ios_zoom",
     "condition": "guided",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
   },
   {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "model": "us.writer.palmyra-x5-v1:0",
     "task": "cover_crop",
     "condition": "cold",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
   },
   {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "model": "us.writer.palmyra-x5-v1:0",
     "task": "cover_crop",
     "condition": "guided",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
   },
   {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "model": "us.writer.palmyra-x5-v1:0",
     "task": "revenuecat_permonth",
     "condition": "cold",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
   },
   {
-    "model": "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "model": "us.writer.palmyra-x5-v1:0",
     "task": "revenuecat_permonth",
     "condition": "guided",
-    "error": "ValidationException: An error occurred (ValidationException) when calling the Converse operation: The maximum tokens you requested exceeds the model limit of 8192. Try again with a maximum tokens value that is lower than 8192."
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
   }
 ]

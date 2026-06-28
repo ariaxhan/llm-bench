@@ -1,33 +1,49 @@
-# Model Card — nvidia.nemotron-nano-12b-v2
+# Model Card — `nvidia.nemotron-nano-12b-v2`
 
-> Confidence: **Low (pilot, n=6 observations across 3 task types)** · generated 2026-06-27
-> Replay bootstrap (cold + guided). Every line traces to an observation below.
+> **Outcome reached: 2/6** (cold 1/3 · guided 1/3) · confidence **Low** (pilot, n=6) · generated 2026-06-27
+> Detailed replay profile. Every quote below is the model's own output, verbatim.
 
 ## At a glance
-- **Outcome reached:** 1/6 observations
-  - cold: 1/3 · guided: 0/3
-- **Divergence mix:** {'worse': 5, 'better': 1}
-- **Avg latency:** 2698.1 ms
-- **Avg cost/task:** unknown (no public pricing recorded — not fabricated)
-- ⚠️ **Judge/spine disagreements:** 5 (surfaced, not hidden — see observations)
+- **Reached the root cause:** 2/6 cells
+- **Cold vs guided:** 1/3 unaided · 1/3 after a bare "still broken" follow-up
+- **Latency:** 2770 ms median (2604–3200)
+- **Answer length:** 480 output tokens median
+- **Cost/task:** unknown (no public pricing recorded — not fabricated)
+- ⚠️ **Judge/spine disagreements:** 4 (surfaced, not hidden)
 
-## Role signal (tentative — pilot n)
-- debugger / implementer (CSS layout)
+## Signature quirks
+_Behavioural tics, each anchored to a count from the runs._
 
-## Strengths (reached the outcome)
-- **CSS layout / aspect-ratio debugging** (cover_crop) — cold:better, guided:worse
+- **Commits to one fix** — rarely enumerates alternatives (avg 0.0 option blocks/answer).
+
+## Task by task
+
+### aspect-ratio crop (CSS layout)
+- **cold** — ✅ reached (better). The model answer correctly identifies the aspect-ratio mismatch and prescribes the correct fix of setting the container to 9/16. It goes further by offering a well-reasoned alternative with `object-fit: contain` and explaining trade-offs, making it more complete and user-aware than the…
+  > The issue arises because the .cover-card is styled with an aspect-ratio: 3/4 (3:4), which is wider than the photo strip's 9:16 aspect ratio (tall and narrow).
+- **guided** — ✅ reached (better). The model answer correctly identifies the aspect-ratio mismatch and provides the correct fix of changing the cover-card to 9/16. It goes further by clearly explaining the root cause, illustrating with example dimensions, and presenting complete corrected code, making it more comprehensive than the…
+  > The issue arises because the .cover-card is styled with an aspect-ratio: 3/4 (3:4), which is wider than the 9:16 (tall and narrow) photo strip.
+
+### iOS WKWebView auto-zoom (mobile-web)
+- **cold** — ❌ missed (worse). The model incorrectly identifies the root cause as a combination of viewport settings and font inheritance, and recommends the inferior 'user-scalable=no' fix despite acknowledging its accessibility downsides. The known-correct outcome states that iOS auto-zooms specifically when input font size is…
+  > The root cause of the zoom behavior when tapping the note input field on iOS is the combination of the viewport meta tag and the font: inherit property on the .desk-input element.
+- **guided** — ❌ missed (worse). The model incorrectly identifies the root cause as the combination of `initial-scale=1.0` and font inheritance, and recommends removing `initial-scale=1.0`, which is not the issue. The known-correct outcome states the real cause is iOS auto-zooming on inputs with font size under 16px, and the…
+  > The root cause of the zoom behavior is the combination of initial-scale=1.0 in the viewport meta tag and the font: inherit property on the input field.
+
+### per-month price bug (payments logic)
+- **cold** — ❌ missed (worse). The model incorrectly assumes that pkg.product.priceString represents a monthly price and that the bug is in the 'price' field formatting. However, the known-correct outcome states that priceString is the full-period price (e.g., $79.99/year for annual), and the real bug is assigning this…
+  > The bug lies in the price field of the returned object.
+- **guided** — ❌ missed (worse). The model answer incorrectly assumes RevenueCat's priceString for annual plans is already a per-month value (e.g., $6.67/mo), but the known-correct outcome states that priceString is the full-period price ($79.99/year). The model's fix retains priceString unmodified, which perpetuates the bug by…
+  > The bug is in the price field of the returned object.
 
 ## Failure modes
-- **mobile-web debugging (iOS WKWebView)** (ios_zoom, cold): The model misidentifies the root cause, attributing the zoom to 'Auto-resizing text' and inheritance from a larger parent font, whereas the actual cause is iOS zooming on inputs with font size below 16px. The model correctly suggests setting font-size to 16px or 1rem as a fix, but misunderstands the mechanism, leading to an incorrect explanation and flawed accessibility discussion.
-- **mobile-web debugging (iOS WKWebView)** (ios_zoom, guided): The model answer incorrectly attributes the zoom to iOS 'Dynamic Type' and inheritance of a larger font size, when the actual cause is iOS auto-zooming on inputs with font size below 16px. The model suggests setting font-size to 1rem or 16px but frames it around preventing inheritance of larger text, missing the core issue. It also proposes an irrelevant media query for dark mode as an accessibility solution, failing to acknowledge that locking font size can harm accessibility by overriding user preferences.
-- **CSS layout / aspect-ratio debugging** (cover_crop, guided): The model incorrectly claims the photo strip's 9:16 aspect ratio is approximately compatible with the 3:4 cover card, and suggests the strips may be 3:4 or that cropping is intentional. The known-correct outcome identifies the core issue: 9:16 (0.5625) and 3:4 (0.75) are mismatched, causing cropping via object-fit: cover, and the fix is to align the container's aspect ratio to 9:16. The model instead advises making the image 3:4, which contradicts the facts and misses the correct fix.
-- **payments-logic / API-semantics debugging** (revenuecat_permonth, cold): The model answer incorrectly assumes RevenueCat's priceString represents a monthly equivalent (e.g., '$6.67/mo'), but the known-correct outcome states that priceString is the full-period price ($79.99/year). The model misidentifies the bug as a formatting issue when it is actually a logic error in reusing the full price as if it were per-month. The correct fix requires computing pricePerMonth as price / 12, which the model answer does not propose.
-- **payments-logic / API-semantics debugging** (revenuecat_permonth, guided): The model answer incorrectly identifies the bug as redundant appending of '/yr' or '/mo' to priceString, but the real issue is that pricePerMonth is incorrectly assigned the full annual priceString instead of computing the monthly equivalent (e.g., $79.99/12 ≈ $6.67). The known-correct outcome requires computing per-month value from the annual price, which the model answer does not address.
-
-## Best pairings
-- Insufficient data — pairings need multi-model co-runs (phase 2). Not inferred.
+- **ios_zoom / cold** (worse): The model incorrectly identifies the root cause as a combination of viewport settings and font inheritance, and recommends the inferior 'user-scalable=no' fix despite acknowledging its accessibility downsides. The known-correct outcome…
+- **ios_zoom / guided** (worse): The model incorrectly identifies the root cause as the combination of `initial-scale=1.0` and font inheritance, and recommends removing `initial-scale=1.0`, which is not the issue. The known-correct outcome states the real cause is iOS…
+- **revenuecat_permonth / cold** (worse): The model incorrectly assumes that pkg.product.priceString represents a monthly price and that the bug is in the 'price' field formatting. However, the known-correct outcome states that priceString is the full-period price (e.g.,…
+- **revenuecat_permonth / guided** (worse): The model answer incorrectly assumes RevenueCat's priceString for annual plans is already a per-month value (e.g., $6.67/mo), but the known-correct outcome states that priceString is the full-period price ($79.99/year). The model's fix…
 
 ## Provenance
-- n = 6 observations (3 real mined tasks x 2 conditions).
-- Outcomes judged by an LLM judge anchored to the objective outcome, floor-tested live (garbage -> not-reached; differently-worded-correct -> reached).
-- Pilot != powered. Trust resets on model version change.
+- n = 6 cells (3 real mined bugs × cold/guided). Pilot, not powered.
+- Outcomes judged by an LLM judge anchored to the objective root cause, floor-tested live before the run (garbage→missed, differently-worded-correct→reached).
+- Quirks are computed deterministically from the saved outputs (token counts, regex tallies, cold↔guided flips) — no LLM-as-judge in the quirk layer.
+- Trust resets on any model-version change.

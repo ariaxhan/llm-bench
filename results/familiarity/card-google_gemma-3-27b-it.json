@@ -1,0 +1,82 @@
+{
+  "model": "google.gemma-3-27b-it",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "3/6",
+  "by_condition": {
+    "cold": {
+      "reached": 1,
+      "total": 3
+    },
+    "guided": {
+      "reached": 2,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 3,
+    "better": 3
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:better"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "weaknesses": [
+    "payments-logic / API-semantics debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the root cause as iOS's general zoom behavior on keyboard appearance and recommends disabling user-scalable as the preferred fix, which contradicts the known-correct outcome. The correct cause is iOS auto-zooming specifically due to input font-size < 16px, and the correct fix is increasing the input's font-size to >=16px, not locking the viewport. The model's recommended solution harms accessibility by disabling pinch-zoom, which the known-correct outcome explicitly warns against."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model answer incorrectly assumes RevenueCat provides a correct monthly equivalent for annual plans and that leaving `pricePerMonth` as `pkg.product.priceString` is acceptable. The known-correct outcome states that `pkg.product.priceString` is the full-period price ($79.99/year), not a per-month value, so assigning it directly to `pricePerMonth` causes the bug. The fix requires computing `pricePerMonth` as `price / 12`, not reusing `priceString`. The model answer fails to identify this core issue and thus does not reach the correct outcome."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model incorrectly redefines the `price` field to show the per-month value for annual plans (e.g., '$6.67/mo'), but the known-correct outcome states the `price` should remain '$79.99/yr' for annual plans. The bug is in `pricePerMonth`, which should be computed as `price / 12`, not reused from `priceString`. The model misidentifies which field is broken and applies the fix to the wrong field."
+    }
+  ],
+  "avg_latency_ms": 12542.2,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 3,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

@@ -2,20 +2,20 @@
   "model": "nvidia.nemotron-nano-12b-v2",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "1/6",
+  "reached_rate": "2/6",
   "by_condition": {
     "cold": {
       "reached": 1,
       "total": 3
     },
     "guided": {
-      "reached": 0,
+      "reached": 1,
       "total": 3
     }
   },
   "divergence_counts": {
-    "worse": 5,
-    "better": 1
+    "worse": 4,
+    "better": 2
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -31,7 +31,7 @@
       "reached_any": true,
       "divergences": [
         "cold:better",
-        "guided:worse"
+        "guided:better"
       ]
     },
     "payments-logic / API-semantics debugging": {
@@ -58,36 +58,30 @@
       "task_id": "ios_zoom",
       "capability": "mobile-web debugging (iOS WKWebView)",
       "condition": "cold",
-      "how": "The model misidentifies the root cause, attributing the zoom to 'Auto-resizing text' and inheritance from a larger parent font, whereas the actual cause is iOS zooming on inputs with font size below 16px. The model correctly suggests setting font-size to 16px or 1rem as a fix, but misunderstands the mechanism, leading to an incorrect explanation and flawed accessibility discussion."
+      "how": "The model incorrectly identifies the root cause as a combination of viewport settings and font inheritance, and recommends the inferior 'user-scalable=no' fix despite acknowledging its accessibility downsides. The known-correct outcome states that iOS auto-zooms specifically when input font size is under 16px, and the correct fix is setting font-size >=16px\u2014without needing viewport locks. The model mentions setting font-size: 16px but pairs it with the harmful viewport change, failing to identify that the font size alone is the proper solution."
     },
     {
       "task_id": "ios_zoom",
       "capability": "mobile-web debugging (iOS WKWebView)",
       "condition": "guided",
-      "how": "The model answer incorrectly attributes the zoom to iOS 'Dynamic Type' and inheritance of a larger font size, when the actual cause is iOS auto-zooming on inputs with font size below 16px. The model suggests setting font-size to 1rem or 16px but frames it around preventing inheritance of larger text, missing the core issue. It also proposes an irrelevant media query for dark mode as an accessibility solution, failing to acknowledge that locking font size can harm accessibility by overriding user preferences."
-    },
-    {
-      "task_id": "cover_crop",
-      "capability": "CSS layout / aspect-ratio debugging",
-      "condition": "guided",
-      "how": "The model incorrectly claims the photo strip's 9:16 aspect ratio is approximately compatible with the 3:4 cover card, and suggests the strips may be 3:4 or that cropping is intentional. The known-correct outcome identifies the core issue: 9:16 (0.5625) and 3:4 (0.75) are mismatched, causing cropping via object-fit: cover, and the fix is to align the container's aspect ratio to 9:16. The model instead advises making the image 3:4, which contradicts the facts and misses the correct fix."
+      "how": "The model incorrectly identifies the root cause as the combination of `initial-scale=1.0` and font inheritance, and recommends removing `initial-scale=1.0`, which is not the issue. The known-correct outcome states the real cause is iOS auto-zooming on inputs with font size under 16px, and the correct fix is setting input font-size \u226516px. The model's suggestion to remove `initial-scale` misunderstands iOS viewport behavior and could lead to unintended layout consequences, while its proposed fix does not address the core issue of sub-16px font triggering zoom."
     },
     {
       "task_id": "revenuecat_permonth",
       "capability": "payments-logic / API-semantics debugging",
       "condition": "cold",
-      "how": "The model answer incorrectly assumes RevenueCat's priceString represents a monthly equivalent (e.g., '$6.67/mo'), but the known-correct outcome states that priceString is the full-period price ($79.99/year). The model misidentifies the bug as a formatting issue when it is actually a logic error in reusing the full price as if it were per-month. The correct fix requires computing pricePerMonth as price / 12, which the model answer does not propose."
+      "how": "The model incorrectly assumes that pkg.product.priceString represents a monthly price and that the bug is in the 'price' field formatting. However, the known-correct outcome states that priceString is the full-period price (e.g., $79.99/year for annual), and the real bug is assigning this full-period price to 'pricePerMonth' without dividing by 12. The model's fix incorrectly multiplies the monthly rate by 12, which is the reverse of the correct logic and would produce wrong annual totals."
     },
     {
       "task_id": "revenuecat_permonth",
       "capability": "payments-logic / API-semantics debugging",
       "condition": "guided",
-      "how": "The model answer incorrectly identifies the bug as redundant appending of '/yr' or '/mo' to priceString, but the real issue is that pricePerMonth is incorrectly assigned the full annual priceString instead of computing the monthly equivalent (e.g., $79.99/12 \u2248 $6.67). The known-correct outcome requires computing per-month value from the annual price, which the model answer does not address."
+      "how": "The model answer incorrectly assumes RevenueCat's priceString for annual plans is already a per-month value (e.g., $6.67/mo), but the known-correct outcome states that priceString is the full-period price ($79.99/year). The model's fix retains priceString unmodified, which perpetuates the bug by showing $79.99/mo instead of computing $6.67/mo. The correct fix requires dividing the annual price by 12, which the model answer does not do."
     }
   ],
-  "avg_latency_ms": 2698.1,
+  "avg_latency_ms": 2837.2,
   "avg_cost_usd": null,
   "cost_known": false,
-  "spine_disagreements": 5,
+  "spine_disagreements": 4,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

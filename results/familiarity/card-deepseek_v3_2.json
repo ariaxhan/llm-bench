@@ -14,8 +14,8 @@
     }
   },
   "divergence_counts": {
-    "better": 5,
-    "worse": 1
+    "better": 4,
+    "worse": 2
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -23,7 +23,7 @@
       "reached_any": true,
       "divergences": [
         "cold:better",
-        "guided:better"
+        "guided:worse"
       ]
     },
     "CSS layout / aspect-ratio debugging": {
@@ -56,14 +56,20 @@
   ],
   "failure_modes": [
     {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model answer correctly identifies the root cause and the primary fix (setting font-size to >=16px), but then recommends a viewport meta tag with maximum-scale=1 and user-scalable=no as a fallback, which the known-correct outcome explicitly rejects as inferior due to accessibility harm. It also introduces unnecessary JavaScript solutions, which are not part of the correct fix and could introduce side effects. While it acknowledges the accessibility tradeoff, it still promotes a less-accessible solution as an option, making the advice less correct overall."
+    },
+    {
       "task_id": "revenuecat_permonth",
       "capability": "payments-logic / API-semantics debugging",
       "condition": "cold",
-      "how": "The model incorrectly assumes RevenueCat's priceString already includes period information like '/yr' or '/mo', but the known-correct outcome states that priceString is just the full-period price (e.g., '$79.99') without any period suffix. The model's fix unnecessarily removes the manual suffix logic and misattributes the bug to UI rendering, while the actual bug is in incorrectly assigning the full annual priceString to pricePerMonth without dividing by 12. The correct fix requires computing price/12 for annual plans, which the model only partially and conditionally includes."
+      "how": "The model answer incorrectly assumes RevenueCat's priceString includes period information and misidentifies the root cause. The known-correct outcome states that priceString contains only the raw price (e.g., '$79.99') without any period suffix, and the bug is in directly assigning priceString to pricePerMonth. The model's proposed fix incorrectly relies on introPrice and does not address the core issue: for annual plans, pricePerMonth must be derived by dividing the annual price by 12, not copied from priceString."
     }
   ],
-  "avg_latency_ms": 6202.2,
-  "avg_cost_usd": 0.001032375,
+  "avg_latency_ms": 5464.1,
+  "avg_cost_usd": 0.0010836133333333334,
   "cost_known": true,
   "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"

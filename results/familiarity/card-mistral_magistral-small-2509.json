@@ -1,0 +1,93 @@
+{
+  "model": "mistral.magistral-small-2509",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "1/6",
+  "by_condition": {
+    "cold": {
+      "reached": 1,
+      "total": 3
+    },
+    "guided": {
+      "reached": 0,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 5,
+    "better": 1
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:worse"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "weaknesses": [
+    "mobile-web debugging (iOS WKWebView)",
+    "payments-logic / API-semantics debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the root cause as general touch handling and suggests viewport locking or CSS workarounds, while missing the key fact that iOS auto-zooms on inputs with font-size below 16px. It recommends `maximum-scale=1.0, user-scalable=no` which is explicitly called out in the correct outcome as inferior due to accessibility harm, and fails to prescribe the correct fix of setting the input font-size to >=16px."
+    },
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model answer incorrectly identifies the root cause as general touch handling differences rather than the specific iOS behavior of zooming on inputs with font-size below 16px. It recommends the inferior viewport-lock fix (maximum-scale=1, user-scalable=no), which the known-correct outcome explicitly states harms accessibility and is not the correct solution. The correct fix\u2014setting the input font-size to >=16px\u2014is not mentioned."
+    },
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "guided",
+      "how": "The model incorrectly recommends changing the cover card's aspect ratio to 16/9, which is the inverse of the correct 9/16 ratio, and suggests using object-fit: contain, which would not fill the container as intended. The known-correct outcome requires matching the card's aspect ratio to the image's 9:16 and retaining object-fit: cover to avoid letterboxing, which the model fails to correctly specify."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the bug as a double-appending of period units or a flag/priceString formatting issue with RevenueCat, when the actual bug is misusing the full-period priceString as a per-month value. The known-correct outcome requires computing pricePerMonth as price divided by 12, but the model suggests using priceString directly, which fails to fix the core issue."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model incorrectly states that the existing code is correct and suggests no real fix is needed, even recommending logging and external checks instead of addressing the core issue. The known-correct outcome requires computing pricePerMonth as price divided by 12 for annual plans, but the model falsely claims pkg.product.priceString is already correctly computed per-period by RevenueCat, which contradicts the bug report and the correct outcome."
+    }
+  ],
+  "avg_latency_ms": 5850.7,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 4,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

@@ -1,0 +1,70 @@
+{
+  "model": "qwen.qwen3-coder-480b-a35b-v1:0",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "6/6",
+  "by_condition": {
+    "cold": {
+      "reached": 3,
+      "total": 3
+    },
+    "guided": {
+      "reached": 3,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "better": 5,
+    "worse": 1
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:worse"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging",
+    "payments-logic / API-semantics debugging"
+  ],
+  "weaknesses": [],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "guided",
+      "how": "The model correctly identifies the aspect-ratio mismatch and suggests fixing the container to 9/16, which aligns with the known-correct outcome. However, it unnecessarily changes object-fit to 'contain', which would prevent cropping but may introduce letterboxing; 'cover' would work fine with matching aspect ratios. The fix is partially correct but includes an incorrect recommendation that deviates from the optimal solution."
+    }
+  ],
+  "avg_latency_ms": 4306.4,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 0,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

@@ -14,8 +14,7 @@
     }
   },
   "divergence_counts": {
-    "better": 5,
-    "equivalent": 1
+    "better": 6
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
@@ -30,7 +29,7 @@
       "task_id": "cover_crop",
       "reached_any": true,
       "divergences": [
-        "cold:equivalent",
+        "cold:better",
         "guided:better"
       ]
     },
@@ -55,8 +54,8 @@
     "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [],
-  "avg_latency_ms": 16714.8,
-  "avg_cost_usd": 0.014318550000000001,
+  "avg_latency_ms": 16271.2,
+  "avg_cost_usd": 0.015325200000000002,
   "cost_known": true,
   "spine_disagreements": 0,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"

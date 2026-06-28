@@ -54,7 +54,7 @@
     "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [],
-  "avg_latency_ms": 5515.8,
+  "avg_latency_ms": 3697.7,
   "avg_cost_usd": null,
   "cost_known": false,
   "spine_disagreements": 0,
