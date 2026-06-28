@@ -1,6 +1,6 @@
 """Replay-bootstrap pilot — the smallest honest loop, run end to end.
 
-floor-gate the judge -> replay 3 real tasks through 2 non-Claude models (cold + guided)
+floor-gate the judge -> replay 3 real tasks through N non-Claude models (cold + guided)
 -> judge each against the objective outcome -> render Model Cards from real observations.
 
 Run: ``AWS_PROFILE=keystone python -m llm_bench.familiarity.pilot``
@@ -19,7 +19,6 @@ from pathlib import Path
 from llm_bench.familiarity.card import (
     Observation,
     build_card,
-    render_card_md,
     render_comparison,
 )
 from llm_bench.familiarity.floor import run_floor
@@ -28,23 +27,63 @@ from llm_bench.familiarity.replay import CONDITIONS, replay_task
 from llm_bench.familiarity.tasks import load_tasks
 from llm_bench.providers import get_provider
 
+# 32 non-Claude Bedrock models (us-west-2), all smoke-tested invocable 2026-06-27.
+# The judge (qwen.qwen3-235b-a22b-2507) is deliberately NOT a subject — it can't grade
+# itself. Some ids need the `us.` inference-profile prefix to invoke (Llama/Nova/Palmyra).
 SUBJECT_MODELS = [
+    # DeepSeek
     "deepseek.v3.2",
     "us.deepseek.r1-v1:0",
+    # MiniMax
     "minimax.minimax-m2",
+    "minimax.minimax-m2.1",
     "minimax.minimax-m2.5",
+    # Mistral
     "mistral.mistral-large-3-675b-instruct",
     "mistral.devstral-2-123b",
+    "mistral.magistral-small-2509",
+    "mistral.ministral-3-14b-instruct",
+    # Moonshot
     "moonshotai.kimi-k2.5",
+    "moonshot.kimi-k2-thinking",
+    # OpenAI (open weights)
     "openai.gpt-oss-120b-1:0",
-    "nvidia.nemotron-nano-12b-v2",
+    "openai.gpt-oss-20b-1:0",
+    # Qwen (judge family, but distinct models; floor-test guards affinity)
+    "qwen.qwen3-32b-v1:0",
+    "qwen.qwen3-next-80b-a3b",
+    "qwen.qwen3-coder-480b-a35b-v1:0",
+    "qwen.qwen3-coder-30b-a3b-v1:0",
+    # Z.AI / GLM
     "zai.glm-4.7-flash",
+    "zai.glm-4.7",
+    "zai.glm-5",
+    # Google Gemma
+    "google.gemma-3-27b-it",
+    "google.gemma-3-12b-it",
+    # Meta Llama
     "us.meta.llama4-maverick-17b-instruct-v1:0",
+    "us.meta.llama4-scout-17b-instruct-v1:0",
+    "us.meta.llama3-3-70b-instruct-v1:0",
+    # NVIDIA Nemotron
+    "nvidia.nemotron-super-3-120b",
+    "nvidia.nemotron-nano-3-30b",
+    "nvidia.nemotron-nano-12b-v2",
+    "nvidia.nemotron-nano-9b-v2",
+    # Amazon Nova
+    "us.amazon.nova-pro-v1:0",
+    "us.amazon.nova-2-lite-v1:0",
+    # Writer
+    "us.writer.palmyra-x5-v1:0",
 ]
 OUT_DIR = Path(__file__).resolve().parents[3] / "results" / "familiarity"
 
 
-async def run_pilot(subjects: list[str] | None = None, judge_model: str = DEFAULT_JUDGE_MODEL):
+async def run_pilot(
+    subjects: list[str] | None = None,
+    judge_model: str = DEFAULT_JUDGE_MODEL,
+    concurrency: int = 6,
+):
     subjects = subjects or SUBJECT_MODELS
     provider = get_provider("bedrock")
     today = datetime.date.today().isoformat()
@@ -66,39 +105,52 @@ async def run_pilot(subjects: list[str] | None = None, judge_model: str = DEFAUL
     verdicts_dump: list[dict] = []
 
     errors: list[dict] = []
-    for model in subjects:
-        for task in tasks:
-            for condition in CONDITIONS:
-                # Per-cell resilience: one model's timeout/throttle must not kill the sweep.
+    # Bounded concurrency: cells are independent, so run several at once. The semaphore
+    # caps in-flight Bedrock calls (provider has adaptive retries for throttling). Per-cell
+    # try/except keeps one model's timeout/throttle from aborting the whole sweep.
+    sem = asyncio.Semaphore(concurrency)
+    cells = [(m, t, c) for m in subjects for t in tasks for c in CONDITIONS]
+
+    async def run_cell(model: str, task, condition: str):
+        async with sem:
+            try:
                 # 12000 max_tokens gives reasoning models room (4096 left them empty).
-                try:
-                    rep = await replay_task(task, provider, model, condition, max_tokens=12000)
-                    v = await judge(task, rep.output, provider, judge_model=judge_model)
-                except Exception as e:  # noqa: BLE001 — record + continue, don't abort 11 models
-                    errors.append({"model": model, "task": task.task_id,
-                                   "condition": condition, "error": f"{type(e).__name__}: {e}"})
-                    print(f"{model:42} {task.task_id:10} {condition:7} ERROR {type(e).__name__}")
-                    continue
-                observations.append(
-                    Observation(
-                        task_id=task.task_id,
-                        capability=task.capability,
-                        model=model,
-                        condition=condition,
-                        reached=v.reached,
-                        divergence=v.divergence,
-                        how=v.how,
-                        latency_ms=rep.latency_ms,
-                        cost_usd=rep.cost_usd,
-                        agrees_with_spine=v.agrees_with_spine,
-                        answered=bool(rep.output and rep.output.strip()),
-                    )
-                )
-                replays_dump.append(rep.to_dict())
-                verdicts_dump.append(v.to_dict())
-                flag = "" if v.agrees_with_spine else "  ⚠ spine-disagree"
-                print(f"{model:42} {task.task_id:10} {condition:7} "
-                      f"reached={str(v.reached):5} {v.divergence:11}{flag}")
+                rep = await replay_task(task, provider, model, condition, max_tokens=12000)
+                v = await judge(task, rep.output, provider, judge_model=judge_model)
+            except Exception as e:  # noqa: BLE001 — record + continue, never abort the sweep
+                print(f"{model:42} {task.task_id:10} {condition:7} ERROR {type(e).__name__}")
+                return ("err", model, task, condition, f"{type(e).__name__}: {e}")
+            flag = "" if v.agrees_with_spine else "  ⚠ spine-disagree"
+            print(f"{model:42} {task.task_id:10} {condition:7} "
+                  f"reached={str(v.reached):5} {v.divergence:11}{flag}")
+            return ("ok", model, task, condition, rep, v)
+
+    cell_results = await asyncio.gather(*[run_cell(m, t, c) for m, t, c in cells])
+
+    for res in cell_results:
+        if res[0] == "err":
+            _, model, task, condition, err = res
+            errors.append({"model": model, "task": task.task_id,
+                           "condition": condition, "error": err})
+            continue
+        _, model, task, condition, rep, v = res
+        observations.append(
+            Observation(
+                task_id=task.task_id,
+                capability=task.capability,
+                model=model,
+                condition=condition,
+                reached=v.reached,
+                divergence=v.divergence,
+                how=v.how,
+                latency_ms=rep.latency_ms,
+                cost_usd=rep.cost_usd,
+                agrees_with_spine=v.agrees_with_spine,
+                answered=bool(rep.output and rep.output.strip()),
+            )
+        )
+        replays_dump.append(rep.to_dict())
+        verdicts_dump.append(v.to_dict())
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "observations.json").write_text(
@@ -112,23 +164,27 @@ async def run_pilot(subjects: list[str] | None = None, judge_model: str = DEFAUL
         for e in errors:
             print(f"  {e['model']} {e['task']}/{e['condition']}: {e['error'][:80]}")
 
-    # --- render a card per subject that produced at least one observation ---
+    # --- structured (.json) card per subject that produced at least one observation ---
     print()
     models_with_obs = {o.model for o in observations}
     for model in subjects:
         if model not in models_with_obs:
             continue
         card = build_card(model, observations, today)
-        md = render_card_md(card)
         safe = model.replace(".", "_").replace(":", "_").replace("/", "_")
-        (OUT_DIR / f"card-{safe}.md").write_text(md)
         (OUT_DIR / f"card-{safe}.json").write_text(json.dumps(card, indent=2))
 
-    # cross-model comparison leaderboard
+    # cross-model comparison leaderboard (quick table)
     comparison = render_comparison(observations, today)
     (OUT_DIR / "comparison.md").write_text(comparison)
     print(comparison)
-    print(f"\nwrote {len(subjects)} cards + comparison + observations to {OUT_DIR}")
+
+    # detailed quote-backed cards (.md) + cross-model report, rendered from the dumps
+    # we just wrote (report reads observations.json + replays.json off disk).
+    from llm_bench.familiarity import report
+
+    report.main([])
+    print(f"\nwrote {len(models_with_obs)} cards + comparison + detailed report to {OUT_DIR}")
 
 
 def main():

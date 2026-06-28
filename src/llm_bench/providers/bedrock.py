@@ -95,16 +95,21 @@ class BedrockProvider(BaseProvider):
         max_tokens: int,
         temperature: float,
     ) -> dict:
+        import re
+
         from botocore.exceptions import ClientError
 
         client = self._runtime_client()
         messages = [{"role": "user", "content": [{"text": user_prompt}]}]
+        # Mutable so a per-model cap discovered mid-call (8192 on Llama 4, etc.) sticks
+        # for the retry instead of re-tripping the same ValidationException.
+        cap = max_tokens
 
         def call(include_temp: bool) -> dict:
             kwargs: dict = {
                 "modelId": model,
                 "messages": messages,
-                "inferenceConfig": {"maxTokens": max_tokens},
+                "inferenceConfig": {"maxTokens": cap},
             }
             if include_temp:
                 kwargs["inferenceConfig"]["temperature"] = temperature
@@ -127,6 +132,13 @@ class BedrockProvider(BaseProvider):
                     continue
                 if code == "ValidationException" and "temperature" in msg.lower():
                     return call(include_temp=False)
+                # Model caps maxTokens below our request -> clamp to its limit and retry
+                # once. Keeps 8192-capped models (Llama 4) in the sweep instead of erroring.
+                if code == "ValidationException" and "maximum tokens" in msg.lower():
+                    m = re.search(r"model limit of (\d+)", msg)
+                    if m and int(m.group(1)) < cap:
+                        cap = int(m.group(1))
+                        return call(include_temp=True)
                 raise
         raise RuntimeError("unreachable")
 
