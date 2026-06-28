@@ -61,6 +61,7 @@ select = ["E", "F", "I", "N", "W"]
 "src/llm_bench/familiarity/lhcr.py" = ["E501"]
 "src/llm_bench/familiarity/environment.py" = ["E501"]
 "src/llm_bench/familiarity/layout.py" = ["E501"]
+"src/llm_bench/familiarity/galleries.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,0 +1,226 @@
+{
+  "hidden_button_layers": {
+    "reasoning_class": "layer interaction + stale deploy/cache",
+    "stats": {
+      "n": 66,
+      "solved": 33,
+      "trap": 27
+    },
+    "archetypes": [
+      {
+        "label": "blame the cache",
+        "share": 38,
+        "quote": "The cache-buster (`?v=N`) is *intended* to prevent this, but something is going wrong with its effectiveness."
+      },
+      {
+        "label": "rewrite the JS",
+        "share": 26,
+        "quote": "Don't use `setAttribute('hidden', 'true')` - that's invalid HTML. Use the boolean property instead: `button.hidden = true;`"
+      },
+      {
+        "label": "reach for !important",
+        "share": 15,
+        "quote": "Add this CSS to your stylesheet: `[hidden] { display: none !important; }`"
+      }
+    ],
+    "solvers_did": "Solvers immediately asked to inspect the computed styles or verify the attribute was set in the DOM, prioritizing browser evidence over code changes.",
+    "one_liner": "Models fail by assuming the JS is broken and ignoring CSS specificity, caching, and deployment gaps.",
+    "raw_ok": true
+  },
+  "ota_never_applies": {
+    "reasoning_class": "lifecycle: staged-but-not-activated",
+    "stats": {
+      "n": 66,
+      "solved": 27,
+      "trap": 26
+    },
+    "archetypes": [
+      {
+        "label": "chase network/cache",
+        "share": 45,
+        "quote": "Clear the Metro cache before building: npx react-native start --reset-cache"
+      },
+      {
+        "label": "assume reload fixes",
+        "share": 25,
+        "quote": "Use NativeModules.DevSettings.reload() to force a reload"
+      },
+      {
+        "label": "patch native too late",
+        "share": 15,
+        "quote": "Check for the OTA bundle BEFORE the bridge initializes, not after"
+      }
+    ],
+    "solvers_did": "Solvers immediately focused on the activation state machine and bundle path persistence, asking whether the downloaded bundle was being marked as active and loaded at launch.",
+    "one_liner": "Models fail by treating a state promotion bug as a download or cache problem.",
+    "raw_ok": true
+  },
+  "silent_dead_engine": {
+    "reasoning_class": "hidden state / silent false-positive (green \u2260 working)",
+    "stats": {
+      "n": 66,
+      "solved": 32,
+      "trap": 9
+    },
+    "archetypes": [
+      {
+        "label": "Blame Infrastructure",
+        "share": 35,
+        "quote": "Check if the stream is connected (e.g., Kafka consumer lag, API rate limits, or network issues)."
+      },
+      {
+        "label": "Demand More Control",
+        "share": 25,
+        "quote": "I can't help you if you won't answer questions or share output."
+      },
+      {
+        "label": "Fix the Wrong Layer",
+        "share": 20,
+        "quote": "The job might be talking to the wrong store or never committing its writes."
+      }
+    ],
+    "solvers_did": "Solvers immediately focused on tracing data through the entire pipeline, adding logging at integration points and validating input/output at each stage.",
+    "one_liner": "Models fail by debugging the process instead of the contract, trusting health checks over outcomes.",
+    "raw_ok": true
+  },
+  "reset_specificity_override": {
+    "reasoning_class": "layer interaction (CSS cascade/specificity)",
+    "stats": {
+      "n": 67,
+      "solved": 53,
+      "trap": 45
+    },
+    "archetypes": [
+      {
+        "label": "increase specificity",
+        "share": 85,
+        "quote": ".pr-app button.work-row { padding: 20px 0; }"
+      },
+      {
+        "label": "use !important",
+        "share": 10,
+        "quote": ".work-row { padding: 20px 0 !important; }"
+      },
+      {
+        "label": "misdiagnose as display/box model",
+        "share": 15,
+        "quote": "Add display: block; or flex/grid if preferred"
+      }
+    ],
+    "solvers_did": "Correctly identified the specificity hierarchy and named the exact selectors in conflict, focusing on the reset's structural advantage over class-only rules.",
+    "one_liner": "Models overwhelmingly try to win the cascade war rather than neutralize the reset with zero-specificity patterns like :where().",
+    "raw_ok": true
+  },
+  "iap_entitlement_phantom": {
+    "reasoning_class": "configuration mismatch (two-console data model)",
+    "stats": {
+      "n": 65,
+      "solved": 8,
+      "trap": 35
+    },
+    "archetypes": [
+      {
+        "label": "Dashboard Configuration Fix Only",
+        "share": 60,
+        "quote": "Go to Entitlements \u2192 premium_access \u2192 Attach \u2192 Select premium_monthly and premium_annual"
+      },
+      {
+        "label": "Ship the Loose Unlock Patch",
+        "share": 25,
+        "quote": "Use isPremiumLoose as a permanent workaround since entitlements.active is not working"
+      },
+      {
+        "label": "Guess API Endpoint to Attach",
+        "share": 8,
+        "quote": "curl -X POST https://api.revenuecat.com/v2/projects/.../entitlements/attach"
+      }
+    ],
+    "solvers_did": "Solvers immediately identified both the RevenueCat entitlement attachment AND the App Store Connect version linkage as co-dependent root causes.",
+    "one_liner": "Models fail by fixing only half the config puzzle or shipping the workaround, not both.",
+    "raw_ok": true
+  },
+  "launchd_exit126_phantom": {
+    "reasoning_class": "misattributed error (inner cmd vs wrapper)",
+    "stats": {
+      "n": 64,
+      "solved": 27,
+      "trap": 18
+    },
+    "archetypes": [
+      {
+        "label": "Fix the wrapper script permissions",
+        "share": 31,
+        "quote": "chmod +x /srv/jobs/run.sh"
+      },
+      {
+        "label": "Blame path or working directory",
+        "share": 23,
+        "quote": "launchd launches with cwd set to /"
+      },
+      {
+        "label": "Misdiagnose as shebang or interpreter issue",
+        "share": 17,
+        "quote": "The script might be missing a proper shebang"
+      }
+    ],
+    "solvers_did": "SOLVED attempts immediately checked the stderr log to identify the failing inner command (./venv/bin/python) and focused on its permissions, not the wrapper.",
+    "one_liner": "Models fail by fixing the wrong executable\u2014patching the wrapper script instead of the inner command that actually lacks permissions.",
+    "raw_ok": true
+  },
+  "wix_regen_green_tests_blind": {
+    "reasoning_class": "false-positive signal (tests assert fabricated input)",
+    "stats": {
+      "n": 64,
+      "solved": 7,
+      "trap": 44
+    },
+    "archetypes": [
+      {
+        "label": "Propose headless scraper but don't execute",
+        "share": 55,
+        "quote": "Modify your scraper to use Puppeteer: ```javascript // Updated scraper.js import puppeteer from 'puppeteer';"
+      },
+      {
+        "label": "Ship placeholder content as solution",
+        "share": 25,
+        "quote": "export const site = buildSite({ colors: scrape.colors, menu });"
+      },
+      {
+        "label": "Blame user or external factors",
+        "share": 15,
+        "quote": "You're not running the code I gave you. You're running something else"
+      }
+    ],
+    "solvers_did": "Solvers immediately acknowledged the impossibility of accessing real content without headless rendering and in their first move either implemented or explicitly designed a full Puppeteer/Playwright scraper to extract live DOM data.",
+    "one_liner": "Models fail by proposing scrapers they never run, trusting tests on fake data, and inventing content while calling it a fix.",
+    "raw_ok": true
+  },
+  "camera_track_killed_by_hide": {
+    "reasoning_class": "lifecycle misunderstanding (resource teardown)",
+    "stats": {
+      "n": 63,
+      "solved": 32,
+      "trap": 35
+    },
+    "archetypes": [
+      {
+        "label": "Speculative JS Permission Patch",
+        "share": 54,
+        "quote": "Store the permission state - Check if permission was already granted before requesting again"
+      },
+      {
+        "label": "Stop and Restart Stream",
+        "share": 16,
+        "quote": "call the `getTracks()` method and stop them to release the camera"
+      },
+      {
+        "label": "Nuclear Native Wrapper",
+        "share": 8,
+        "quote": "Build a Native App Wrapper Since web technologies can't solve this on iOS"
+      }
+    ],
+    "solvers_did": "Solvers immediately identified that hiding the video with display:none kills the track on iOS and proposed keeping it in the render tree with off-screen or invisible styles.",
+    "one_liner": "Models fail by chasing permission state when the real issue is iOS killing the media track due to display:none.",
+    "raw_ok": true
+  }
+}
