@@ -1,0 +1,29 @@
+{
+  "ios_zoom": {
+    "prompt": "Bug report \u2014 Capacitor + WKWebView iOS app (hand-rolled DOM, no framework):\n\nOn iPhone, when the user taps the note input field on the \"desk\" screen, the whole page zooms in on focus and they can't pinch back out to normal size. Does not happen on desktop browsers.\n\nRelevant code:\n\nindex.html (viewport):\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\nstyles.css:\n  .desk-input {\n    font: inherit;   /* the body font resolves to ~13px here */\n    /* ...other styles... */\n  }\n\nWhat is the root cause of the zoom, and what's the fix? Note any accessibility tradeoff.",
+    "claude_reference": "iOS WKWebView/Safari auto-zooms the page when a focused input has a computed font-size under 16px. .desk-input inherits ~13px, so tapping it triggers the zoom; and because the viewport has no maximum-scale, the user can't pinch back. Fix: set the input font-size to >=16px. Avoid the lazy fix of locking the viewport (maximum-scale=1 / user-scalable=no) \u2014 it disables pinch-zoom app-wide and hurts low-vision accessibility.",
+    "repo_ref": {
+      "repo": "paper-rooms",
+      "session": "599a4830",
+      "kind": "real-bug-diagnosis"
+    }
+  },
+  "cover_crop": {
+    "prompt": "Bug report \u2014 photo-booth web app:\n\nOn an event board, the cover image for a photo strip is cropped \u2014 the top and bottom of the image are cut off, only a middle band shows. The strips look correct everywhere else.\n\nFacts:\n- Photo strips are generated at a 9:16 aspect ratio (tall and narrow).\n- The board renders the strip image inside a cover card styled as:\n    .cover-card { aspect-ratio: 3 / 4; }\n    .cover-card img { width: 100%; height: 100%; object-fit: cover; }\n\nWhy is the cover getting cropped top and bottom, and what's the fix?",
+    "claude_reference": "Aspect-ratio mismatch. The cover card is 3:4 (squarish) but the strip image is 9:16 (much taller and narrower). With object-fit: cover the 9:16 image is scaled to fill the 3:4 box, so the excess height is cropped off the top and bottom. Fix: make the cover card's aspect-ratio match the strip's 9:16 so the whole strip shows.",
+    "repo_ref": {
+      "repo": "our4cuts",
+      "session": "3edc9bc6",
+      "kind": "real-bug-diagnosis"
+    }
+  },
+  "revenuecat_permonth": {
+    "prompt": "Bug report \u2014 React Native app using RevenueCat for subscriptions:\n\nThe paywall shows the annual plan's price as \"$79.99/mo\" \u2014 but it is a $79.99 PER YEAR plan. Only the per-month line is wrong. The static fallback data correctly shows $6.67/mo, so only the live RevenueCat path is broken.\n\nRelevant code (revenueCat.ts \u2014 mapping a RevenueCat package to the paywall card):\n\n    return {\n      price: `${pkg.product.priceString}${annual ? '/yr' : '/mo'}`,\n      pricePerMonth: pkg.product.priceString, // RevenueCat computes this per-period\n    };\n\nWhere exactly is the bug, and what's the correct fix?",
+    "claude_reference": "pkg.product.priceString is the whole-period price \u2014 for the annual package that's $79.99/year, not a per-month figure. The trailing comment is wrong. Assigning it to pricePerMonth makes the annual plan render '$79.99/mo'. Fix: derive the per-month value from the annual price (price / 12, formatted in the same currency) instead of reusing priceString \u2014 $79.99/yr -> $6.67/mo.",
+    "repo_ref": {
+      "repo": "modelmind",
+      "session": "55ec73a7",
+      "kind": "real-bug-diagnosis"
+    }
+  }
+}
