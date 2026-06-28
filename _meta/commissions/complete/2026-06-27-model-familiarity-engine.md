@@ -3,8 +3,8 @@ rite: commission
 date: 2026-06-27
 repo: CodingVault/llm-bench
 slug: model-familiarity-engine
-status: active — stage 0 (no implementation yet)
-on_complete: move to _meta/commissions/complete/ and link its chronicle
+status: complete — replay-bootstrap shipped (feat/replay-bootstrap)
+chronicle: _meta/chronicles/2026/2026-06-27-replay-bootstrap.md
 ---
 
 # Commission — bootstrap the Model Familiarity Engine (replay first)

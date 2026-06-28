@@ -22,3 +22,7 @@ results/*.json
 /parse_frontmatter.py
 /MIGRATION_PLAN.md
 .claude/.killswitch/
+
+# Local editor / cache cruft
+_meta/.obsidian/
+_meta/.test-status
