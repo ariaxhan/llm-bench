@@ -30,6 +30,7 @@ class Observation:
     latency_ms: float
     cost_usd: float | None
     agrees_with_spine: bool
+    answered: bool = True  # False = model produced no answer text (e.g. reasoning overflow)
 
     def to_dict(self) -> dict:
         return self.__dict__.copy()
@@ -180,6 +181,7 @@ def render_comparison(obs: list[Observation], date: str) -> str:
         costs = [o.cost_usd for o in mine if o.cost_usd is not None]
         lats = [o.latency_ms for o in mine if o.latency_ms]
         disagree = sum(1 for o in mine if not o.agrees_with_spine)
+        no_answer = sum(1 for o in mine if not o.answered)
         rows.append(
             {
                 "model": model,
@@ -191,12 +193,14 @@ def render_comparison(obs: list[Observation], date: str) -> str:
                 "cost": (sum(costs) / len(costs)) if costs else None,
                 "lat": (sum(lats) / len(lats)) if lats else None,
                 "disagree": disagree,
+                "no_answer": no_answer,
             }
         )
     rows.sort(key=lambda r: (-r["reached"], r["cost"] if r["cost"] is not None else 9e9))
 
     short = {t: t[:10] for t in tasks}
-    head = ["model", "reached", "cold", "guided", *[short[t] for t in tasks], "cost/task", "lat ms"]
+    head = ["model", "reached", "cold", "guided", *[short[t] for t in tasks],
+            "no-ans", "cost/task", "lat ms"]
     lines = [
         "# Model Familiarity — cross-model comparison",
         "",
@@ -215,6 +219,7 @@ def render_comparison(obs: list[Observation], date: str) -> str:
             str(r["cold"]),
             str(r["guided"]),
             *[r["per_task"][t] for t in tasks],
+            str(r["no_answer"]) if r["no_answer"] else "·",
             cost,
             lat,
         ]
@@ -224,6 +229,9 @@ def render_comparison(obs: list[Observation], date: str) -> str:
         "",
         f"_Tasks: {', '.join(f'{short[t]} = {t}' for t in tasks)}._",
         "_cold = outcomes reached with no help; guided = reached after Aria's realistic "
-        "frustrated follow-up. cost/task n/a = no public pricing recorded (not fabricated)._",
+        "frustrated follow-up. **no-ans** = cells where the model emitted NO answer (e.g. a "
+        "reasoning model overflowing its token budget) — these count as not-reached but are "
+        "a budget/behaviour artifact, not a wrong diagnosis. cost/task n/a = no public "
+        "pricing recorded (not fabricated)._",
     ]
     return "\n".join(lines)

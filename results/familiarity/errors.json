@@ -1,0 +1,32 @@
+[
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "task": "ios_zoom",
+    "condition": "guided",
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "task": "cover_crop",
+    "condition": "cold",
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "task": "cover_crop",
+    "condition": "guided",
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "task": "revenuecat_permonth",
+    "condition": "cold",
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  },
+  {
+    "model": "us.writer.palmyra-x5-v1:0",
+    "task": "revenuecat_permonth",
+    "condition": "guided",
+    "error": "ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 3): Too many requests, please wait before trying again."
+  }
+]

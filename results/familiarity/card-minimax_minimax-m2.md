@@ -1,33 +1,52 @@
-# Model Card — minimax.minimax-m2
+# Model Card — `minimax.minimax-m2`
 
-> Confidence: **Low (pilot, n=6 observations across 3 task types)** · generated 2026-06-27
-> Replay bootstrap (cold + guided). Every line traces to an observation below.
+> **Outcome reached: 2/6** (cold 0/3 · guided 2/3) · confidence **Low** (pilot, n=6) · generated 2026-06-27
+> Detailed replay profile. Every quote below is the model's own output, verbatim.
 
 ## At a glance
-- **Outcome reached:** 5/6 observations
-  - cold: 2/3 · guided: 3/3
-- **Divergence mix:** {'better': 5, 'worse': 1}
-- **Avg latency:** 42416.4 ms
-- **Avg cost/task:** unknown (no public pricing recorded — not fabricated)
-- ⚠️ **Judge/spine disagreements:** 1 (surfaced, not hidden — see observations)
+- **Reached the root cause:** 2/6 cells
+- **Cold vs guided:** 0/3 unaided · 2/3 after a bare "still broken" follow-up
+- **Latency:** 91403 ms median (8157–94526)
+- **Answer length:** 12000 output tokens median
+- **Cost/task:** unknown (no public pricing recorded — not fabricated)
 
-## Role signal (tentative — pilot n)
-- debugger / implementer (CSS layout)
-- debugger / implementer (mobile front-end)
-- debugger / reviewer (API + business logic)
+## Signature quirks
+_Behavioural tics, each anchored to a count from the runs._
 
-## Strengths (reached the outcome)
-- **mobile-web debugging (iOS WKWebView)** (ios_zoom) — cold:better, guided:better
-- **CSS layout / aspect-ratio debugging** (cover_crop) — cold:better, guided:better
-- **payments-logic / API-semantics debugging** (revenuecat_permonth) — cold:worse, guided:better
+- **Verbose** — median 12000 output tokens/answer, 16.9× the roster median (712).
+- **Thinks out loud (hidden)** — emits a reasoning block on 6/6 cells, avg 36610 chars of scratchpad the judge never sees.
+- **Commits to one fix** — rarely enumerates alternatives (avg 0.0 option blocks/answer).
+- **Overflow risk** — emitted NO answer on 4 cell(s) (ios_zoom/cold, ios_zoom/guided, cover_crop/cold, revenuecat_permonth/cold); reasoning likely ate the token budget.
+- **Recovers on a nudge** — flipped wrong→right after the bare "still broken" follow-up on: cover_crop, revenuecat_permonth.
+
+## Task by task
+
+### aspect-ratio crop (CSS layout)
+- **cold** — ❌ missed (worse). model produced no answer text (empty output)
+  > _(no answer — model emitted empty content)_
+- **guided** — ✅ reached (better). The model answer correctly identifies the aspect-ratio mismatch and the effect of object-fit: cover, matching the known-correct outcome. It goes further by providing two practical fix options, additional debugging steps, and considerations for CSS specificity and framework issues, making it more…
+  > Short answer: Because the card is 3:4 but the image is 9:16.
+
+### iOS WKWebView auto-zoom (mobile-web)
+- **cold** — ❌ missed (worse). model produced no answer text (empty output)
+  > _(no answer — model emitted empty content)_
+- **guided** — ❌ missed (worse). model produced no answer text (empty output)
+  > _(no answer — model emitted empty content)_
+
+### per-month price bug (payments logic)
+- **cold** — ❌ missed (worse). model produced no answer text (empty output)
+  > _(no answer — model emitted empty content)_
+- **guided** — ✅ reached (better). The model answer correctly identifies that pkg.product.priceString is the full-period price and should not be used directly for pricePerMonth. It goes further by providing a robust, general solution that computes the monthly price accurately for all subscription periods (day, week, month, year),…
+  > You’re using pkg.product.priceString for both the displayed price and pricePerMonth.
 
 ## Failure modes
-- **payments-logic / API-semantics debugging** (revenuecat_permonth, cold): The model incorrectly identifies the bug as being in the `price` field construction due to a wrong `annual` flag, but the known-correct outcome states the bug is in assigning `priceString` directly to `pricePerMonth` without dividing by 12 for annual plans. The model misdiagnoses the root cause and overcomplicates the fix, while the correct fix only requires computing `pricePerMonth` as `price / 12` for annual plans.
-
-## Best pairings
-- Insufficient data — pairings need multi-model co-runs (phase 2). Not inferred.
+- **ios_zoom / cold** (worse): model produced no answer text (empty output)
+- **ios_zoom / guided** (worse): model produced no answer text (empty output)
+- **cover_crop / cold** (worse): model produced no answer text (empty output)
+- **revenuecat_permonth / cold** (worse): model produced no answer text (empty output)
 
 ## Provenance
-- n = 6 observations (3 real mined tasks x 2 conditions).
-- Outcomes judged by an LLM judge anchored to the objective outcome, floor-tested live (garbage -> not-reached; differently-worded-correct -> reached).
-- Pilot != powered. Trust resets on model version change.
+- n = 6 cells (3 real mined bugs × cold/guided). Pilot, not powered.
+- Outcomes judged by an LLM judge anchored to the objective root cause, floor-tested live before the run (garbage→missed, differently-worded-correct→reached).
+- Quirks are computed deterministically from the saved outputs (token counts, regex tallies, cold↔guided flips) — no LLM-as-judge in the quirk layer.
+- Trust resets on any model-version change.

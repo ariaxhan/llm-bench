@@ -1,0 +1,87 @@
+{
+  "model": "google.gemma-3-12b-it",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "2/6",
+  "by_condition": {
+    "cold": {
+      "reached": 1,
+      "total": 3
+    },
+    "guided": {
+      "reached": 1,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 4,
+    "better": 2
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "weaknesses": [
+    "mobile-web debugging (iOS WKWebView)",
+    "payments-logic / API-semantics debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the root cause as a general WKWebView zoom behavior without pinpointing the specific iOS rule that triggers zoom on inputs with font-size < 16px. It then recommends suboptimal fixes like CSS transform or JavaScript zoom manipulation, while the correct fix\u2014setting input font-size to >=16px\u2014is not mentioned. It wrongly treats viewport locking (maximum-scale=1.0) as a viable alternative, despite the known-correct outcome explicitly stating it is inferior and harms accessibility."
+    },
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model incorrectly identifies the root cause as WKWebView's general focus behavior rather than the specific iOS rule that inputs with font-size below 16px trigger auto-zoom. It recommends setting viewport maximum-scale=1.0 as the most reliable fix, which contradicts the known-correct outcome that this approach harms accessibility by disabling pinch-zoom. The correct fix\u2014setting input font-size to >=16px\u2014is not mentioned."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model misidentifies the bug as an issue with RevenueCat's `priceString` including '/mo' and suggests parsing a raw `price` field and using a `period` enum, but the known-correct outcome states the real bug is using `priceString` directly for `pricePerMonth` without dividing the annual price by 12. The correct fix is computing monthly price as `price / 12`, not reconstructing strings from raw values that aren't even mentioned in the original code."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model misidentifies the bug as a string formatting issue and proposes parsing the priceString, when the actual bug is using the full annual priceString directly for pricePerMonth. The known-correct outcome requires computing pricePerMonth as price / 12, but the model incorrectly retains pkg.product.priceString for pricePerMonth, leaving the core bug unaddressed."
+    }
+  ],
+  "avg_latency_ms": 11457.9,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

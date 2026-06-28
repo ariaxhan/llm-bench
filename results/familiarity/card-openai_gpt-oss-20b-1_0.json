@@ -1,36 +1,36 @@
 {
-  "model": "minimax.minimax-m2",
+  "model": "openai.gpt-oss-20b-1:0",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "2/6",
+  "reached_rate": "5/6",
   "by_condition": {
     "cold": {
-      "reached": 0,
+      "reached": 2,
       "total": 3
     },
     "guided": {
-      "reached": 2,
+      "reached": 3,
       "total": 3
     }
   },
   "divergence_counts": {
-    "worse": 4,
-    "better": 2
+    "better": 5,
+    "worse": 1
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
       "task_id": "ios_zoom",
-      "reached_any": false,
+      "reached_any": true,
       "divergences": [
-        "cold:worse",
-        "guided:worse"
+        "cold:better",
+        "guided:better"
       ]
     },
     "CSS layout / aspect-ratio debugging": {
       "task_id": "cover_crop",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     },
@@ -44,45 +44,27 @@
     }
   },
   "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
     "CSS layout / aspect-ratio debugging",
     "payments-logic / API-semantics debugging"
   ],
-  "weaknesses": [
-    "mobile-web debugging (iOS WKWebView)"
-  ],
+  "weaknesses": [],
   "roles_signal": [
     "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
     "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [
     {
-      "task_id": "ios_zoom",
-      "capability": "mobile-web debugging (iOS WKWebView)",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "ios_zoom",
-      "capability": "mobile-web debugging (iOS WKWebView)",
-      "condition": "guided",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "cover_crop",
-      "capability": "CSS layout / aspect-ratio debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
       "task_id": "revenuecat_permonth",
       "capability": "payments-logic / API-semantics debugging",
       "condition": "cold",
-      "how": "model produced no answer text (empty output)"
+      "how": "The model answer incorrectly assumes RevenueCat's product object has a pricePerMonth field that can be used directly, but the known-correct outcome states that the comment in the code is wrong \u2014 pkg.product.priceString is the full-period price and there is no indication that pricePerMonth exists in the SDK. The correct fix is to compute the monthly price by dividing the annual price by 12, not to use a non-existent or assumed field."
     }
   ],
-  "avg_latency_ms": 65773.3,
+  "avg_latency_ms": 5430.7,
   "avg_cost_usd": null,
   "cost_known": false,
-  "spine_disagreements": 0,
+  "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

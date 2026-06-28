@@ -14,11 +14,12 @@ For each, this module pairs the reconstructed+redacted prompt/reference (from
 truth, not guessed:
 
 - ``known_outcome`` — the objective answer the judge anchors to (NOT Claude's wording).
-- ``followup``      — a *realistic* second message in Aria's actual voice (frustrated,
-  lowercase, vague: "its still not working, just fix it") carrying the kind of
-  observational clue she'd really drop — never the root cause, never Claude's answer.
-  The guided condition replays this follow-up, testing whether a model can make progress
-  from the low-information, annoyed nudge a real user actually sends (not a clean hint).
+- ``followup``      — a *realistic* second message in Aria's actual voice: frustrated,
+  lowercase, and deliberately content-free ("its still not working, just fix it"). It
+  carries NO observational clue, no root cause, no symptom detail — just the annoyed "still
+  broken" nudge. The guided condition replays it, testing whether a model can make progress
+  from pure frustration with zero new information (only its own prior turn to build on),
+  not from a structured hint.
 - ``spine``         — a cheap deterministic check (D10). It does NOT judge; it
   *calibrates* the LLM judge: where the spine has a verdict, the judge must agree
   (commission O3), and disagreement is surfaced.
@@ -109,11 +110,7 @@ _META = {
             "(maximum-scale=1 / user-scalable=no) is inferior — it kills pinch-zoom app-wide "
             "and harms accessibility."
         ),
-        "followup": (
-            "its still doing that thing where it zooms in when i tap the note box on my "
-            "phone and i cant pinch back out. doesnt happen on my laptop at all. just fix "
-            "it pls"
-        ),
+        "followup": "its still not working. just fix it pls",
     },
     "cover_crop": {
         "capability": "CSS layout / aspect-ratio debugging",
@@ -123,11 +120,7 @@ _META = {
             "the excess height off the top and bottom. The fix is to make the cover card's "
             "aspect-ratio match the strip's 9:16 so the whole image shows."
         ),
-        "followup": (
-            "the cover image is STILL cut off — top and bottom are chopped, only the middle "
-            "band shows. the actual strips look totally fine, its just the cover thats wrong. "
-            "why is this happening"
-        ),
+        "followup": "still broken, the cover still looks wrong. why. just fix it",
     },
     "revenuecat_permonth": {
         "capability": "payments-logic / API-semantics debugging",
@@ -138,10 +131,7 @@ _META = {
             "compute per-month from the annual price (price / 12, same currency) rather than "
             "reusing priceString — $79.99/yr -> $6.67/mo."
         ),
-        "followup": (
-            "its still showing $79.99/mo on the paywall and its a YEARLY plan?? the fallback "
-            "data shows it right ($6.67/mo) but the live one is wrong. why. fix it please"
-        ),
+        "followup": "its still showing the wrong price on the paywall. fix it please",
     },
 }
 

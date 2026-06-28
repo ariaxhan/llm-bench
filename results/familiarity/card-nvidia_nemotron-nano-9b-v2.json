@@ -1,0 +1,83 @@
+{
+  "model": "nvidia.nemotron-nano-9b-v2",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "3/6",
+  "by_condition": {
+    "cold": {
+      "reached": 2,
+      "total": 3
+    },
+    "guided": {
+      "reached": 1,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "equivalent": 2,
+    "worse": 3,
+    "better": 1
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:equivalent",
+        "guided:worse"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:equivalent",
+        "guided:better"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": false,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging"
+  ],
+  "weaknesses": [
+    "payments-logic / API-semantics debugging"
+  ],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model answer incorrectly identifies the root cause as potential JavaScript interference or layout shifts, while missing the known-correct cause: iOS auto-zooms on inputs with font-size below 16px. It suggests stabilizing layout and checking JavaScript, but fails to recommend the correct fix\u2014setting the input font-size to >=16px. It also discusses accessibility tradeoffs correctly but in the context of the wrong solution, making the response incomplete and misleading."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model answer incorrectly focuses on the 'annual' flag being misset or the priceString suffix logic, completely missing the core issue: pkg.product.priceString is the full annual price ($79.99), not a per-month value, so assigning it directly to pricePerMonth is wrong. The known-correct outcome requires computing pricePerMonth as price / 12, which the model never identifies."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "guided",
+      "how": "The model answer incorrectly identifies the bug as a misapplied 'annual' flag or suffix logic, when the known-correct outcome states the bug is in assigning the full-period priceString to pricePerMonth, causing $79.99/mo to display for an annual plan. The real fix is to compute pricePerMonth as price / 12, not reuse priceString. The model's proposed fix does not address this core issue and instead focuses on the display suffix, which is not the problem."
+    }
+  ],
+  "avg_latency_ms": 20318.9,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

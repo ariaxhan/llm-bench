@@ -1,0 +1,76 @@
+{
+  "model": "nvidia.nemotron-nano-3-30b",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "4/6",
+  "by_condition": {
+    "cold": {
+      "reached": 1,
+      "total": 3
+    },
+    "guided": {
+      "reached": 3,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 2,
+    "better": 4
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:better"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:better"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging",
+    "payments-logic / API-semantics debugging"
+  ],
+  "weaknesses": [],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the root cause and proposes suboptimal or incorrect fixes. It suggests workarounds like changing input type to 'search', using JavaScript to scroll, or temporarily increasing font size on focus, but misses the known-correct solution: setting the input's font-size to \u226516px permanently in CSS. It also incorrectly implies that viewport locking is the only way to prevent zoom, while the correct fix is adjusting font size, preserving accessibility. The model overcomplicates the solution and fails to identify the actual root cause: iOS auto-zooming on inputs with computed font size below 16px."
+    },
+    {
+      "task_id": "revenuecat_permonth",
+      "capability": "payments-logic / API-semantics debugging",
+      "condition": "cold",
+      "how": "The model answer incorrectly identifies the bug as appending '/yr' or '/mo' to priceString, when the real issue is that pricePerMonth is set to priceString (the full annual price) instead of the computed per-month value. The known-correct outcome states that pkg.product.priceString is the total period price (e.g. $79.99/year), not a per-month amount, and the fix is to compute price/12 for annual plans. The model suggests multiple options but misdiagnoses the core issue, leading to unnecessary complexity and incorrect solutions like relying on a non-existent pricePerMonth field in RevenueCat's product object."
+    }
+  ],
+  "avg_latency_ms": 5465.2,
+  "avg_cost_usd": null,
+  "cost_known": false,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

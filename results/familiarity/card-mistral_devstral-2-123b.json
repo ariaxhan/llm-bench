@@ -1,11 +1,11 @@
 {
-  "model": "minimax.minimax-m2",
+  "model": "mistral.devstral-2-123b",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "2/6",
+  "reached_rate": "5/6",
   "by_condition": {
     "cold": {
-      "reached": 0,
+      "reached": 3,
       "total": 3
     },
     "guided": {
@@ -14,15 +14,15 @@
     }
   },
   "divergence_counts": {
-    "worse": 4,
-    "better": 2
+    "better": 5,
+    "worse": 1
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
       "task_id": "ios_zoom",
-      "reached_any": false,
+      "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:worse"
       ]
     },
@@ -30,7 +30,7 @@
       "task_id": "cover_crop",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     },
@@ -38,51 +38,33 @@
       "task_id": "revenuecat_permonth",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     }
   },
   "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
     "CSS layout / aspect-ratio debugging",
     "payments-logic / API-semantics debugging"
   ],
-  "weaknesses": [
-    "mobile-web debugging (iOS WKWebView)"
-  ],
+  "weaknesses": [],
   "roles_signal": [
     "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
     "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [
     {
       "task_id": "ios_zoom",
       "capability": "mobile-web debugging (iOS WKWebView)",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "ios_zoom",
-      "capability": "mobile-web debugging (iOS WKWebView)",
       "condition": "guided",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "cover_crop",
-      "capability": "CSS layout / aspect-ratio debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
+      "how": "The model answer incorrectly recommends the viewport-lock fix (maximum-scale=1.0, user-scalable=no) as the 'recommended' solution, which contradicts the known-correct outcome that labels this approach as inferior due to accessibility harm. While it mentions setting font-size to 16px, it demotes it to an 'alternative' fix rather than the primary solution, thus failing to prioritize the correct fix and misleading the user with an accessibility-damaging recommendation."
     }
   ],
-  "avg_latency_ms": 65773.3,
+  "avg_latency_ms": 5573.4,
   "avg_cost_usd": null,
   "cost_known": false,
-  "spine_disagreements": 0,
+  "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }

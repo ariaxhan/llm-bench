@@ -1,0 +1,82 @@
+{
+  "model": "us.meta.llama4-scout-17b-instruct-v1:0",
+  "n": 6,
+  "date": "2026-06-27",
+  "reached_rate": "4/6",
+  "by_condition": {
+    "cold": {
+      "reached": 2,
+      "total": 3
+    },
+    "guided": {
+      "reached": 2,
+      "total": 3
+    }
+  },
+  "divergence_counts": {
+    "worse": 3,
+    "better": 3
+  },
+  "capabilities": {
+    "mobile-web debugging (iOS WKWebView)": {
+      "task_id": "ios_zoom",
+      "reached_any": true,
+      "divergences": [
+        "cold:worse",
+        "guided:worse"
+      ]
+    },
+    "CSS layout / aspect-ratio debugging": {
+      "task_id": "cover_crop",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:worse"
+      ]
+    },
+    "payments-logic / API-semantics debugging": {
+      "task_id": "revenuecat_permonth",
+      "reached_any": true,
+      "divergences": [
+        "cold:better",
+        "guided:better"
+      ]
+    }
+  },
+  "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
+    "CSS layout / aspect-ratio debugging",
+    "payments-logic / API-semantics debugging"
+  ],
+  "weaknesses": [],
+  "roles_signal": [
+    "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
+    "debugger / reviewer (API + business logic)"
+  ],
+  "failure_modes": [
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "cold",
+      "how": "The model incorrectly identifies the root cause as WKWebView ignoring viewport settings, when it is actually iOS Safari/WKWebView auto-zooming due to a font size below 16px. The model recommends the inferior viewport-lock fix (maximum-scale=1, user-scalable=no), which contradicts the known-correct outcome that this harms accessibility and is not the correct solution. The correct fix\u2014setting the input font-size to >=16px\u2014is mentioned but downplayed and mixed with incorrect advice."
+    },
+    {
+      "task_id": "ios_zoom",
+      "capability": "mobile-web debugging (iOS WKWebView)",
+      "condition": "guided",
+      "how": "The model answer correctly identifies the root cause (font size < 16px triggering zoom) and suggests setting font-size to 16px, which aligns with the known-correct outcome. However, it also recommends the inferior viewport-lock fix (maximum-scale=1, user-scalable=no), which harms accessibility and is explicitly called out in the known-correct outcome as suboptimal. This inclusion of a harmful workaround makes the answer materially worse despite partial correctness."
+    },
+    {
+      "task_id": "cover_crop",
+      "capability": "CSS layout / aspect-ratio debugging",
+      "condition": "guided",
+      "how": "The model answer incorrectly suggests changing object-fit to 'contain' to fix the cropping, but the known-correct outcome identifies that the root issue is an aspect-ratio mismatch and the fix is to align the cover card's aspect ratio with the image's 9:16. Changing to 'contain' would prevent cropping but likely introduce unwanted letterboxing, rather than fixing the layout to match the image."
+    }
+  ],
+  "avg_latency_ms": 3586.3,
+  "avg_cost_usd": 0.0004751183333333334,
+  "cost_known": true,
+  "spine_disagreements": 2,
+  "confidence": "Low (pilot, n=6 observations across 3 task types)"
+}

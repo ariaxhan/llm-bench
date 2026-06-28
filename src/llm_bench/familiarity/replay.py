@@ -4,11 +4,10 @@ For each task the harness runs:
 
 - ``cold``   : the prompt alone (tests how little hand-holding the model needs).
 - ``guided`` : the prompt plus Aria's *realistic follow-up* (tasks.py ``followup``) — a
-  frustrated, low-information second message in her actual voice ("its still not working,
-  just fix it") carrying the kind of observational clue she'd really drop, never the root
-  cause. This tests whether a model makes progress from the annoyed nudge a real user
-  actually sends — not a sanitized hint. The gap between cold and guided is itself a model
-  trait (D5b).
+  frustrated, content-free second message in her actual voice ("its still not working,
+  just fix it") carrying NO observational clue and no root cause. This tests whether a model
+  makes progress from the bare annoyed nudge a real user actually sends — not a structured
+  hint. The gap between cold and guided is itself a model trait (D5b).
 
 The redaction gate is enforced at the send boundary: ``assert_clean`` runs on the exact
 outgoing prompt before any Bedrock call. Even though tasks are pre-redacted, this is the

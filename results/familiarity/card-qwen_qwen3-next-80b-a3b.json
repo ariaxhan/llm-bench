@@ -1,11 +1,11 @@
 {
-  "model": "minimax.minimax-m2",
+  "model": "qwen.qwen3-next-80b-a3b",
   "n": 6,
   "date": "2026-06-27",
-  "reached_rate": "2/6",
+  "reached_rate": "5/6",
   "by_condition": {
     "cold": {
-      "reached": 0,
+      "reached": 3,
       "total": 3
     },
     "guided": {
@@ -14,75 +14,57 @@
     }
   },
   "divergence_counts": {
-    "worse": 4,
-    "better": 2
+    "better": 5,
+    "worse": 1
   },
   "capabilities": {
     "mobile-web debugging (iOS WKWebView)": {
       "task_id": "ios_zoom",
-      "reached_any": false,
+      "reached_any": true,
       "divergences": [
-        "cold:worse",
-        "guided:worse"
+        "cold:better",
+        "guided:better"
       ]
     },
     "CSS layout / aspect-ratio debugging": {
       "task_id": "cover_crop",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
-        "guided:better"
+        "cold:better",
+        "guided:worse"
       ]
     },
     "payments-logic / API-semantics debugging": {
       "task_id": "revenuecat_permonth",
       "reached_any": true,
       "divergences": [
-        "cold:worse",
+        "cold:better",
         "guided:better"
       ]
     }
   },
   "strengths": [
+    "mobile-web debugging (iOS WKWebView)",
     "CSS layout / aspect-ratio debugging",
     "payments-logic / API-semantics debugging"
   ],
-  "weaknesses": [
-    "mobile-web debugging (iOS WKWebView)"
-  ],
+  "weaknesses": [],
   "roles_signal": [
     "debugger / implementer (CSS layout)",
+    "debugger / implementer (mobile front-end)",
     "debugger / reviewer (API + business logic)"
   ],
   "failure_modes": [
     {
-      "task_id": "ios_zoom",
-      "capability": "mobile-web debugging (iOS WKWebView)",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "ios_zoom",
-      "capability": "mobile-web debugging (iOS WKWebView)",
-      "condition": "guided",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
       "task_id": "cover_crop",
       "capability": "CSS layout / aspect-ratio debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
-    },
-    {
-      "task_id": "revenuecat_permonth",
-      "capability": "payments-logic / API-semantics debugging",
-      "condition": "cold",
-      "how": "model produced no answer text (empty output)"
+      "condition": "guided",
+      "how": "The model answer incorrectly concludes that using `object-fit: contain` with `height: 100%` and `width: auto` is the fix, which would show the full image but introduce side letterboxing. The known-correct outcome identifies the actual issue as an aspect-ratio mismatch and correctly states that the fix is to align the container's aspect ratio (3:4) with the image's (9:16), not change the object-fit behavior. The model's solution alters rendering behavior to avoid cropping but fails to address the root cause: the container's aspect ratio should match the image's 9:16 ratio to fully display it without unintended cropping or letterboxing."
     }
   ],
-  "avg_latency_ms": 65773.3,
+  "avg_latency_ms": 10643.1,
   "avg_cost_usd": null,
   "cost_known": false,
-  "spine_disagreements": 0,
+  "spine_disagreements": 1,
   "confidence": "Low (pilot, n=6 observations across 3 task types)"
 }
