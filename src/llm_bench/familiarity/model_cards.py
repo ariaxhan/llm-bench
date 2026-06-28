@@ -26,9 +26,14 @@ _REGION_PREFIXES = {"us", "eu", "apac"}
 
 
 def provider_of(model: str) -> str:
-    """Vendor folder for a Bedrock model id, stripping any region/inference-profile prefix.
-    ``us.amazon.nova-pro`` -> amazon, ``deepseek.v3.2`` -> deepseek, ``moonshotai.*`` -> moonshot.
+    """Vendor folder for a model id. Handles Bedrock dotted ids (stripping any region/
+    inference-profile prefix) and the bare frontier ids from the OpenAI/Gemini APIs.
+    ``us.amazon.nova-pro`` -> amazon, ``gpt-5.1`` -> openai, ``gemini-2.5-flash`` -> google.
     """
+    if model.startswith(("gpt-", "o3", "o4")):
+        return "openai"
+    if model.startswith("gemini-"):
+        return "google"
     parts = model.split(".")
     prov = parts[1] if parts[0] in _REGION_PREFIXES and len(parts) > 2 else parts[0]
     return _PROVIDER_ALIAS.get(prov, prov)

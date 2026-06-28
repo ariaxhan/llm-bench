@@ -22,6 +22,7 @@ from __future__ import annotations
 import asyncio
 import datetime
 import json
+import os
 
 from llm_bench.familiarity import layout, model_cards
 from llm_bench.familiarity.challenges import load_challenges
@@ -86,6 +87,52 @@ def rebuild_comparison(today: str, out_tag: str = "") -> None:
 
 
 DEFAULT_ENV_MODEL = DEFAULT_JUDGE_MODEL  # held-out infra model; never a subject
+
+# Frontier closed models, routed to their own provider. Anthropic runs on Bedrock (same as
+# the OSS subjects); OpenAI + Gemini use their OpenAI-compatible APIs (keys from env). The
+# env + judge always stay on Bedrock (qwen3-235b) so no subject ever grades itself.
+FRONTIER_MODELS = [
+    # Anthropic (Bedrock — invocable on the keystone account)
+    "us.anthropic.claude-opus-4-6-v1",
+    "us.anthropic.claude-sonnet-4-6",
+    "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+    "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    # OpenAI (api.openai.com — OPENAI_API_KEY)
+    "gpt-5.1",
+    "gpt-5",
+    "gpt-5-mini",
+    # Google Gemini (generativelanguage API — GEMINI_API_KEY)
+    "gemini-3-pro-preview",
+    "gemini-2.5-pro",
+    "gemini-2.5-flash",
+]
+
+_PROVIDER_CACHE: dict = {}
+
+
+def _subject_provider(model: str):
+    """Resolve the provider for a SUBJECT model by id prefix (cached). Bedrock for OSS +
+    Anthropic; OpenAI / Gemini for their frontier models via the OpenAI-compatible API."""
+    from llm_bench.providers.openai_compat import OpenAICompatProvider
+
+    if model.startswith(("gpt-", "o3", "o4")):
+        key = "openai"
+    elif model.startswith("gemini-"):
+        key = "gemini"
+    else:
+        key = "bedrock"
+    if key not in _PROVIDER_CACHE:
+        if key == "openai":
+            _PROVIDER_CACHE[key] = OpenAICompatProvider(
+                base_url="https://api.openai.com/v1",
+                api_key=os.environ.get("OPENAI_API_KEY", ""), name="openai")
+        elif key == "gemini":
+            _PROVIDER_CACHE[key] = OpenAICompatProvider(
+                base_url="https://generativelanguage.googleapis.com/v1beta/openai",
+                api_key=os.environ.get("GEMINI_API_KEY", ""), name="gemini")
+        else:
+            _PROVIDER_CACHE[key] = get_provider("bedrock")
+    return _PROVIDER_CACHE[key]
 
 
 # --- floors: prove the judge AND the environment on EVERY challenge before any run ---
@@ -195,7 +242,8 @@ async def run_sweep(
         async with sem:
             try:
                 convo = await run_conversation_env(
-                    challenge, provider, model, provider, env_model, max_turns=max_turns)
+                    challenge, _subject_provider(model), model, provider, env_model,
+                    max_turns=max_turns)
                 if convo.error:
                     print(f"{model:40} {challenge.challenge_id:24} s{sample} "
                           f"CONVO-ERR {convo.error[:34]}")
@@ -339,6 +387,8 @@ def main(argv: list[str] | None = None):
         asyncio.run(run_sweep(subjects=TOP10_MODELS, k=k))
     elif mode == "all":
         asyncio.run(run_sweep(subjects=_all_pilot_models(), k=k))
+    elif mode == "frontier":
+        asyncio.run(run_sweep(subjects=FRONTIER_MODELS, k=k))
     else:
         subjects = [m.strip() for m in mode.split(",") if m.strip()]
         asyncio.run(run_sweep(subjects=subjects, k=k))
