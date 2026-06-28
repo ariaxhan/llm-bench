@@ -1,5 +1,11 @@
 # CONTEXT HANDOFF — "The Workshop" eval reframe
 
+> ⚠️ **SUPERSEDED 2026-06-27 by the Model Familiarity Engine reframe.** The Workshop survives
+> *inside* the new framing as the onboarding-interview / cold-start probe, but the canonical
+> source of truth is now `VISION.md` + `_meta/doctrine.md` + the active commission
+> (`_meta/commissions/active/2026-06-27-model-familiarity-engine.md`). Kept below as the
+> historical brainstorm record of how the thinking got there.
+
 Generated: 2026-06-27 20:19 PDT · Stage: **brainstorm / framing** (no code written yet)
 
 > **For Aria:** this whole doc is paste-ready for ChatGPT. It's self-contained — ChatGPT
