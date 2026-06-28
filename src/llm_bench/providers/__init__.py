@@ -3,6 +3,7 @@
 import os
 
 from llm_bench.providers.apfel import ApfelProvider
+from llm_bench.providers.bedrock import BedrockProvider
 from llm_bench.providers.claude_cli import ClaudeCLIProvider
 from llm_bench.providers.openai_compat import OpenAICompatProvider
 from llm_bench.providers.opencode import OpenCodeProvider
@@ -10,6 +11,7 @@ from llm_bench.providers.opencode import OpenCodeProvider
 __all__ = [
     "OpenAICompatProvider",
     "ApfelProvider",
+    "BedrockProvider",
     "OpenCodeProvider",
     "ClaudeCLIProvider",
     "get_provider",
@@ -24,6 +26,10 @@ def get_provider(name: str, **kwargs):
             name="ollama",
         ),
         "apfel": lambda: ApfelProvider(),
+        "bedrock": lambda: BedrockProvider(
+            profile=kwargs.get("profile", "keystone"),
+            region=kwargs.get("region", "us-west-2"),
+        ),
         "opencode": lambda: OpenCodeProvider(),
         "claude-cli": lambda: ClaudeCLIProvider(),
         "openai-compat": lambda: OpenAICompatProvider(

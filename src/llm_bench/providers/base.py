@@ -13,6 +13,14 @@ class LLMResponse:
     tokens_used: int
     model: str
     raw: dict | None = None
+    # Optional richer accounting (Bedrock provider records these; others may leave
+    # them None). input/output split makes cost-per-task computable; reasoning holds
+    # a reasoning model's thinking trace, kept separate from the final answer so the
+    # judge never scores the scratchpad.
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    cost_usd: float | None = None
+    reasoning: str | None = None
 
 
 class BaseProvider(ABC):
