@@ -363,7 +363,12 @@ def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]
         return 0.0, {"reason": "content-free prompt echo rejected",
                      "echo_overlap": round(_prompt_echo_ratio(output_stripped, prompt), 3)}
 
+    # Lenient parse: a correct answer inside ```json fences must not score
+    # identical to garbage — JSON checks measure the transformation/extraction
+    # capability; bare-output compliance has its own dedicated checks.
     parsed = _try_json(output_stripped)
+    if parsed is None:
+        parsed = _extract_json(output_stripped)
     passed = 0
     details = {}
     for check in checks:

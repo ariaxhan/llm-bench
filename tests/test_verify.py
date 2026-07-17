@@ -202,3 +202,18 @@ def add(a, b):
             "test_code": "assert add(2, 3) == 5\nprint('ALL TESTS PASSED')"
         })
         assert score < 0.5
+
+
+class TestFencedJsonChecks:
+    def test_fenced_json_passes_json_checks(self):
+        from llm_bench.verify import verify_instruction_follow
+
+        fenced = '```json\n{"total": 109.97, "shipping_tier": "express"}\n```'
+        score, details = verify_instruction_follow(
+            fenced,
+            {"checks": [
+                {"type": "is_valid_json"},
+                {"type": "json_field_contains", "field": "shipping_tier", "value": "express"},
+            ]},
+        )
+        assert score == 1.0, details
