@@ -8,6 +8,28 @@ import httpx
 
 from llm_bench.providers.base import BaseProvider, LLMResponse
 
+_HARMONY_FINAL = "<|channel|>final<|message|>"
+
+
+def _extract_final_answer(content: str) -> str:
+    """Unwrap raw gpt-oss harmony channel markup if the server didn't.
+
+    Some servers (e.g. mlx_lm.server) return the raw harmony token stream as
+    content: analysis-channel reasoning first, then the final channel. Grading
+    the whole blob fails strict verifiers on answers that are actually correct.
+    If there is no final channel, the model never finished answering — return
+    empty so the verifier records an honest fail. Content without channel
+    markup passes through untouched.
+    """
+    if _HARMONY_FINAL in content:
+        final = content.rsplit(_HARMONY_FINAL, 1)[1]
+        for stop in ("<|end|>", "<|return|>", "<|start|>"):
+            final = final.split(stop, 1)[0]
+        return final.strip()
+    if "<|channel|>" in content:
+        return ""
+    return content
+
 
 class OpenAICompatProvider(BaseProvider):
     def __init__(self, base_url: str, api_key: str = "", name: str = "openai-compat"):
@@ -50,6 +72,7 @@ class OpenAICompatProvider(BaseProvider):
         # the reasoning channel; servers then omit "content" entirely. Treat that
         # as an empty answer (honest fail) instead of crashing with KeyError.
         content = data["choices"][0]["message"].get("content") or ""
+        content = _extract_final_answer(content)
         tokens = data.get("usage", {}).get("total_tokens", 0)
 
         return LLMResponse(
