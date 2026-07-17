@@ -46,7 +46,10 @@ class OpenAICompatProvider(BaseProvider):
 
         elapsed_ms = (time.perf_counter() - start) * 1000
         data = resp.json()
-        content = data["choices"][0]["message"]["content"]
+        # Reasoning models (gpt-oss, gemma-4, GLM) can exhaust max_tokens inside
+        # the reasoning channel; servers then omit "content" entirely. Treat that
+        # as an empty answer (honest fail) instead of crashing with KeyError.
+        content = data["choices"][0]["message"].get("content") or ""
         tokens = data.get("usage", {}).get("total_tokens", 0)
 
         return LLMResponse(
