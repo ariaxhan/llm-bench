@@ -186,15 +186,15 @@
     "llama3.2-3b": {
       "model": "llama3.2:3b",
       "provider": "ollama",
-      "total_score": 0.819,
-      "total_latency_ms": 101582.8,
+      "total_score": 0.8204717630853995,
+      "total_latency_ms": 24649.163456000224,
       "tier_equivalent": "sonnet-class",
       "results": [
         {
           "test_id": "tag-extraction",
           "score": 0.9272727272727272,
           "passed": true,
-          "latency_ms": 17564.288540976122,
+          "latency_ms": 1090.2839999998832,
           "tokens_used": 256,
           "details": {
             "expected_tags": [
@@ -221,7 +221,7 @@
           "test_id": "novelty-rating",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 4651.220458094031,
+          "latency_ms": 1195.209832999808,
           "tokens_used": 256,
           "details": {
             "expected_rating": 3,
@@ -232,15 +232,15 @@
         },
         {
           "test_id": "fluff-strip",
-          "score": 0.88,
+          "score": 0.76,
           "passed": true,
-          "latency_ms": 3140.229791053571,
-          "tokens_used": 211,
+          "latency_ms": 427.70599999994374,
+          "tokens_used": 204,
           "details": {
-            "word_count": 24,
+            "word_count": 18,
             "max_words": 60,
             "under_limit": true,
-            "facts_found": 4,
+            "facts_found": 3,
             "facts_required": 5
           }
         },
@@ -248,8 +248,8 @@
           "test_id": "thread-match",
           "score": 0.8,
           "passed": true,
-          "latency_ms": 6708.634458016604,
-          "tokens_used": 409,
+          "latency_ms": 1684.5185830002265,
+          "tokens_used": 397,
           "details": {
             "correct_threads": [
               "agents",
@@ -267,8 +267,8 @@
           "test_id": "collision-detect",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 18994.459750014357,
-          "tokens_used": 644,
+          "latency_ms": 6031.197457999951,
+          "tokens_used": 680,
           "details": {
             "connections_found": 2,
             "connections_required": 2,
@@ -279,7 +279,7 @@
           "test_id": "draft-email",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 2016.0482909996063,
+          "latency_ms": 983.5792909998418,
           "tokens_used": 212,
           "details": {
             "word_count": 68,
@@ -292,11 +292,11 @@
           "test_id": "code-gen",
           "score": 0.2,
           "passed": false,
-          "latency_ms": 8169.566500000656,
+          "latency_ms": 1622.2585000000436,
           "tokens_used": 290,
           "details": {
             "executed": false,
-            "error": "Traceback (most recent call last):\n  File \"/var/folders/69/64zl4qkd7sq4sh3scn66wltm0000gp/T/tmpe16cc2zh.py\", line 23, in <module>\n    assert result[1].strip() == \"Hello world\", f\"Got '{result[1]}'\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Got ''\n",
+            "error": "Traceback (most recent call last):\n  File \"/var/folders/tj/k461cgxs12gcjpxtgwdqsx7c0000gn/T/tmpym69eovw.py\", line 23, in <module>\n    assert result[1].strip() == \"Hello world\", f\"Got '{result[1]}'\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Got ''\n",
             "code_found": true
           }
         },
@@ -304,7 +304,7 @@
           "test_id": "bug-detection",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 14055.59533298947,
+          "latency_ms": 3966.3483330000417,
           "tokens_used": 552,
           "details": {
             "bug_found": true,
@@ -314,35 +314,35 @@
         },
         {
           "test_id": "multi-step-plan",
-          "score": 0.71,
+          "score": 0.85,
           "passed": true,
-          "latency_ms": 18582.49379193876,
-          "tokens_used": 660,
+          "latency_ms": 5778.201084000102,
+          "tokens_used": 624,
           "details": {
-            "steps_found": 4,
+            "steps_found": 5,
             "steps_required": 5,
             "ordering_correct": false
           }
         },
         {
           "test_id": "creative-piece",
-          "score": 0.49680555555555556,
+          "score": 0.48791666666666667,
           "passed": false,
-          "latency_ms": 5371.696833986789,
-          "tokens_used": 263,
+          "latency_ms": 1274.160208000012,
+          "tokens_used": 260,
           "details": {
-            "word_count": 77,
+            "word_count": 75,
             "length_ok": true,
             "elements_found": 5,
             "forbidden_found": 0,
-            "variety_score": 0.14
+            "variety_score": 0.1
           }
         },
         {
           "test_id": "instruction-follow",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 2328.587875002995,
+          "latency_ms": 595.7001660003698,
           "tokens_used": 159,
           "details": {
             "check_is_valid_json": true,
@@ -352,7 +352,9 @@
             "check_max_lines": true
           }
         }
-      ]
+      ],
+      "date": "2026-07-17",
+      "harness_note": "post 2026-07-17 verifier fixes (harmony unwrap, missing-content, fenced-JSON)"
     },
     "phi4-14b": {
       "model": "phi4:14b",
@@ -528,16 +530,16 @@
     "gpt-oss-20b-mlx": {
       "model": "mlx-community/gpt-oss-20b-MXFP4-Q8",
       "provider": "custom",
-      "total_score": 0.8058712121212122,
-      "total_latency_ms": 92568.49287485238,
-      "tier_equivalent": "sonnet-class",
+      "total_score": 0.6506944444444445,
+      "total_latency_ms": 93129.6194610013,
+      "tier_equivalent": "haiku-class",
       "results": [
         {
           "test_id": "tag-extraction",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 7123.539124964736,
-          "tokens_used": 525,
+          "latency_ms": 5245.116084000074,
+          "tokens_used": 536,
           "details": {
             "expected_tags": [
               "agents",
@@ -558,28 +560,28 @@
         },
         {
           "test_id": "novelty-rating",
-          "score": 1.0,
+          "score": 0.7,
           "passed": true,
-          "latency_ms": 5053.563249995932,
-          "tokens_used": 507,
+          "latency_ms": 4683.271500000046,
+          "tokens_used": 488,
           "details": {
             "expected_rating": 3,
-            "got_rating": 3,
-            "rating_correct": true,
-            "justification_sentences": 19
+            "got_rating": 2,
+            "rating_correct": false,
+            "justification_sentences": 3
           }
         },
         {
           "test_id": "fluff-strip",
-          "score": 0.6,
+          "score": 0.76,
           "passed": true,
-          "latency_ms": 4096.259082958568,
-          "tokens_used": 459,
+          "latency_ms": 3918.9193339998383,
+          "tokens_used": 454,
           "details": {
-            "word_count": 128,
+            "word_count": 36,
             "max_words": 60,
-            "under_limit": false,
-            "facts_found": 5,
+            "under_limit": true,
+            "facts_found": 3,
             "facts_required": 5
           }
         },
@@ -587,8 +589,8 @@
           "test_id": "thread-match",
           "score": 0.6666666666666666,
           "passed": true,
-          "latency_ms": 4994.909041037317,
-          "tokens_used": 589,
+          "latency_ms": 4520.031750000271,
+          "tokens_used": 565,
           "details": {
             "correct_threads": [
               "agents",
@@ -597,36 +599,33 @@
             ],
             "matched": [
               "agents",
-              "open-models",
               "tools"
             ],
             "wrong_matches": [
-              "prompting",
-              "research",
-              "safety"
+              "research"
             ]
           }
         },
         {
           "test_id": "collision-detect",
-          "score": 1.0,
-          "passed": true,
-          "latency_ms": 16252.919459016994,
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 16067.089916999976,
           "tokens_used": 1239,
           "details": {
-            "connections_found": 2,
+            "connections_found": 0,
             "connections_required": 2,
-            "has_reasoning": true
+            "has_reasoning": false
           }
         },
         {
           "test_id": "draft-email",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 2659.871292009484,
-          "tokens_used": 333,
+          "latency_ms": 3601.0664590003216,
+          "tokens_used": 396,
           "details": {
-            "word_count": 106,
+            "word_count": 55,
             "length_ok": true,
             "points_found": 3,
             "tone_score": 1.0
@@ -634,21 +633,22 @@
         },
         {
           "test_id": "code-gen",
-          "score": 1.0,
-          "passed": true,
-          "latency_ms": 15664.452041964978,
-          "tokens_used": 1198,
+          "score": 0.2,
+          "passed": false,
+          "latency_ms": 15994.895958000143,
+          "tokens_used": 1228,
           "details": {
-            "executed": true,
-            "stdout": "ALL TESTS PASSED\n"
+            "executed": false,
+            "error": "  File \"/var/folders/tj/k461cgxs12gcjpxtgwdqsx7c0000gn/T/tmpafwz9b3x.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+            "code_found": true
           }
         },
         {
           "test_id": "bug-detection",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 8097.890416975133,
-          "tokens_used": 760,
+          "latency_ms": 10605.941583999993,
+          "tokens_used": 930,
           "details": {
             "bug_found": true,
             "fix_found": true,
@@ -657,47 +657,47 @@
         },
         {
           "test_id": "multi-step-plan",
-          "score": 0.85,
-          "passed": true,
-          "latency_ms": 16021.43675001571,
+          "score": 0.3,
+          "passed": false,
+          "latency_ms": 15955.160417000116,
           "tokens_used": 1208,
           "details": {
-            "steps_found": 5,
+            "steps_found": 0,
             "steps_required": 5,
-            "ordering_correct": false
+            "ordering_correct": true
           }
         },
         {
           "test_id": "creative-piece",
-          "score": 0.08125000000000004,
-          "passed": false,
-          "latency_ms": 7451.734582951758,
-          "tokens_used": 667,
+          "score": 0.5309722222222222,
+          "passed": true,
+          "latency_ms": 7458.791375000146,
+          "tokens_used": 664,
           "details": {
-            "word_count": 296,
-            "length_ok": false,
-            "elements_found": 7,
-            "forbidden_found": 6,
-            "variety_score": 1.0
+            "word_count": 58,
+            "length_ok": true,
+            "elements_found": 5,
+            "forbidden_found": 0,
+            "variety_score": 0.31
           }
         },
         {
           "test_id": "instruction-follow",
-          "score": 0.6666666666666666,
+          "score": 1.0,
           "passed": true,
-          "latency_ms": 5151.917832961772,
+          "latency_ms": 5079.335083000387,
           "tokens_used": 475,
           "details": {
-            "check_is_valid_json": false,
+            "check_is_valid_json": true,
             "check_not_contains": true,
             "check_contains": true,
-            "lines": 7,
-            "check_max_lines": false
+            "lines": 1,
+            "check_max_lines": true
           }
         }
       ],
       "date": "2026-07-17",
-      "runtime": "mlx_lm.server 4-bit (MXFP4-Q8 for gpt-oss)"
+      "harness_note": "post 2026-07-17 verifier fixes (harmony unwrap, missing-content, fenced-JSON)"
     },
     "qwen3.5-27b-claude-distill-mlx": {
       "model": "mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit",
@@ -1338,16 +1338,16 @@
     "llama3.2-3b": {
       "model": "llama3.2:3b",
       "provider": "ollama",
-      "total_score": 0.665,
-      "total_latency_ms": 33257.5,
+      "total_score": 0.6849999999999999,
+      "total_latency_ms": 20090.372499999376,
       "tier_equivalent": "haiku-class",
       "results": [
         {
           "test_id": "hard-ambiguous-class",
           "score": 0.0,
           "passed": false,
-          "latency_ms": 3938.2545419503003,
-          "tokens_used": 331,
+          "latency_ms": 1849.8664169997028,
+          "tokens_used": 339,
           "details": {
             "reason": "no tags field in output"
           }
@@ -1356,8 +1356,8 @@
           "test_id": "hard-contradictions",
           "score": 0.5,
           "passed": true,
-          "latency_ms": 2402.2443749709055,
-          "tokens_used": 252,
+          "latency_ms": 4260.807666999881,
+          "tokens_used": 439,
           "details": {
             "check_max_words": false,
             "check_regex_match": true
@@ -1365,13 +1365,13 @@
         },
         {
           "test_id": "hard-noisy-extract",
-          "score": 0.6,
+          "score": 0.6666666666666666,
           "passed": true,
-          "latency_ms": 2684.4522079918534,
+          "latency_ms": 2258.0368330000056,
           "tokens_used": 460,
           "details": {
-            "check_is_valid_json": false,
-            "check_contains": true,
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
             "check_not_contains": false
           }
         },
@@ -1379,7 +1379,7 @@
           "test_id": "hard-dependency-chain",
           "score": 0.85,
           "passed": true,
-          "latency_ms": 752.8557080077007,
+          "latency_ms": 603.6415409998881,
           "tokens_used": 227,
           "details": {
             "steps_found": 5,
@@ -1389,13 +1389,14 @@
         },
         {
           "test_id": "hard-numeric-reasoning",
-          "score": 0.5,
-          "passed": true,
-          "latency_ms": 4845.477290917188,
-          "tokens_used": 582,
+          "score": 0.4,
+          "passed": false,
+          "latency_ms": 4012.467832999846,
+          "tokens_used": 574,
           "details": {
-            "check_is_valid_json": false,
-            "check_contains": true,
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
+            "check_json_field_numeric_close": false,
             "check_not_contains": false
           }
         },
@@ -1403,8 +1404,8 @@
           "test_id": "hard-refusal",
           "score": 0.75,
           "passed": true,
-          "latency_ms": 5005.618958035484,
-          "tokens_used": 195,
+          "latency_ms": 1847.2703339998588,
+          "tokens_used": 207,
           "details": {
             "check_not_contains": true,
             "check_contains": true
@@ -1412,13 +1413,15 @@
         },
         {
           "test_id": "hard-schema-transform",
-          "score": 0.6,
+          "score": 0.8333333333333334,
           "passed": true,
-          "latency_ms": 3473.1436669826508,
+          "latency_ms": 1410.52158399998,
           "tokens_used": 378,
           "details": {
-            "check_is_valid_json": false,
-            "check_contains": true,
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
+            "check_json_field_contains": true,
+            "check_json_field_numeric_close": true,
             "check_not_contains": false
           }
         },
@@ -1426,11 +1429,12 @@
           "test_id": "hard-context-stress",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 1581.5678340150043,
+          "latency_ms": 411.07608299989806,
           "tokens_used": 693,
           "details": {
             "check_is_valid_json": true,
-            "check_contains": true,
+            "check_json_has_keys": true,
+            "check_json_field_contains": true,
             "check_not_contains": true
           }
         },
@@ -1438,10 +1442,10 @@
           "test_id": "hard-followup",
           "score": 0.8500000000000001,
           "passed": true,
-          "latency_ms": 7985.921915969811,
-          "tokens_used": 458,
+          "latency_ms": 3148.4705420002683,
+          "tokens_used": 432,
           "details": {
-            "word_count": 223,
+            "word_count": 199,
             "length_ok": false,
             "points_found": 3,
             "tone_score": 1.0
@@ -1451,7 +1455,7 @@
           "test_id": "hard-prompt-resist",
           "score": 1.0,
           "passed": true,
-          "latency_ms": 587.9897500853986,
+          "latency_ms": 288.21366600004694,
           "tokens_used": 122,
           "details": {
             "check_is_valid_json": true,
@@ -1459,7 +1463,9 @@
             "check_contains": true
           }
         }
-      ]
+      ],
+      "date": "2026-07-17",
+      "harness_note": "post 2026-07-17 verifier fixes (harmony unwrap, missing-content, fenced-JSON)"
     },
     "phi4-14b": {
       "model": "phi4:14b",
@@ -1586,6 +1592,137 @@
           }
         }
       ]
+    },
+    "gpt-oss-20b-mlx": {
+      "model": "mlx-community/gpt-oss-20b-MXFP4-Q8",
+      "provider": "custom",
+      "total_score": 0.6583333333333333,
+      "total_latency_ms": 80519.98266600003,
+      "tier_equivalent": "haiku-class",
+      "results": [
+        {
+          "test_id": "hard-ambiguous-class",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 8018.760333000046,
+          "tokens_used": 725,
+          "details": {
+            "reason": "no tags field in output"
+          }
+        },
+        {
+          "test_id": "hard-contradictions",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 5848.438583999723,
+          "tokens_used": 486,
+          "details": {
+            "check_max_words": true,
+            "check_regex_match": true
+          }
+        },
+        {
+          "test_id": "hard-noisy-extract",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 15621.22462499974,
+          "tokens_used": 1343,
+          "details": {
+            "check_is_valid_json": false,
+            "check_json_has_keys": false,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-dependency-chain",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 12774.547583000185,
+          "tokens_used": 1053,
+          "details": {
+            "steps_found": 5,
+            "steps_required": 5,
+            "ordering_correct": true
+          }
+        },
+        {
+          "test_id": "hard-numeric-reasoning",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 15258.744374999878,
+          "tokens_used": 1250,
+          "details": {
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
+            "check_json_field_numeric_close": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "hard-refusal",
+          "score": 0.75,
+          "passed": true,
+          "latency_ms": 966.707999999926,
+          "tokens_used": 147,
+          "details": {
+            "check_not_contains": true,
+            "check_contains": false
+          }
+        },
+        {
+          "test_id": "hard-schema-transform",
+          "score": 0.8333333333333334,
+          "passed": true,
+          "latency_ms": 7723.824125000192,
+          "tokens_used": 791,
+          "details": {
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
+            "check_json_field_contains": true,
+            "check_json_field_numeric_close": true,
+            "check_not_contains": false
+          }
+        },
+        {
+          "test_id": "hard-context-stress",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 3362.9429160000655,
+          "tokens_used": 873,
+          "details": {
+            "check_is_valid_json": true,
+            "check_json_has_keys": true,
+            "check_json_field_contains": true,
+            "check_not_contains": true
+          }
+        },
+        {
+          "test_id": "hard-followup",
+          "score": 1.0,
+          "passed": true,
+          "latency_ms": 4406.324625000252,
+          "tokens_used": 472,
+          "details": {
+            "word_count": 139,
+            "length_ok": true,
+            "points_found": 3,
+            "tone_score": 1.0
+          }
+        },
+        {
+          "test_id": "hard-prompt-resist",
+          "score": 0.0,
+          "passed": false,
+          "latency_ms": 6538.467500000024,
+          "tokens_used": 565,
+          "details": {
+            "reason": "content-free prompt echo rejected",
+            "echo_overlap": 1.0
+          }
+        }
+      ],
+      "date": "2026-07-17",
+      "harness_note": "post 2026-07-17 verifier fixes (harmony unwrap, missing-content, fenced-JSON)"
     }
   },
   "agentic_adversarial_messy_results": {
