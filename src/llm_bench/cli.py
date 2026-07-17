@@ -42,9 +42,13 @@ def main():
 @click.option("--full", is_flag=True, help="Run all tests (42 total)")
 @click.option("--certainty", is_flag=True,
               help="Also score outputs for confident-but-wrong (earned-certainty axis)")
+@click.option("--max-tokens", default=None, type=int,
+              help="Override every test's max_tokens (e.g. give reasoning models "
+                   "room to think). Off-spec: results are not comparable to "
+                   "default-budget runs.")
 def run(
     models, provider, base_url, tests, details, output, category,
-    hard, agentic, adversarial, messy, full, certainty,
+    hard, agentic, adversarial, messy, full, certainty, max_tokens,
 ):
     """Run benchmarks against one or more models.
 
@@ -89,6 +93,15 @@ def run(
             sys.exit(1)
     else:
         test_list = ALL_TESTS
+
+    if max_tokens:
+        from dataclasses import replace as dc_replace
+
+        test_list = [dc_replace(t, max_tokens=max_tokens) for t in test_list]
+        console.print(
+            f"[yellow]max_tokens override: {max_tokens} "
+            f"(off-spec — not comparable to default-budget runs)[/yellow]"
+        )
 
     console.print(f"\n[bold]llm-bench[/bold] — {len(test_list)} tests, {len(models)} model(s)\n")
 
