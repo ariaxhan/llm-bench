@@ -1,3 +1,9 @@
+---
+type: note
+status: active
+created: 2026-06-16
+---
+
 # Eval-floor discipline — "Every Eval Ever" ↔ Wrong Convergence ↔ llm-bench
 
 **Date:** 2026-06-16

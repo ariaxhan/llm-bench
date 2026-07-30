@@ -4,8 +4,10 @@ date: 2026-06-16
 commission: Vaults _meta/commissions/active/2026-06-16-llm-bench-floor-in-the-harness.md
 repo: CodingVault/llm-bench
 window: todo (hcom) — coordinated w/ @dune
+type: note
+status: active
+created: 2026-06-16
 ---
-
 # Chronicle — the cheap floor in the harness (P5 at the model-eval layer)
 
 ## What I was asked to do

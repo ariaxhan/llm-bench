@@ -5,8 +5,10 @@ commission: Vaults _meta/commissions/active/2026-06-16-llm-bench-floor-full-suit
 follows: 2026-06-16-floor-in-the-harness.md (the n=1 demonstration)
 repo: CodingVault/llm-bench
 window: todo (hcom) — coordinated w/ @dune
+type: note
+status: active
+created: 2026-06-16
 ---
-
 # Chronicle — the cheap floor across the full suite (the verifier self-audit)
 
 ## What I was asked to do

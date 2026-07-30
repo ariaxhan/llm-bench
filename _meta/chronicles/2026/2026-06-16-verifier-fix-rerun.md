@@ -5,8 +5,10 @@ commission: Vaults _meta/commissions/active/2026-06-16-llm-bench-verifier-fix-re
 follows: 2026-06-16-floor-full-suite.md (which proved the verifiers were broken)
 repo: CodingVault/llm-bench
 window: todo (hcom) — coordinated w/ @dune
+type: note
+status: active
+created: 2026-06-16
 ---
-
 # Chronicle — fixing the broken verifiers, then proving the hole is closed
 
 ## What I was asked to do
