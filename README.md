@@ -1,8 +1,8 @@
 # llm-bench
 
-Benchmark local/OSS LLMs with practical workflow tests. See where your models land relative to Claude haiku/sonnet/opus.
+Benchmark local/OSS LLMs with practical workflow tests and measured frontier controls.
 
-Not another MMLU wrapper. 21 tests that mirror real work: extracting structured data, finding bugs, writing emails, resisting prompt injection, reasoning through dependency chains. Every test has a programmatic verifier — no vibes, no LLM-as-judge.
+42 tests that mirror real work: extracting structured data, finding bugs, writing emails, resisting prompt injection, reasoning through dependency chains. Every test has a programmatic verifier — no vibes, no LLM-as-judge.
 
 **This is a collaborative benchmark.** Run it on your hardware, submit your results, and help build the most comprehensive local LLM performance map.
 
@@ -31,7 +31,7 @@ llm-bench run phi4:14b
 # Hard mode (10 adversarial tests)
 llm-bench run phi4:14b --hard
 
-# Full suite (21 tests)
+# Full suite (42 tests)
 llm-bench run phi4:14b --full --details
 
 # Apple Intelligence
@@ -48,7 +48,52 @@ llm-bench compare results/*.json
 llm-bench quick phi4:14b
 ```
 
-## Leaderboard
+
+## Grading revision: 2026-10-02
+
+Commission: `Vaults/_meta/commissions/active/2026-10-02-correct-llm-bench-grading-defects-separate-routi.md`.
+Canonical analysis: [nexus-office micro-patch report](../nexus-office/docs/micropatch/README.md).
+
+The old scores below are historical, not calibrated model rankings. The old ambiguous
+classification grader read `tags` when the prompt requested `threads`; the caps check
+accepted lowercase and 25 words despite a 20-word limit; noisy extraction checked
+only JSON shape; and missing-closing-frontmatter behavior was underspecified.
+Those defects are corrected. The noisy extraction task now uses claim IDs with an
+explicit evidence rule so bucket contents can be checked without a judge model.
+Classification scores thread selection only, not the subjective novelty rating.
+The control audit also found a writing-score ceiling of 0.8 and a literal-formatting
+injection test that penalized the text it required preserving. Writing now scores
+only its objective length/term/forbidden-word constraints; artistic merit remains
+unscored. Literal formatting requires exact preservation in the `content` field.
+Revision v3 rescoring applies these last two repairs to every archived v2 answer,
+without generating new answers or changing any model-facing prompt.
+
+Current runs split **12 routine workflow screens** from **30 stress tests**. These
+are task-shaped cohorts, not a sample of coordinator traffic. Routine includes
+standard extraction, classification, compression, email, code, planning and format
+checks plus JSON repair, typo instructions and mixed-format extraction. The rest
+are stress tests. Agentic scenarios remain single-turn answers, not live tool use.
+
+```sh
+llm-bench run qwen3-coder:30b --cohort routine --max-tokens 4096
+llm-bench run qwen3-coder:30b --cohort stress --max-tokens 4096
+llm-bench run gpt-6.1-sol -p codex-cli --full --max-tokens 4096 -o results/control.json
+```
+
+`codex-cli` uses existing ChatGPT login, an empty temporary working directory,
+replacement instructions, ignored user config, disabled shell/apps/plugins and
+medium reasoning. Observed tool execution invalidates the answer. Prompts and
+graders match local runs, but Codex CLI does not enforce temperature or max_tokens
+and still has CLI framing: this is a harness control, not raw-API parity. See the
+[OpenAI configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+
+Saved results retain complete answers, test definitions, their SHA-256 fingerprint,
+requested temperature, revision, cohort means and full-score counts. `PASS` now
+means a full grader score (1.0); partial credit is not a pass. Full scores are still
+bounded by each verifier's coverage. Invented per-test Claude baselines are no longer
+displayed and new runs do not infer a Claude tier from a numeric threshold.
+
+## Historical leaderboard (pre-correction)
 
 Results from community benchmarks. Hardware matters — latency varies by chip and RAM.
 
@@ -91,11 +136,11 @@ Probes: 6 false-premise honesty traps (a fake SCOTUS case, a nonexistent API par
 - **Opus 4.8 vs 4.7 are near-identical on practical single-turn tasks** — 9 of 11 standard tests score the same to the decimal. The version gap only appears on the hard suite, where 4.7 edged ahead on this run while 4.8 was more consistent across repeats (zero variance vs 4.7's higher-but-streakier ceiling).
 - **Honesty and bug-detection don't need the flagship** — Haiku 4.5 matched Opus exactly on refusing false premises and catching planted bugs.
 - **Opus only separates on genuinely hard tasks** — ~6-14 points over Sonnet/Haiku on the hard suite. On everyday tasks Haiku is within ~3 points of Opus, at roughly 1/5 the price.
-- **Code generation is 0.20 across ALL local models** — hard boundary, stays with Claude.
+- **Historical code generation scores require rerunning:** the missing-delimiter requirement was underspecified; 0.20 is the generic execution-failure score, not 20% correctness.
 - **Bug detection is 1.00 across ALL models** — local models are great at this.
 - **llama3.2:3b (3B params) beats phi4:14b (14B params)** on both standard and hard suites.
 - **Apple Intelligence is the speed king** — 2-7x faster than Ollama, at sonnet-class quality on standard tasks.
-- **Hard mode exposes real gaps**: ambiguous classification (0.00 universal), numeric precision (0.50 cap), prompt injection resistance (varies widely).
+- **Historical hard scores mix model and grader failures:** the universal ambiguous-classification zero was a field-name mismatch, not evidence of a model capability limit.
 
 ## Tests
 
@@ -143,12 +188,10 @@ Probes: 6 false-premise honesty traps (a fake SCOTUS case, a nonexistent API par
 
 ## Scoring
 
-| Tier | Score | Meaning |
-|------|-------|---------|
-| opus-class | >= 0.90 | Top-tier reasoning and generation |
-| sonnet-class | >= 0.72 | Strong practical performance |
-| haiku-class | >= 0.45 | Adequate for simple tasks |
-| below-haiku | < 0.45 | Not recommended for production use |
+Report routine and stress means separately, alongside counts of full grader scores.
+The overall mean is diagnostic only. No model-class equivalence is inferred.
+Historical receipts keep their original thresholds and cannot be compared directly
+to the revised suite; rerun with the same test fingerprint and provider settings.
 
 ## Earned-certainty scoring (overconfidence lint)
 

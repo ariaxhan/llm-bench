@@ -35,7 +35,11 @@ class TestTagExtraction:
 
 class TestNoveltyRating:
     def test_correct_rating_with_justification(self):
-        output = "★★★\nThis is groundbreaking because it changes the fundamental approach. The evidence strongly supports a paradigm shift in how we think about inference scaling."
+        output = (
+            '★★★\nThis is groundbreaking because it changes the fundamental approach. '
+            'The evidence strongly supports a paradigm shift in how we think about '
+            'inference scaling.'
+        )
         score, _ = verify_novelty_rating(output, {"rating": 3, "min_reasons": 2})
         assert score >= 0.8
 
@@ -45,14 +49,21 @@ class TestNoveltyRating:
         assert score < 0.5
 
     def test_numeric_rating(self):
-        output = "Rating: 3/3\nThis represents a major breakthrough because of X. Additionally, Y is novel."
+        output = (
+            'Rating: 3/3\nThis represents a major breakthrough because of X. '
+            'Additionally, Y is novel.'
+        )
         score, _ = verify_novelty_rating(output, {"rating": 3, "min_reasons": 2})
         assert score >= 0.6
 
 
 class TestFluffStrip:
     def test_good_compression(self):
-        output = "VectorForge: a RAG framework with a chunking algorithm that reduces embedding storage by 40% while maintaining 98% retrieval accuracy on MTEB. Open-source, Apache 2.0."
+        output = (
+            'VectorForge: a RAG framework with a chunking algorithm that reduces '
+            'embedding storage by 40% while maintaining 98% retrieval accuracy on MTEB.'
+            ' Open-source, Apache 2.0.'
+        )
         score, details = verify_fluff_strip(output, {
             "max_words": 60,
             "required_facts": ["40%", "98%", "MTEB", "chunking", "RAG"],
@@ -70,7 +81,10 @@ class TestFluffStrip:
 
 class TestThreadMatch:
     def test_correct_threads(self):
-        output = "This belongs to agents (autonomous tool use), tools (CLI developer tool), and open-models (open-source release)."
+        output = (
+            'This belongs to agents (autonomous tool use), tools (CLI developer tool), '
+            'and open-models (open-source release).'
+        )
         score, _ = verify_thread_match(output, {
             "correct_threads": ["agents", "tools", "open-models"],
             "all_threads": ["agents", "prompting", "safety", "tools", "open-models", "research"],
@@ -88,7 +102,10 @@ class TestThreadMatch:
 
 class TestBugDetection:
     def test_finds_bug(self):
-        output = "The bug is that `i += 1` is missing in the first while loop after appending. This causes an infinite loop."
+        output = (
+            'The bug is that `i += 1` is missing in the first while loop after '
+            'appending. This causes an infinite loop.'
+        )
         score, _ = verify_bug_detection(output, {
             "bug_keywords": ["i += 1", "increment", "infinite loop"],
             "fix_keywords": ["i += 1", "increment i"],
@@ -106,7 +123,10 @@ class TestBugDetection:
 
 class TestInstructionFollow:
     def test_valid_json_response(self):
-        output = '{"command": "find . -name \\"*.py\\" | wc -l", "explanation": "Counts all Python files in directory tree recursively", "confidence": 0.95}'
+        output = (
+            '{"command": "find . -name \\"*.py\\" | wc -l", "explanation": "Counts all '
+            'Python files in directory tree recursively", "confidence": 0.95}'
+        )
         score, _ = verify_instruction_follow(output, {
             "checks": [
                 {"type": "is_valid_json", "value": True},

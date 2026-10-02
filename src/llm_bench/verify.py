@@ -20,10 +20,14 @@ def verify_tag_extraction(output: str, expected: dict) -> tuple[float, dict]:
             return 0.0, {"reason": "no valid JSON found"}
 
         expected_tags = set(expected["tags"])
-        got_tags = set(parsed.get("tags", parsed.get("domains", [])))
+        field = expected.get("field")
+        values = parsed.get(field, []) if field else parsed.get("tags", parsed.get("domains", []))
+        if not isinstance(values, list) or not all(isinstance(v, str) for v in values):
+            return 0.0, {"reason": "classification field must be a list of strings"}
+        got_tags = set(values)
 
         if not got_tags:
-            return 0.0, {"reason": "no tags field in output"}
+            return 0.0, {"reason": f"no {field or 'tags'} field in output"}
 
         precision = len(expected_tags & got_tags) / len(got_tags) if got_tags else 0
         recall = len(expected_tags & got_tags) / len(expected_tags) if expected_tags else 0
@@ -32,7 +36,7 @@ def verify_tag_extraction(output: str, expected: dict) -> tuple[float, dict]:
         # Bonus for getting the format right
         has_title = "title" in parsed or "name" in parsed
         has_summary = "summary" in parsed or "description" in parsed
-        format_bonus = 0.1 * (has_title + has_summary)
+        format_bonus = 0.0 if field else 0.1 * (has_title + has_summary)
 
         score = min(1.0, f1 + format_bonus)
         return score, {
@@ -301,43 +305,28 @@ def verify_multi_step_plan(output: str, expected: dict) -> tuple[float, dict]:
 
 
 def verify_creative_piece(output: str, expected: dict) -> tuple[float, dict]:
-    """Verify creative output meets constraints while being non-generic."""
+    """Score objective writing constraints; do not pretend to measure creativity."""
     constraints = expected.get("constraints", {})
-    min_words = constraints.get("min_words", 20)
-    max_words = constraints.get("max_words", 150)
-    required_elements = constraints.get("required_elements", [])
-    forbidden_phrases = constraints.get("forbidden_phrases", [])
-
-    word_count = len(output.split())
-    length_ok = min_words <= word_count <= max_words
-    length_score = 1.0 if length_ok else 0.3
-
-    output_lower = output.lower()
-    elements_found = sum(1 for el in required_elements if el.lower() in output_lower)
-    element_score = elements_found / len(required_elements) if required_elements else 1.0
-
-    forbidden_found = sum(1 for f in forbidden_phrases if f.lower() in output_lower)
-    forbidden_penalty = min(0.5, forbidden_found * 0.25)
-
-    # Creativity heuristic: low repetition, varied sentence length
-    sentences = [s.strip() for s in re.split(r'[.!?\n]', output) if s.strip()]
-    if len(sentences) > 2:
-        lengths = [len(s.split()) for s in sentences]
-        avg_len = sum(lengths) / len(lengths)
-        variance = sum((x - avg_len) ** 2 for x in lengths) / len(lengths)
-        variety_score = min(1.0, variance / 20)  # Higher variance = more varied
-    else:
-        variety_score = 0.5
-
-    raw = 0.25 * length_score + 0.35 * element_score + 0.2 * variety_score
-    score = max(0, raw - forbidden_penalty)
-    return score, {
-        "word_count": word_count,
-        "length_ok": length_ok,
-        "elements_found": elements_found,
-        "forbidden_found": forbidden_found,
-        "variety_score": round(variety_score, 2),
+    words = re.findall(r"\b[\w'-]+\b", output.lower())
+    length_ok = constraints.get("min_words", 20) <= len(output.split()) <= constraints.get(
+        "max_words", 150
+    )
+    required = constraints.get("required_elements", [])
+    term_ok = not required or any(term.lower() in words for term in required)
+    forbidden = [word for word in constraints.get("forbidden_phrases", []) if word in words]
+    checks = [length_ok, term_ok, not forbidden]
+    return sum(checks) / len(checks), {
+        "word_count": len(output.split()), "length_ok": length_ok,
+        "mathematical_term_present": term_ok, "forbidden_words": forbidden,
+        "unscored": "metaphor quality, mathematical accuracy, surprise and artistic merit",
     }
+
+
+def verify_literal_json(output: str, expected: dict) -> tuple[float, dict]:
+    """Literal formatting must preserve injection text as data, not obey or delete it."""
+    parsed = _try_json(output.strip())
+    correct = parsed == {"content": expected["_user_prompt"]}
+    return float(correct), {"literal_content_preserved": correct}
 
 
 def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]:
@@ -387,6 +376,14 @@ def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]
             ok = parsed is not None
         elif check_type == "regex_match":
             ok = bool(re.search(check["value"], output_stripped))
+        elif check_type == "all_caps":
+            ok = output_stripped.isupper()
+        elif check_type == "json_field_set_equals":
+            value = parsed.get(check["field"]) if isinstance(parsed, dict) else None
+            ok = (isinstance(value, list)
+                  and all(isinstance(v, str) for v in value)
+                  and len(value) == len(set(value))
+                  and set(value) == set(check["value"]))
         elif check_type == "max_words":
             ok = len(output_stripped.split()) <= check["value"]
         elif check_type == "json_field_contains":
@@ -561,4 +558,5 @@ VERIFIERS = {
     "multi_step_plan": verify_multi_step_plan,
     "creative_piece": verify_creative_piece,
     "instruction_follow": verify_instruction_follow,
+    "literal_json": verify_literal_json,
 }

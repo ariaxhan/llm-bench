@@ -113,8 +113,8 @@ def result_to_claim(record: Dict[str, Any], *, claim_id: str = "") -> Dict[str, 
     """Map a run result record (dict) onto an earned-certainty scorer claim.
 
     `record` is a per-test result dict: at minimum `test_id`, `score`, `passed`;
-    `raw_output` when the run kept it in memory (saved community files STRIP it,
-    see _save_results in cli.py). Returns a claim dict ready for `score_claim`.
+    `raw_output` is retained by current runs; legacy community files may omit it.
+    Returns a claim dict ready for `score_claim`.
 
     What this honestly derives:
       - raw_output passthrough (drives performed_authority; text-only).

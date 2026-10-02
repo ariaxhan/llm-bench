@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from llm_bench.models import CLAUDE_BASELINES, BenchmarkRun
+from llm_bench.models import BenchmarkRun
 
 console = Console()
 
@@ -36,10 +36,6 @@ def display_results(runs: list[BenchmarkRun], show_details: bool = False) -> Non
             min_width=12,
         )
 
-    # Add Claude baseline columns
-    for tier, score in CLAUDE_BASELINES.items():
-        table.add_column(f"Claude\n{tier}", justify="center", style="dim", min_width=10)
-
     # Populate rows
     test_ids = [r.test_id for r in runs[0].results] if runs else []
     for test_id in test_ids:
@@ -62,13 +58,6 @@ def display_results(runs: list[BenchmarkRun], show_details: bool = False) -> Non
             else:
                 row.append("—")
 
-        # Claude baselines (estimated per-test)
-        for tier, base_score in CLAUDE_BASELINES.items():
-            # Adjust baseline by difficulty
-            diff_mult = test_def.difficulty.value / 3 if test_def else 1.0
-            adjusted = max(0.1, base_score - (diff_mult - 1) * 0.15)
-            row.append(f"[dim]{adjusted:.2f}[/dim]")
-
         table.add_row(*row)
 
     # Summary row
@@ -77,15 +66,27 @@ def display_results(runs: list[BenchmarkRun], show_details: bool = False) -> Non
     for run in runs:
         color = _score_color(run.total_score)
         summary_row.append(f"[bold {color}]{run.total_score:.2f}[/bold {color}]")
-    for tier, score in CLAUDE_BASELINES.items():
-        summary_row.append(f"[dim bold]{score:.2f}[/dim bold]")
     table.add_row(*summary_row)
 
     console.print()
     console.print(table)
     console.print()
 
-    # Tier classification
+    console.print("[dim]PASS = full grader score; partial scores are not passes. "
+                  "No inferred frontier equivalence.[/dim]")
+    # Measured cohort summaries
+    from llm_bench.tests import cohort_for
+
+    for run in runs:
+        for cohort in ("routine", "stress"):
+            rows = [r for r in run.results if cohort_for(r.test_id) == cohort]
+            if rows:
+                mean = sum(r.score for r in rows) / len(rows)
+                full = sum(r.score == 1.0 for r in rows)
+                console.print(f"  {run.model} {cohort}: {mean:.3f} mean; "
+                              f"{full}/{len(rows)} full scores")
+
+    # Overall diagnostic only
     for run in runs:
         color = _score_color(run.total_score)
         console.print(

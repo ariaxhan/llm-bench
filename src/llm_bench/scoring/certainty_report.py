@@ -167,7 +167,7 @@ def render_run_report(scored: List[Dict[str, Any]], *, source: str = "") -> str:
     if without_text == total and total > 0:
         lines.append(
             "**No raw_output present in any record** — this is a saved results "
-            "file and `_save_results` does not persist raw_output. Only the "
+            "file without archived raw_output (legacy format). Only the "
             "verifier ground truth (passed/score) survives; performed authority "
             "and confident-but-wrong need the text and cannot be computed here. "
             "Re-run with `llm-bench run --certainty` to score with raw_output in "

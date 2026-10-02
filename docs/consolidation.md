@@ -109,23 +109,16 @@ the verifier verdict; confident-but-wrong is built on that.
 
 ### Residual (stated plainly)
 
-`_save_results` (and the committed community files) **strip `raw_output`** — only
-`test_id/score/passed/latency/tokens/details` persist. So `score-run` on a real
-community file reports **0 records with raw_output**, says so explicitly, and
-cannot compute authority or confident-but-wrong for them (only the verifier-
-failure count survives). The full confident-but-wrong path is exercised on
-`tests/fixtures/run_with_raw_output.json` (a synthetic run that kept raw_output)
-and on `run --certainty` (raw_output is in memory there). To make `score-run`
-fully useful on saved files, a future change would persist `raw_output` in
-`_save_results` (a `--keep-raw` option) — that is the remaining residual, named
-rather than faked.
+As of grading revision `2026-10-02-grading-v3`, `_save_results` persists complete
+`raw_output`, so `score-run` can process new receipts. Historical community files
+without raw responses remain score-only evidence and cannot be reconstructed.
 
 ## Remaining punch list to shippable
 
 - [ ] PyPI publish (Aria triggers — out of scope here).
 - [x] An adapter that derives claim fields from real `llm-bench run` outputs
       (`scoring/extract.py` + `score-run` / `run --certainty`) — gap closed.
-- [ ] Persist `raw_output` in `_save_results` (`--keep-raw`) so `score-run` can
+- [x] Persist `raw_output` in `_save_results` so `score-run` can
       compute confident-but-wrong on saved community files, not just live runs.
 - [ ] A README section pointing at `score-certainty` / `score-run` and this note.
 - [ ] Decide whether the scorer's text heuristics (confidence/caveat/scope word

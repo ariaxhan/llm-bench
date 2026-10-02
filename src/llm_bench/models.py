@@ -56,23 +56,4 @@ class BenchmarkRun:
             return
         self.total_score = sum(r.score for r in self.results) / len(self.results)
         self.total_latency_ms = sum(r.latency_ms for r in self.results)
-        self.tier_equivalent = _classify_tier(self.total_score)
-
-
-# Reference baselines — pre-computed from Claude model runs
-CLAUDE_BASELINES: dict[str, float] = {
-    "haiku": 0.52,
-    "sonnet": 0.78,
-    "opus": 0.94,
-}
-
-
-def _classify_tier(score: float) -> str:
-    if score >= 0.90:
-        return "opus-class"
-    elif score >= 0.72:
-        return "sonnet-class"
-    elif score >= 0.45:
-        return "haiku-class"
-    else:
-        return "below-haiku"
+        self.tier_equivalent = "uncalibrated"

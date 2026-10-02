@@ -4,6 +4,7 @@ import os
 
 from llm_bench.providers.apfel import ApfelProvider
 from llm_bench.providers.claude_cli import ClaudeCLIProvider
+from llm_bench.providers.codex_cli import CodexCLIProvider
 from llm_bench.providers.openai_compat import OpenAICompatProvider
 from llm_bench.providers.opencode import OpenCodeProvider
 
@@ -26,6 +27,7 @@ def get_provider(name: str, **kwargs):
         "apfel": lambda: ApfelProvider(),
         "opencode": lambda: OpenCodeProvider(),
         "claude-cli": lambda: ClaudeCLIProvider(),
+        "codex-cli": lambda: CodexCLIProvider(),
         "openai-compat": lambda: OpenAICompatProvider(
             base_url=kwargs["base_url"],
             api_key=kwargs.get("api_key", ""),

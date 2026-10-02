@@ -184,7 +184,8 @@ CODE_GEN = TestCase(
 1. Takes a string that may start with YAML frontmatter (delimited by --- on its own line)
 2. Returns a tuple of (metadata_dict, remaining_content)
 3. If no frontmatter exists, returns ({}, original_text)
-4. Handles edge cases: empty string, only frontmatter, no closing delimiter
+4. Empty input returns ({}, ""). Only frontmatter returns its metadata and empty content.
+5. If the opening delimiter has no closing delimiter, return ({}, original_text).
 
 Do not use any external libraries (no yaml module). Parse key: value pairs only (no nested objects).
 """,
@@ -209,7 +210,7 @@ assert result4[0] == {"only": "frontmatter"}
 assert result4[1].strip() == ""
 
 result5 = parse_frontmatter("---\\nno: closing")
-assert result5[0] == {}
+assert result5 == ({}, "---\\nno: closing")
 
 print("ALL TESTS PASSED")
 """,
@@ -317,8 +318,8 @@ Write only the piece, no title or explanation.
     verify="creative_piece",
     metadata={
         "constraints": {
-            "min_words": 35,
-            "max_words": 100,
+            "min_words": 40,
+            "max_words": 80,
             "required_elements": ["gradient", "minimum", "loss", "converge", "descent", "step", "parameter", "weight"],
             "forbidden_phrases": ["journey", "explore", "vast", "delve", "landscape", "dance"],
         },

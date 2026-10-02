@@ -46,7 +46,7 @@ async def run_single_test(
             raw_output=response.content,
             latency_ms=response.latency_ms,
             tokens_used=response.tokens_used,
-            passed=score >= 0.5,
+            passed=score == 1.0,
             details=details,
         )
 

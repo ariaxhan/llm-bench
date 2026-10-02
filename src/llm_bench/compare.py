@@ -8,22 +8,28 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from llm_bench.models import CLAUDE_BASELINES
-
 console = Console()
 
 
 def compare_results(result_files: list[str]) -> None:
     """Load and compare results from JSON files."""
     all_runs = []
+    fingerprints = set()
     for fpath in result_files:
         data = json.loads(Path(fpath).read_text())
+        fingerprints.add(data.get("test_fingerprint", "legacy/unknown"))
+        if data.get("provider_caveat"):
+            console.print(f"[yellow]{data['provider_caveat']}[/yellow]")
         for run in data["runs"]:
             all_runs.append(run)
 
     if not all_runs:
         console.print("[red]No results to compare[/red]")
         return
+
+    if len(fingerprints) > 1 or "legacy/unknown" in fingerprints:
+        console.print("[yellow]Different or unknown test definitions: "
+                      "these scores are not a controlled comparison.[/yellow]")
 
     # Build comparison table
     table = Table(
@@ -41,9 +47,6 @@ def compare_results(result_files: list[str]) -> None:
             justify="center",
             min_width=12,
         )
-
-    for tier in CLAUDE_BASELINES:
-        table.add_column(f"Claude {tier}", justify="center", style="dim")
 
     # Gather all test IDs from first run
     test_ids = [r["test_id"] for r in all_runs[0]["results"]]
@@ -68,9 +71,6 @@ def compare_results(result_files: list[str]) -> None:
             else:
                 row.append("--")
 
-        for _tier, base in CLAUDE_BASELINES.items():
-            row.append(f"[dim]{base:.2f}[/dim]")
-
         table.add_row(*row)
 
     # Summary
@@ -80,23 +80,21 @@ def compare_results(result_files: list[str]) -> None:
         score = run["total_score"]
         color = _score_color(score)
         summary.append(f"[bold {color}]{score:.2f}[/bold {color}]")
-    for _tier, base in CLAUDE_BASELINES.items():
-        summary.append(f"[dim bold]{base:.2f}[/dim bold]")
     table.add_row(*summary)
 
     console.print()
     console.print(table)
     console.print()
 
-    # Tier placement
+    # Recorded cohort scores; no invented frontier columns.
     for run in all_runs:
-        tier = run["tier_equivalent"]
+        for cohort, stats in run.get("cohorts", {}).items():
+            console.print(f"  {run['model']} {cohort}: {stats['mean_score']:.3f} mean; "
+                          f"{stats['full_score_count']}/{stats['count']} full scores")
         score = run["total_score"]
         latency = run["total_latency_ms"]
-        color = _score_color(score)
         console.print(
             f"  {run['model']} ({run['provider']}): "
-            f"[{color}]{tier}[/{color}] "
             f"— {score:.2f} avg, {latency / 1000:.1f}s total"
         )
 

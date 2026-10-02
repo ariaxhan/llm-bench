@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import sys
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -39,6 +41,8 @@ def main():
 @click.option("--agentic", is_flag=True, help="Run agentic capability tests only")
 @click.option("--adversarial", is_flag=True, help="Run adversarial tests only")
 @click.option("--messy", is_flag=True, help="Run real-world messy tests only")
+@click.option("--cohort", type=click.Choice(["routine", "stress"]), default=None,
+              help="Run routine workflow screens or separate stress tests")
 @click.option("--full", is_flag=True, help="Run all tests (42 total)")
 @click.option("--certainty", is_flag=True,
               help="Also score outputs for confident-but-wrong (earned-certainty axis)")
@@ -48,7 +52,7 @@ def main():
                    "default-budget runs.")
 def run(
     models, provider, base_url, tests, details, output, category,
-    hard, agentic, adversarial, messy, full, certainty, max_tokens,
+    hard, agentic, adversarial, messy, full, certainty, max_tokens, cohort,
 ):
     """Run benchmarks against one or more models.
 
@@ -65,10 +69,17 @@ def run(
         FULL_TESTS,
         HARD_TESTS,
         MESSY_TESTS,
+        ROUTINE_TESTS,
+        STRESS_TESTS,
     )
 
+    if cohort and (tests or full or hard or agentic or adversarial or messy or category):
+        raise click.UsageError("--cohort cannot be combined with other test selectors")
+
     # Resolve tests
-    if tests:
+    if cohort:
+        test_list = ROUTINE_TESTS if cohort == "routine" else STRESS_TESTS
+    elif tests:
         test_list = [get_test(t.strip()) for t in tests.split(",")]
         test_list = [t for t in test_list if t]
         if not test_list:
@@ -131,7 +142,7 @@ def run(
     display_results(runs, show_details=details)
 
     # Earned-certainty scoring on the FRESH run — raw_output is in memory here,
-    # so this is the full-fidelity path (the saved-file path strips raw_output).
+    # and revised saved files preserve it for the score-run path too.
     if certainty:
         from llm_bench.scoring.certainty_report import render_run_report
         from llm_bench.scoring.extract import score_result
@@ -152,7 +163,7 @@ def run(
 
     # Save if requested
     if output:
-        _save_results(runs, output)
+        _save_results(runs, output, test_list)
 
 
 @main.command()
@@ -349,9 +360,24 @@ def score_run(results_file, as_json):
         print(render_run_report(scored, source=results_file))
 
 
-def _save_results(runs: list[BenchmarkRun], path: str) -> None:
-    """Save results to JSON."""
+def _save_results(runs: list[BenchmarkRun], path: str, test_list=None) -> None:
+    """Save auditable answers and cohort summaries alongside scores."""
+    from llm_bench.tests import BENCHMARK_REVISION, cohort_for
+
+    definitions = [asdict(t) for t in (test_list or [])]
     output = {
+        "test_definitions": definitions,
+        "test_fingerprint": hashlib.sha256(
+            json.dumps(definitions, sort_keys=True, default=str).encode()
+        ).hexdigest(),
+        "temperature_requested": 0.0,
+        "provider_caveat": (
+            "Codex CLI uses medium reasoning; temperature/max_tokens are not enforced; "
+            "CLI framing remains, so this is a harness control, not raw-API parity."
+            if any(r.provider == "codex-cli" for r in runs) else None
+        ),
+        "benchmark_revision": BENCHMARK_REVISION,
+        "pass_threshold": 1.0,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "runs": [],
     }
@@ -362,9 +388,20 @@ def _save_results(runs: list[BenchmarkRun], path: str) -> None:
             "total_score": run.total_score,
             "total_latency_ms": run.total_latency_ms,
             "tier_equivalent": run.tier_equivalent,
+            "cohorts": {
+                cohort: {
+                    "count": len(rows),
+                    "mean_score": sum(r.score for r in rows) / len(rows),
+                    "full_score_count": sum(r.score == 1.0 for r in rows),
+                }
+                for cohort in ("routine", "stress")
+                if (rows := [r for r in run.results if cohort_for(r.test_id) == cohort])
+            },
             "results": [
                 {
                     "test_id": r.test_id,
+                    "cohort": cohort_for(r.test_id),
+                    "raw_output": r.raw_output,
                     "score": r.score,
                     "passed": r.passed,
                     "latency_ms": r.latency_ms,
@@ -378,7 +415,7 @@ def _save_results(runs: list[BenchmarkRun], path: str) -> None:
 
     out_path = Path(path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(output, indent=2))
+    out_path.write_text(json.dumps(output, indent=2, default=str))
     console.print(f"\n[dim]Results saved to {path}[/dim]")
 
 
