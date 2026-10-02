@@ -67,7 +67,12 @@ only its objective length/term/forbidden-word constraints; artistic merit remain
 unscored. Literal formatting requires exact preservation in the `content` field.
 The control audit also repaired vocabulary-overlap echo false positives, rejection
 of quoted false premises, keyword-only parallel-group checks, and unstated JSON line
-limits. Spreadsheet checking now compares all six records, not just one date.
+limits. Spreadsheet checking now compares all six records, not just one date. Thread matching
+now follows its stated taxonomy (an open-source CLI is not an open-weight model).
+Open-ended migration plans check numbered presentation and topic coverage rather than
+first keyword occurrence; recommendation screens check assumptions about the named
+unknowns without demanding the literal word "unknown". These remain coverage proxies,
+not semantic proof of a sound plan or recommendation. Novelty ratings remain subjective.
 Revision v3 rescoring applies these grader repairs to every archived v2 answer,
 without generating new answers or changing any model-facing prompt.
 

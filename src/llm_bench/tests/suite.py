@@ -101,7 +101,7 @@ Which thread(s) does this item belong to?
 """,
     verify="thread_match",
     metadata={
-        "correct_threads": ["agents", "tools", "open-models"],
+        "correct_threads": ["agents", "tools", "research"],
         "all_threads": ["agents", "prompting", "safety", "tools", "open-models", "research"],
     },
 )
@@ -285,6 +285,7 @@ Provide an ordered, numbered plan with specific steps. Not vague — each step s
 """,
     verify="multi_step_plan",
     metadata={
+        "ordering_mode": "numbered",
         "required_steps": [
             {"keywords": ["test", "suite", "coverage", "verify", "existing"]},
             {"keywords": ["hono", "parallel", "new", "implement", "rewrite", "port"]},

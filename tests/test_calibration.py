@@ -164,3 +164,23 @@ def test_spreadsheet_whitespace_is_not_a_constraint():
     assert grade(SPREADSHEET_CHAOS, json.dumps(rows, indent=2)) == 1
     assert grade(SPREADSHEET_CHAOS, json.dumps(rows)) == 1
     assert grade(SPREADSHEET_CHAOS, json.dumps(rows[:-1])) < 1
+
+
+def test_thread_taxonomy_does_not_confuse_open_source_tool_with_model():
+    from llm_bench.tests.suite import THREAD_MATCH
+
+    assert grade(THREAD_MATCH, "agents tools research") == 1
+    assert grade(THREAD_MATCH, "agents tools open-models") < 1
+
+
+def test_migration_intro_does_not_determine_step_order():
+    from llm_bench.tests.suite import MULTI_STEP_PLAN
+
+    answer = (
+        "Keep rollback ready; send traffic to the existing app until verified.\n"
+        "1. Build a test suite for existing behavior.\n"
+        "2. Implement Hono alongside Express.\n"
+        "3. Canary traffic and monitor metrics.\n"
+        "4. Revert using the prepared rollback if gates fail."
+    )
+    assert grade(MULTI_STEP_PLAN, answer) == 1

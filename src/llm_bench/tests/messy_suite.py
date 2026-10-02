@@ -181,12 +181,12 @@ Respond in under 200 words. Be direct. Pick ONE technology.
 """,
     verify="draft_email",
     metadata={
-        "min_words": 60,
-        "max_words": 210,
+        "min_words": 1,
+        "max_words": 199,
         "required_points": [
             {"keywords": ["SQS", "RabbitMQ", "Kafka", "Redis", "NATS", "Pulsar", "queue"]},
             {"keywords": ["assum", "assuming", "assumption"]},
-            {"keywords": ["unknown", "unclear", "unconfirmed", "not decided", "not confirmed", "gap"]},
+            {"keywords": ["budget", "cost", "finance", "cloud", "compliance", "soc2", "soc 2"]},
         ],
         "tone": "professional",
     },

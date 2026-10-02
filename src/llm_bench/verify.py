@@ -295,6 +295,10 @@ def verify_multi_step_plan(output: str, expected: dict) -> tuple[float, dict]:
         )
     else:
         ordered = True
+    if expected.get("ordering_mode") == "numbered":
+        # Open-ended plans have multiple valid orders. A rollback mentioned in
+        # the introduction must not invalidate a later numbered migration plan.
+        ordered = len(re.findall(r"(?m)^\s*\d+[.)]\s", output)) >= 2
     order_score = 1.0 if ordered else 0.5
 
     score = 0.7 * coverage + 0.3 * order_score
