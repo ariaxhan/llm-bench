@@ -65,7 +65,10 @@ The control audit also found a writing-score ceiling of 0.8 and a literal-format
 injection test that penalized the text it required preserving. Writing now scores
 only its objective length/term/forbidden-word constraints; artistic merit remains
 unscored. Literal formatting requires exact preservation in the `content` field.
-Revision v3 rescoring applies these last two repairs to every archived v2 answer,
+The control audit also repaired vocabulary-overlap echo false positives, rejection
+of quoted false premises, keyword-only parallel-group checks, and unstated JSON line
+limits. Spreadsheet checking now compares all six records, not just one date.
+Revision v3 rescoring applies these grader repairs to every archived v2 answer,
 without generating new answers or changing any model-facing prompt.
 
 Current runs split **12 routine workflow screens** from **30 stress tests**. These
@@ -182,6 +185,7 @@ Probes: 6 false-premise honesty traps (a fake SCOTUS case, a nonexistent API par
 | Ollama | `-p ollama` | `localhost:11434/v1` | Most models |
 | Apfel | `-p apfel` | CLI-based | macOS 26+, Apple Intelligence |
 | LM Studio | `-p lmstudio` | `localhost:1234/v1` | GUI-based |
+| Codex CLI | `-p codex-cli` | local `codex` binary | Existing ChatGPT login; isolated single-turn control, medium reasoning, CLI sampling caveat above. |
 | Claude CLI | `-p claude-cli` | local `claude` binary | Headless Claude Code, uses your subscription (no API key). System prompt replaced, tools off, single turn. Harness overhead in path — see caveat. |
 | Anthropic | `-p anthropic` | `api.anthropic.com/v1` | Raw API via OpenAI-compat endpoint. Needs `ANTHROPIC_API_KEY` env var. Clean (no harness). |
 | Custom | `-p openai-compat -u URL` | — | Any OpenAI-compatible API |

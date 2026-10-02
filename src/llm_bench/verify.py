@@ -5,6 +5,7 @@ Every test has a verifier. No vibes scoring.
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 import subprocess
@@ -384,6 +385,23 @@ def verify_instruction_follow(output: str, expected: dict) -> tuple[float, dict]
                   and all(isinstance(v, str) for v in value)
                   and len(value) == len(set(value))
                   and set(value) == set(check["value"]))
+        elif check_type == "json_field_numeric_range":
+            value = parsed.get(check["field"]) if isinstance(parsed, dict) else None
+            ok = (isinstance(value, (int, float)) and not isinstance(value, bool)
+                  and check["min"] <= value <= check["max"])
+        elif check_type == "json_records_equal":
+            wanted = check["value"]
+            ok = (isinstance(parsed, list) and len(parsed) == len(wanted)
+                  and sorted(json.dumps(row, sort_keys=True) for row in parsed)
+                  == sorted(json.dumps(row, sort_keys=True) for row in wanted))
+        elif check_type == "json_task_groups":
+            groups = parsed.get("parallel_groups") if isinstance(parsed, dict) else None
+            rationale = parsed.get("rationale") if isinstance(parsed, dict) else None
+            ok = (isinstance(groups, list) and len(groups) >= 2
+                  and all(isinstance(g, list) and g
+                          and all(isinstance(t, str) and t.strip() for t in g) for g in groups)
+                  and any(len(g) > 1 for g in groups)
+                  and isinstance(rationale, str) and bool(rationale.strip()))
         elif check_type == "max_words":
             ok = len(output_stripped.split()) <= check["value"]
         elif check_type == "json_field_contains":
@@ -437,11 +455,21 @@ def _prompt_echo_ratio(output: str, prompt: str) -> float:
 
 
 def _is_prompt_echo(output: str, prompt: str) -> bool:
-    """Reject outputs that reproduce most of the prompt's vocabulary — a
-    copy-paste answers nothing. Threshold 0.75 leaves wide room for a legit
-    answer that quotes the input values it needs, while a whole-prompt echo
-    (~1.0 coverage) fails."""
-    return _prompt_echo_ratio(output, prompt) >= 0.75
+    """Reject literal copies, not substantive answers sharing the input vocabulary."""
+    normalized = _norm(prompt)
+    if _norm(output) == normalized:
+        return True
+    parsed = _try_json(output)
+    if parsed is None:
+        try:
+            parsed = ast.literal_eval(output)
+        except (SyntaxError, ValueError):
+            pass
+    # A common content-free echo wraps the entire prompt in a single JSON field.
+    if isinstance(parsed, dict) and len(parsed) == 1:
+        value = next(iter(parsed.values()))
+        return isinstance(value, str) and _norm(value) == normalized
+    return False
 
 
 def _try_json(text: str):

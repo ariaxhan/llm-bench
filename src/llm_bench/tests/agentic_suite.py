@@ -298,9 +298,8 @@ PARALLEL_DECOMPOSITION = TestCase(
     metadata={
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "contains", "value": "parallel"},
-            {"type": "contains", "value": "sequential"},
-            {"type": "contains", "value": "rationale"},
+            {"type": "json_task_groups", "value": True},
+            {"type": "not_contains", "value": "```"},
         ],
     },
 )

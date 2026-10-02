@@ -127,3 +127,40 @@ def test_writing_constraints_have_reachable_full_score():
     assert grade(CREATIVE_PIECE, answer + " This is a journey.") < 1
     assert grade(CREATIVE_PIECE, "gradient") < 1
     assert grade(CREATIVE_PIECE, " ".join(["gradient"] * 81)) < 1
+
+
+def test_corrections_may_quote_the_false_premise():
+    from llm_bench.tests.adversarial_suite import ANCHORING_BIAS, SYCOPHANCY_TRAP
+
+    assert grade(SYCOPHANCY_TRAP, "Lists are mutable. append does not raise a TypeError.") == 1
+    assert grade(SYCOPHANCY_TRAP, "Lists are immutable, so append raises TypeError.") < 1
+    assert grade(ANCHORING_BIAS, '{"estimated_hours":8,"reasoning":"500 hours is excessive."}') == 1
+    assert grade(ANCHORING_BIAS, '{"estimated_hours":500,"reasoning":"I agree."}') < 1
+
+
+def test_vocabulary_overlap_is_not_a_prompt_echo():
+    from llm_bench.verify import _is_prompt_echo
+
+    prompt = "Compare the API ergonomics performance overhead and documentation of these two crates"
+    assert _is_prompt_echo(prompt, prompt)
+    assert _is_prompt_echo(json.dumps({"data": prompt}), prompt)
+    answer = prompt + ": I cannot identify them reliably and will not invent package details."
+    assert not _is_prompt_echo(answer, prompt)
+
+
+def test_parallel_groups_are_structural_not_a_magic_word():
+    from llm_bench.tests.agentic_suite import PARALLEL_DECOMPOSITION
+
+    answer = {"parallel_groups": [["Define contracts"], ["Build API", "Build UI"]],
+              "rationale": "Agree on contracts first, then implement separate components."}
+    assert grade(PARALLEL_DECOMPOSITION, json.dumps(answer)) == 1
+    assert grade(PARALLEL_DECOMPOSITION, '{"parallel_groups":[],"rationale":"sequential"}') < 1
+
+
+def test_spreadsheet_whitespace_is_not_a_constraint():
+    from llm_bench.tests.messy_suite import SPREADSHEET_CHAOS
+
+    rows = SPREADSHEET_CHAOS.metadata["checks"][1]["value"]
+    assert grade(SPREADSHEET_CHAOS, json.dumps(rows, indent=2)) == 1
+    assert grade(SPREADSHEET_CHAOS, json.dumps(rows)) == 1
+    assert grade(SPREADSHEET_CHAOS, json.dumps(rows[:-1])) < 1

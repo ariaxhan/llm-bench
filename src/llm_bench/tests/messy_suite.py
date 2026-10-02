@@ -290,17 +290,16 @@ Return a JSON array of employee objects with fields: name, department, start_dat
 """,
     verify="instruction_follow",
     metadata={
-        # FIXED 2026-06-16 (verifier-fix): was contains() of input cell values — all
-        # sit in the prompt, so echoing the messy input scored 1.00 without parsing.
-        # Now require a real JSON ARRAY of employee objects with the right fields
-        # (an echo's {"data":...} dict fails), plus the mangled date is fixed to
-        # 2023-06-15 inside a record.
         "checks": [
             {"type": "is_valid_json", "value": True},
-            {"type": "json_array_of_objects", "min_len": 5,
-             "required_keys": ["name", "department", "start_date", "salary"]},
-            {"type": "json_field_contains", "field": "start_date", "value": "2023-06-15"},
-            {"type": "max_lines", "value": 20},
+            {"type": "json_records_equal", "value": [
+                {"name": "Chen, Wei", "department": "Engineering", "start_date": "2023-01-15", "salary": 145000},
+                {"name": "Martinez, Sofia", "department": "Design", "start_date": "2023-03-01", "salary": 128000},
+                {"name": "O'Brien, Patrick", "department": "Engineering", "start_date": "2022-11-30", "salary": 152000},
+                {"name": "Johnson, Amy", "department": "Marketing", "start_date": "2024-01-10", "salary": 98000},
+                {"name": "Kim, Jun-seo", "department": "Engineering", "start_date": "2023-06-15", "salary": 140000},
+                {"name": "Park, Minji", "department": "Design", "start_date": "2023-09-01", "salary": 115000},
+            ]},
             {"type": "not_contains", "value": "```"},
         ],
     },

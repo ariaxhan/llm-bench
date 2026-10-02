@@ -350,7 +350,6 @@ Nothing else. Just the raw JSON.
             {"type": "contains", "value": "command"},
             {"type": "contains", "value": "explanation"},
             {"type": "contains", "value": "confidence"},
-            {"type": "max_lines", "value": 5},
         ],
     },
 )
